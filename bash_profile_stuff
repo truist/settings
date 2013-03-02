@@ -1,0 +1,9 @@
+
+export EDITOR=vim
+alias vi=vim
+
+alias ack='ack --pager="less -R -X" -a'
+alias less='less -R -W -X'
+
+source ~/.prompt_spec
+

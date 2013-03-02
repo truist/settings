@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+P_ESC_PRE='\[\e['
+P_ESC_POST='\]'
+P_ESC_RESET="${P_ESC_PRE}m${P_ESC_POST}"
+
+P_PLAIN="0;"
+P_BOLD="1;"
+P_HILITE="3;"
+P_UNDERLINE="4;"
+P_BLINK="5;"
+
+P_GREY="29M"
+P_BLACK="30m"
+P_RED="31m"
+P_GREEN="32m"
+P_YELLOW="33m"
+P_BLUE="34m"
+P_VIOLET="35m"
+P_AQUA="36m"
+P_WHITE="37m"
+
+P_PLAIN_GREEN="$P_ESC_PRE$P_PLAIN$P_GREEN$P_ESC_POST"
+P_UNDERLINE_YELLOW="$P_ESC_PRE$P_UNDERLINE$P_YELLOW$P_ESC_POST"
+P_PLAIN_YELLOW="$P_ESC_PRE$P_PLAIN$P_YELLOW$P_ESC_POST"
+P_UNDERLINE_RED="$P_ESC_PRE$P_UNDERLINE$P_RED$P_ESC_POST"
+P_PLAIN_RED="$P_ESC_PRE$P_PLAIN$P_RED$P_ESC_POST"
+
+if [ "truist" == "$USER" ] || [ "narthur" == "$USER" ]; then
+        USER_COLOR=$P_PLAIN_GREEN
+else
+        USER_COLOR=$P_PLAIN_RED
+fi
+if [ -z "$SSH_CLIENT" ]; then
+        HOST_COLOR=$P_PLAIN_GREEN
+else
+        HOST_COLOR=$P_PLAIN_YELLOW
+fi
+BIT_COLOR=$P_PLAIN_GREEN
+BRANCH_COLOR=$P_PLAIN_YELLOW
+
+get_path_color() {
+        if [[ "$PWD" =~ ^`eval echo ~$USER` ]]; then
+                echo "$P_PLAIN$P_GREEN"
+        else
+                echo "$P_PLAIN$P_YELLOW"
+        fi
+}
+
+get_git_branch_if_branch() {
+        git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' | sed -e 's/* \(.*\)/\1/'
+}
+
+wrap_result() {
+        if [ -n "$1" ]; then
+                PREFIX=$2
+                [ -n "$PREFIX" ] || PREFIX='('
+                SUFFIX=$3
+                [ -n "$SUFFIX" ] || SUFFIX=')'
+
+                echo "$PREFIX$1$SUFFIX"
+        fi
+}
+
+# example usage: PS1="my-prompt-and-path\$(show_git_branch_if_branch) "
+show_git_branch_if_branch() {
+        wrap_result "$(get_git_branch_if_branch)" "$@"
+}
+
+show_git_branch_if_not_master() {
+        BRANCH=$(get_git_branch_if_branch)
+        if [ -n "$BRANCH" ] && [ "master" != "$BRANCH" ]; then
+                wrap_result "$BRANCH" "$@"
+        fi
+}
+
+
+export PS1="$BIT_COLOR[$USER_COLOR\u$BIT_COLOR@$HOST_COLOR\h$BIT_COLOR $P_ESC_PRE\$(get_path_color)$P_ESC_POST\W$BRANCH_COLOR\$(show_git_branch_if_not_master ':' $P_ESC_RESET)$BIT_COLOR]$ $P_ESC_RESET"
+
+if [ "$TERM" == "screen" ] || [ "$TERM" == "screen-256color" ] ; then
+        # make tmux show $PWD in the status line
+        export PROMPT_COMMAND="echo -ne \"\\033]0;\${USER}@${HOSTNAME}\\007\\033k\${PWD}\\033\\\\\""
+fi
+
