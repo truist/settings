@@ -1,0 +1,13 @@
+[alias]
+	st = status -s
+	stat = status -s
+	graph = log --graph --all --pretty=format':%C(yellow)%h%Cblue%d%Creset %s %Cgreen %an, %ar%Creset'
+	search = "!f() { git log -p -G\"$1\" --diff-filter=M ; }; f"
+[color]
+	ui = true
+[color "diff"]
+	meta = yellow
+[merge]
+	tool = vimdiff
+[credential]
+	helper = osxkeychain
