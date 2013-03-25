@@ -11,3 +11,5 @@
 	tool = vimdiff
 [credential]
 	helper = osxkeychain
+[push]
+	default = upstream
