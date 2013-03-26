@@ -13,7 +13,7 @@ set scrolloff=3
 " search settings
 "
 set incsearch
-set ignorecase 
+set ignorecase
 set smartcase
 
 "
@@ -28,8 +28,11 @@ filetype plugin indent on
 set cindent
 " make the backspace key work with autoindent
 set backspace=indent,eol,start
-au BufEnter *.tt set tabstop=4 shiftwidth=4 nowrap
-au BufEnter *.mdwn set expandtab tabstop=4 shiftwidth=4 softtabstop=4
+au BufEnter *.tt set nowrap tabstop=4 shiftwidth=4
+au BufEnter *.mdwn set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
+au BufEnter *.ep set nowrap tabstop=4 shiftwidth=4
+au BufEnter *.html set nowrap tabstop=4 shiftwidth=4
+au BufEnter *.css set nowrap tabstop=4 shiftwidth=4
 
 " indent/unindent selected lines in visual mode
 vmap <tab> >gv
