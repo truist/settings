@@ -1,0 +1,11 @@
+mkdir ~/.vim/bundle
+cd ~/.vim/bundle/
+git clone https://github.com/tpope/vim-pathogen.git
+cd ~
+
+(and now the settings in vimrc will work)
+
+plugins:
+	https://github.com/airblade/vim-gitgutter
+	https://github.com/plasticboy/vim-markdown.git
+	http://git.devnull.li/ikiwiki-syntax.git

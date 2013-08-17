@@ -1,6 +1,14 @@
 " reload changes automatically when saved
 autocmd! bufwritepost .vimrc source ~/.vimrc
 
+" pathogen (https://github.com/tpope/vim-pathogen)
+runtime bundle/vim-pathogen/autoload/pathogen.vim
+execute pathogen#infect()
+
+" vim-gitgutter
+highlight clear SignColumn
+
+"general ui
 set showmatch
 set ruler
 set showmode
