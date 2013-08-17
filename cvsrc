@@ -1,0 +1,4 @@
+checkout -P
+update -dP
+diff -u
+rdiff -u
