@@ -47,8 +47,10 @@ vmap <tab> >gv
 vmap <s-tab> <gv
 
 " shortcuts for paste mode in normal and insert modes
-nnoremap  :set invpaste paste?<CR>
-set pastetoggle=
+" DON'T REMEMBER WHAT THIS DOES, AND IT CAUSES A SECOND-DELAY AFTER
+" HITTING :
+"nnoremap  :set invpaste paste?<CR>
+"set pastetoggle=
 
 " highlight text past 80 columns
 au BufWinEnter *.t let w:m2=matchadd('Search', '\%>80v.\+', -1)

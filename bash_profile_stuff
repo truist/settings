@@ -7,3 +7,17 @@ alias less='less -R -W -X'
 
 source ~/.prompt_spec
 
+# pkgsrc
+export PATH=/Users/truist/pkg/bin:$PATH
+export MANPATH=/Users/truist/pkg/man:$MANPATH
+make()
+{
+	local _MK
+	_MK=mk/bsd.pkg.mk
+	if [ -f ../../$_MK -o -f ../$_MK -o -f $_MK ]; then
+		bmake "$@"
+	else
+		/usr/bin/make "$@"
+	fi
+}
+
