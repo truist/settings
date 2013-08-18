@@ -5,9 +5,6 @@ autocmd! bufwritepost .vimrc source ~/.vimrc
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
 
-" vim-gitgutter
-highlight clear SignColumn
-
 "general ui
 set showmatch
 set ruler
@@ -17,18 +14,18 @@ set vb
 " margin while scrolling
 set scrolloff=3
 
-" 
 " search settings
-"
 set incsearch
 set ignorecase
 set smartcase
 
-"
 " syntax highlight and indentation settings
-"
-autocmd BufRead,BufNewFile *.t set filetype=perl
 syntax on
+autocmd BufRead,BufNewFile *.t set filetype=perl
+autocmd BufRead,BufNewFile *.mdwn set filetype=ikiwiki
+
+" vim-gitgutter
+highlight clear SignColumn
 
 " indentation / tabbing
 set autoindent
@@ -46,8 +43,11 @@ au BufEnter *.css set nowrap tabstop=4 shiftwidth=4
 vmap <tab> >gv
 vmap <s-tab> <gv
 
+" turn off all code folding
+autocmd BufEnter * set nofoldenable
+
 " shortcuts for paste mode in normal and insert modes
-" DON'T REMEMBER WHAT THIS DOES, AND IT CAUSES A SECOND-DELAY AFTER
+" DON'T REMEMBER WHAT THIS DOES, AND IT CAUSES A ONE-SECOND DELAY AFTER
 " HITTING :
 "nnoremap  :set invpaste paste?<CR>
 "set pastetoggle=
@@ -73,10 +73,7 @@ onoremap p i(
 let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabMidWordCompletion = "0"
 
-
-"
 " make the tmux status line show the currently-edited file
-"
 if &term == "screen" || &term == "screen-256color"
         set t_ts=
 endif
