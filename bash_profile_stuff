@@ -7,6 +7,9 @@ alias less='less -R -W -X'
 
 source ~/.prompt_spec
 
+# mosh sets this to en_US.UTF-8, which makes perl angry
+unset LANG
+
 # pkgsrc
 export PATH=/Users/truist/pkg/bin:$PATH
 export MANPATH=/Users/truist/pkg/man:$MANPATH
@@ -20,4 +23,3 @@ make()
 		/usr/bin/make "$@"
 	fi
 }
-
