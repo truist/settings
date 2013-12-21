@@ -2,6 +2,8 @@
 export EDITOR=vim
 alias vi=vim
 
+export HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:pwd"
+
 alias ack='ack --pager="less -R -X" -a'
 alias less='less -R -W -X'
 
