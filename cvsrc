@@ -1,4 +1,7 @@
+# recommended CVS configuration file from the pkgsrc guide
+cvs -q -z2
 checkout -P
 update -dP
-diff -u
+diff -upN
 rdiff -u
+release -d
