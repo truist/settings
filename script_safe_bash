@@ -9,19 +9,48 @@ script_safe_die() {
 
 script_safe_checkargs() {
 	if [ $# -lt 1 ]; then
-		script_safe_die 255 "usage: $0 <scriptfile> [args]"
+		script_safe_die 1 "usage: $0 [--nowarn] <scriptfile> [args]"
 	fi
 }
 
 script_safe_main() {
 	script_safe_checkargs $* || script_safe_die 255 "can't check arguments"
 
-	echo
-	echo TODO: make this script handle inputs that define functions or have commands that span multiple lines
-	echo
+	if [ "$1" != "--nowarn" ]; then
+		echo
+		echo Please consider just using \"set -e\" at the top of your script.
+		echo It is simpler and handles functions and line continuations.
+		echo \(But beware how it handles functions called from 'if' statements.\)
+		echo
+		echo You can disable this warning with the --nowarn flag.
+		echo
+		echo You have 10 seconds to interrupt this script before it continues.
+		echo
 
-	exec -a $1 < "$1" || script_safe_die 255 "can't read from input file '$1'"
-	shift || script_safe_die 255 "can't fixup argument list"
+		sleep 10 || script_safe_die $? "can't sleep"
+
+		if ! diff -q <(head -n 1 $0) <(head -n 1 $1) > /dev/null ; then
+			echo
+			echo WARNING: Your script does not use the same shell as this script,
+			echo WARNING: but your script will be run using *the shell from this script*.
+			echo WARNING: This may cause problems.
+			echo
+			echo Your shell: `head -n 1 $1`
+			echo This shell: `head -n 1 $0`
+			echo
+			echo You can disable this warning with the --nowarn flag.
+			echo
+			echo You have 10 seconds to interrupt this script before it continues.
+			echo
+
+			sleep 10 || script_safe_die $? "can't sleep"
+		fi
+	else
+		shift || script_safe_die $? "can't shift --nowarn arg off"
+	fi
+
+	exec -a $1 < "$1" || script_safe_die $? "can't read from input file '$1'"
+	shift || script_safe_die $? "can't fixup argument list"
 	# from here forward, the input script owns the args
 
 	SCRIPT_SAFE_LINENO=0
