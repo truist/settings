@@ -12,5 +12,9 @@
 	tool = vimdiff
 [credential]
 	helper = osxkeychain
+[branch]
+	autosetuprebase = always
 [push]
 	default = upstream
+[pull]
+	rebase = true

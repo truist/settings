@@ -1,0 +1,38 @@
+#!/usr/pkg/bin/bash
+
+script_safe_die() { 
+	local exitcode
+	exitcode=$1; shift
+	echo >&2 "Exiting ($exitcode): $@"
+	exit ${exitcode}
+}
+
+script_safe_checkargs() {
+	if [ $# -lt 1 ]; then
+		script_safe_die 255 "usage: $0 <scriptfile> [args]"
+	fi
+}
+
+script_safe_main() {
+	script_safe_checkargs $* || script_safe_die 255 "can't check arguments"
+
+	echo
+	echo TODO: make this script handle inputs that define functions or have commands that span multiple lines
+	echo
+
+	exec -a $1 < "$1" || script_safe_die 255 "can't read from input file '$1'"
+	shift || script_safe_die 255 "can't fixup argument list"
+	# from here forward, the input script owns the args
+
+	SCRIPT_SAFE_LINENO=0
+	while read SCRIPT_SAFE_LINE; do
+		SCRIPT_SAFE_LINENO=`expr $SCRIPT_SAFE_LINENO + 1`
+
+		# TODO: check for curly braces or end-of-line backslashes
+
+		eval $SCRIPT_SAFE_LINE || script_safe_die $? "error running line $SCRIPT_SAFE_LINENO: $SCRIPT_SAFE_LINE"
+	done
+}
+
+script_safe_main $*
+
