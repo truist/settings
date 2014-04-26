@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# exit the script on first error
+set -e
+
+if [ "$#" -ne 1 ] || [ -z "$1" ]; then
+	echo "args: <branch name>" >&2
+	exit 1
+fi
+NEW_BRANCH=$1
+
+if [[ -n $(git status -s) ]]; then
+	echo "You must commit everything first" >&2
+	exit 2
+fi
+
+CURRENT_BRANCH=`git symbolic-ref --short -q HEAD`
+if [ "$CURRENT_BRANCH" != "master" ]; then
+	echo "You are not currently on 'master' ($CURRENT_BRANCH)" >&2
+	exit 3
+fi
+
+ORIGIN_MASTER=`git rev-parse origin/master`
+
+git branch "$NEW_BRANCH"
+git reset --hard $ORIGIN_MASTER
+git checkout "$NEW_BRANCH"

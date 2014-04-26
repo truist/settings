@@ -1,0 +1,12 @@
+#!/bin/sh
+
+CURDIR=`pwd`
+for DIR in *; do
+	cd "$CURDIR"
+	if [ -d "$DIR" ]; then 
+		echo
+		echo === $DIR ===
+		cd "$DIR"
+		$@
+	fi
+done
