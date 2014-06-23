@@ -1,10 +1,10 @@
 #!/bin/sh
 
 # load the configuration
-. /root/bin/update_all_packages.conf || exit 1
+. /root/bin/update_all_packages.conf || exit $?
 
 # load some utility functions
-. /root/bin/util.sh || exit 1
+. /root/bin/util.sh || exit $?
 
 (
 	echo Determining packages to restart...
@@ -13,7 +13,7 @@
 	for pkgname in `pkg_info -L -a | grep /rc\.d | awk '{ n=split(\$0, a, "/"); print a[n] }'`; do
 		if [ -f ${pkgname} ]; then
 			if ./${pkgname} status 2>/dev/null | grep -qE ^${pkgname}\ .*\d+ ; then
-				echo ${pkgname} >> ${ALLRESTART} || die 2
+				echo ${pkgname} >> ${ALLRESTART} || die $?
 			fi
 		fi
 	done
@@ -25,7 +25,7 @@
 	for pkgname in `rcorder *`; do
 		grep -Fxm 1 ${pkgname} ${ALLRESTART} >> ${TORESTART}
 	done
-	rm ${ALLRESTART} || die 3
+	rm ${ALLRESTART} || die $?
 
 	echo Stopping all installed packages...
 	for pkgname in `cat ${TORESTART} | sort -r`; do
@@ -100,8 +100,8 @@
 	}
 	echo Checking if all desired packages are installed...
 	MATCHED=`list_matched_packages` # ignore return code because some won't match
-	MATCHCOUNT=`echo "${MATCHED}" | wc -l` || die 2
-	DESIREDCOUNT=`cat ${INSTALLLIST} | wc -l` || die 3
+	MATCHCOUNT=`echo "${MATCHED}" | wc -l` || die $?
+	DESIREDCOUNT=`cat ${INSTALLLIST} | wc -l` || die $?
 
 	if [ ${MATCHCOUNT} -eq ${DESIREDCOUNT} ]; then
 		echo ...success!
@@ -109,9 +109,9 @@
 		echo "...failure!  Differing packages (desired/installed):"
 		LEFT=`tempname`
 		RIGHT=`tempname`
-		cat ${INSTALLLIST} | sort > ${LEFT} || die 4
-		list_matched_packages | sort > ${RIGHT} || die 5
-		diff ${LEFT} ${RIGHT} || die 6
+		cat ${INSTALLLIST} | sort > ${LEFT} || die $?
+		list_matched_packages | sort > ${RIGHT} || die $?
+		diff ${LEFT} ${RIGHT} || die $?
 		rm ${LEFT} ${RIGHT}
 		die 7
 	fi
