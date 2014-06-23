@@ -1,0 +1,3 @@
+#!/usr/pkg/bin/bash
+
+printf "\e[%dm%d dark\e[0m \e[%d;1m%d bold\e[0m\n" {30..37}{,,,}
