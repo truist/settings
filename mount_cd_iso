@@ -1,0 +1,3 @@
+#!/bin/sh
+vnconfig vnd0 $1 || exit $?
+mount -t cd9660 -r /dev/vnd0a /mnt/vnd || exit $?

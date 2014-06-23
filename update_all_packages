@@ -1,0 +1,157 @@
+#!/bin/sh
+
+# load the configuration
+. /root/bin/update_all_packages.conf || exit $?
+
+# possibly override the configuration with command-line arguments
+USAGE="usage: $0 "'[-h] [--quick]'
+while [ $# -gt 0 ]; do
+    case $1 in
+	--quick)	DOCLEAN=0; DOUPDATE=0;;
+	--noupdate)	DOUPDATE=0;;
+	--noclean)	DOCLEAN=0;;
+    	-h)	echo "$USAGE"; exit ;;
+    	-*)	echo >&2 "$USAGE"; exit 1 ;;
+    	*)	echo >&2 "$USAGE"; exit 1 ;;
+    esac
+    shift
+done
+
+# load some utility functions
+. /root/bin/util.sh || exit $?
+
+### Script begins here ###
+
+echo Setting nice level... | tee ${BULKLOG}
+renice ${NICELEVEL} -p $$ >> ${BULKLOG} || die $?
+
+if mount | grep -q " on ${SANDBOXDIR}"; then
+	echo Unmounting old sandbox... | tee -a ${BULKLOG}
+	if [ -f ${SANDBOXSCRIPT} ]; then
+		${SANDBOXSCRIPT} umount >> ${BULKLOG} 2>&1 # this will 'fail' if they were already unmounted
+	fi
+	if mount | grep -q " on ${SANDBOXDIR}"; then
+		die $?
+	fi
+fi
+
+if [ -d ${SANDBOXDIR} ]; then
+	echo Removing old sandbox directory... | tee -a ${BULKLOG}
+	rm -r ${SANDBOXDIR} >> ${BULKLOG} 2>&1 || die $?
+fi
+
+cd ${PKGSRCDIR}
+echo Cleaning pkgsrc... | tee -a ${BULKLOG}
+if [ ${DOCLEAN}  -eq 1 ]; then
+	make clean >> ${BULKLOG} 2>&1 || die $?
+fi
+echo Updating pkgsrc... | tee -a ${BULKLOG}
+if [ ${DOUPDATE} -eq 1 ]; then
+	cvs -Q update -dP >> ${BULKLOG} 2>&1 || die $?
+fi
+
+echo Building new sandbox... | tee -a ${BULKLOG}
+${MKSANDBOX} ${SANDBOXDIR} >> ${BULKLOG} 2>&1 || die $?
+
+echo Applying local fixes... | tee -a ${BULKLOG}
+local_fixes >> ${BULKLOG}
+
+# stuff related to the PKG_TOOLS_BIN bug below...
+#echo Working around pkg_install bug... | tee -a ${BULKLOG}
+#if ! pkg_info -e pkg_install; then
+#	cd ${PKGSRCDIR}/pkgtools/pkg_install >> ${BULKLOG} 2>&1 || die $?
+#	make install PKGSRC_LOCKTYPE=none WORKDIR_LOCKTYPE=none LOCALBASE_LOCKTYPE=none >> ${BULKLOG} 2>&1 || die $?
+#fi
+#mkdir -p ${SANDBOXDIR}/usr/local/sbin >> ${BULKLOG} 2>&1 || die $?
+#cd /usr/pkg/sbin >> ${BULKLOG} 2>&1 || die $?
+#cp audit-packages download-vulnerability-list pkg_add pkg_admin pkg_create pkg_delete pkg_info ${SANDBOXDIR}/usr/local/sbin/ >> ${BULKLOG} 2>&1 || die $?
+
+echo Updating sandbox mk.conf... | tee -a ${BULKLOG}
+cat >> ${SANDBOXDIR}/etc/mk.conf << EOF
+
+SPECIFIC_PKGS=1
+HOST_SPECIFIC_PKGS!=cat ${DESIREDPACKAGES} | grep -v \\\\\# | xargs echo
+PKGSRC_LOCKTYPE=none
+WRKDIR_LOCKTYPE=none
+LOCALBASE_LOCKTYPE=none
+#PKG_TOOLS_BIN=/usr/local/sbin # this works around a bug, see pkgsrc-users mailing list on 20080206 
+SKIP_LICENSE_CHECK=yes
+EOF
+
+echo Running build at `date` -- see ${BULKLOG} for details... | tee -a ${BULKLOG}
+STARTTIME=`date '+%s'`
+cd ${SANDBOXDIR}/${PKGSRCDIR}
+# this only fails if the overall build process breaks somehow; it 'succeeds'
+# even if some of the packages fail to build
+sh mk/bulk/do-sandbox-build >> ${BULKLOG} 2>&1 || die $?
+ENDTIME=`date '+%s'`
+cd ${PKGSRCDIR}
+echo ...completed at `date` -- approx. $(( (${ENDTIME} - ${STARTTIME}) / 3600 )) hours | tee -a ${BULKLOG}
+
+if [ ${DOMANUALBUILDMAIL} -eq 1 ]; then
+	(  # do this in a subshell to keep BUILDCONF from cluttering up our variable-space
+	echo Mailing bulk build summary... | tee -a ${BULKLOG}
+	. ${BUILDCONF}
+	mail -s "bulk build summary" ${ADMIN} < ${SANDBOXDIR}/${REPORTS_DIR}/last/${REPORT_TXT_FILE}
+	) || echo "...failed (continuing anyway)" | tee -a ${BULKLOG}
+fi
+
+echo Generating sorted list of top-level packages... | tee -a ${BULKLOG}
+dependsort()
+{
+    for i in `cat ${ALLDEPENDSORT}`; do
+        grep -Fx $i ${DESIREDPACKAGES}
+    done
+}
+SORTED=`dependsort` >> ${BULKLOG} 2>&1 || die $?
+
+if [ -f ${INSTALLLIST} ]; then
+    echo Deleting old install list... | tee -a ${BULKLOG}
+    rm ${INSTALLLIST} >> ${BULKLOG} 2>&1 || die $?
+fi
+
+if ! [ -f ${PACKAGEINDEX} ]; then
+	die $?
+fi
+
+echo Writing install list \(${INSTALLLIST}\)... | tee -a ${BULKLOG}
+for i in ${SORTED}; do
+    grep "^$i " ${PACKAGEINDEX} | awk '{ print $2 }' | xargs printf ${PACKAGEDIR}/%s.tgz\\n >> ${INSTALLLIST} || die $?
+done
+
+echo Unmounting sandbox... | tee -a ${BULKLOG}
+${SANDBOXSCRIPT} umount >> ${BULKLOG} 2>&1 || die $?
+
+echo Checking for broken packages... | tee -a ${BULKLOG}
+if [ 0 -lt `cat ${INSTALLLIST} | xargs ls 2>&1 > /dev/null | tee /dev/stderr | wc -l` ]; then
+    die $?
+fi
+
+echo
+echo Note: all user-requested packages are present, but non-requested dependencies
+echo of those packages may be missing.  Please check the bulk build summary email
+echo or build report file for errors before installing the new packages. The file is
+(
+	. ${BUILDCONF}
+	echo ${SANDBOXDIR}/${REPORTS_DIR}/last/${REPORT_HTML_FILE}
+)
+echo
+
+if [ ${DODELETEOLD} -eq 1 ]; then
+	echo Deleting old versions of new packages... | tee -a ${BULKLOG}
+	for i in `ls ${PACKAGEDIR} | sed s/\.tgz//`; do
+		if ! awk '{print $2}' ${PACKAGEINDEX} | grep -qFx $i; then
+			TODELETE=${PACKAGEDIR}/$i.tgz
+			if [ -f ${TODELETE} ]; then
+				echo "  deleting ${TODELETE}..." | tee -a ${BULKLOG}
+				rm ${TODELETE} || echo "    ...failed!" | tee -a ${BULKLOG}
+			fi
+		fi
+	done
+fi
+
+echo Done! | tee -a ${BULKLOG}
+echo | tee -a ${BULKLOG}
+echo Remember to run install_all_packages | tee -a ${BULKLOG}
+exit 0
+
