@@ -2,8 +2,16 @@
 # interactive non-login shell, and is called by ~/.profile, which
 # is read by bash when it is run as a login shell
 
+PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R7/bin:/usr/X11R6/bin:/usr/pkg/bin
+PATH=${PATH}:/usr/pkg/sbin:/usr/games:/usr/local/bin:/usr/local/sbin
+export PATH
+
+# also add these two lines to /root/.profile (for e.g. 'sudo -i crontab -e')
 export EDITOR=vim
 alias vi=vim
+
+# http://www.shellperson.net/using-sudo-with-an-alias/   (fixes "sudo vi <whatever>" not using vim)
+alias sudo='sudo '
 
 alias ls='ls -F'
 
