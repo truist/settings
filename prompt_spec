@@ -28,11 +28,17 @@ P_PLAIN_RED="$P_ESC_PRE$P_PLAIN$P_RED$P_ESC_POST"
 
 if [ "truist" == "$USER" ] || [ "narthur" == "$USER" ]; then
         USER_COLOR=$P_PLAIN_GREEN
+	SELF=1
 else
         USER_COLOR=$P_PLAIN_RED
+	SELF=0
 fi
 if [ -z "$SSH_CLIENT" ]; then
-        HOST_COLOR=$P_PLAIN_GREEN
+	if [ "1" == "$SELF" ]; then
+		HOST_COLOR=$P_PLAIN_GREEN
+	else
+		HOST_COLOR=$P_PLAIN_RED
+	fi
 else
         HOST_COLOR=$P_PLAIN_YELLOW
 fi
