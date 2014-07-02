@@ -47,7 +47,7 @@ if [ ${DOCLEAN}  -eq 1 ]; then
 fi
 echo Updating pkgsrc... | tee -a ${BULKLOG}
 if [ ${DOUPDATE} -eq 1 ]; then
-	cvs -Q update -dP >> ${BULKLOG} 2>&1 || die $?
+	cvs update -dP >> ${BULKLOG} 2>&1 || die $?
 fi
 
 echo Building new sandbox... | tee -a ${BULKLOG}
