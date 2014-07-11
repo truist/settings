@@ -12,6 +12,7 @@
 [color "diff"]
 	meta = yellow
 [core]
+	excludesfile = ~/.gitignore
 	pager = less -i
 [merge]
 	tool = vimdiff
