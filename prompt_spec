@@ -43,7 +43,6 @@ else
         HOST_COLOR=$P_PLAIN_YELLOW
 fi
 BIT_COLOR=$P_PLAIN_GREEN
-BRANCH_COLOR=$P_PLAIN_YELLOW
 
 get_path_color() {
         if [[ "$PWD" =~ ^`eval echo ~$USER` ]]; then
@@ -68,7 +67,6 @@ wrap_result() {
         fi
 }
 
-# example usage: PS1="my-prompt-and-path\$(show_git_branch_if_branch) "
 show_git_branch_if_branch() {
         wrap_result "$(get_git_branch_if_branch)" "$@"
 }
@@ -80,8 +78,34 @@ show_git_branch_if_not_master() {
         fi
 }
 
+HAVE_GIT_PROMPT=0
+if [ -f ~/.git-prompt.sh ]; then
+	source ~/.git-prompt.sh
+	HAVE_GIT_PROMPT=1
+fi
+do_git() {
+	if [ 1 -eq $HAVE_GIT_PROMPT ]; then
+		GIT_PS1_SHOWDIRTYSTATE=1
+		GIT_PS1_SHOWSTASHSTATE=1
+		GIT_PS1_SHOWUNTRACKEDFILES=1
+		GIT_PS1_SHOWUPSTREAM="auto verbose"
+		GIT_PS1_DESCRIBE_STYLE="default"
+		__git_ps1 ":%s"
+	else
+		show_git_branch_if_not_master "$@"
+	fi
+}
+get_branch_color() {
+        BRANCH=$(get_git_branch_if_branch)
+        if [ -n "$BRANCH" ] && [ "master" == "$BRANCH" ]; then
+                echo "$P_PLAIN$P_GREEN"
+        else
+                echo "$P_PLAIN$P_YELLOW"
+        fi
+}
 
-export PS1="$BIT_COLOR[$USER_COLOR\u$BIT_COLOR@$HOST_COLOR\h$BIT_COLOR $P_ESC_PRE\$(get_path_color)$P_ESC_POST\W$BRANCH_COLOR\$(show_git_branch_if_not_master ':' $P_ESC_RESET)$BIT_COLOR]$ $P_ESC_RESET"
+
+export PS1="$BIT_COLOR[$USER_COLOR\u$BIT_COLOR@$HOST_COLOR\h$BIT_COLOR $P_ESC_PRE\$(get_path_color)$P_ESC_POST\W$P_ESC_PRE\$(get_branch_color)$P_ESC_POST\$(do_git ':' $P_ESC_RESET)$BIT_COLOR]$ $P_ESC_RESET"
 
 if [ "$TERM" == "screen" ] || [ "$TERM" == "screen-256color" ] ; then
         # make tmux show $PWD in the status line

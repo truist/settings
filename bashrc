@@ -22,16 +22,16 @@ alias less='less -R'
 alias ack='ack --pager="less -R -X" -a'
 
 if [ "$TERM" == "xterm-256color" ]; then
+	# 256color isn't recognized by too many things, still
 	export TERM=xterm-color
-fi
-
-if [ "$TERM" == "screen" ]; then
-        # make tmux show useful stuff in the status line
-        export PROMPT_COMMAND="echo -ne \"\\033]0;\${USER}@${HOSTNAME}\\007\\033k\${PWD}\\033\\\\\""
 fi
 
 if [ `/usr/bin/id -u` == 0 ]; then
 	export HOME=/root
+fi
+if [ -f ~/.prompt_spec ]; then
+	source ~/.prompt_spec
+elif [ `/usr/bin/id -u` == 0 ]; then
 	# red
 	export PS1="\[\e[0;31m\][\u@\h \W]$ \[\e[m\]"
 else
@@ -39,7 +39,9 @@ else
 	export PS1="\[\e[0;32m\][\u@\h \W]$ \[\e[m\]"
 fi
 
-source ~/.prompt_spec
+if [ -f ~/.git-completion.bash ]; then
+	source ~/.git-completion.bash
+fi
 
 # mosh sets this to en_US.UTF-8, which makes perl angry
 unset LANG
