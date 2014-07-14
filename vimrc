@@ -33,6 +33,9 @@ filetype plugin indent on
 set cindent
 " make the backspace key work with autoindent
 set backspace=indent,eol,start
+
+au BufEnter * set nowrap tabstop=4 shiftwidth=4
+au BufEnter *.sh set nowrap tabstop=4 shiftwidth=4
 au BufEnter *.tt set nowrap tabstop=4 shiftwidth=4
 au BufEnter *.md set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
 au BufEnter *.js set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
@@ -63,7 +66,7 @@ map ,# :s/^/#<CR>
 map ,## :s/^#<CR>
 
 " shortcut to wrap text to 80 columns
-map ,w !fmt -81<CR>
+map ,w !fmt<CR>
 
 " delete/change/etc text between parentheseis
 " to use: type 'dp' or 'cp' (etc.) while in normal mode
