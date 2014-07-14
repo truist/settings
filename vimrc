@@ -35,6 +35,7 @@ set cindent
 set backspace=indent,eol,start
 au BufEnter *.tt set nowrap tabstop=4 shiftwidth=4
 au BufEnter *.md set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
+au BufEnter *.js set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
 au BufEnter *.ep set nowrap tabstop=4 shiftwidth=4
 au BufEnter *.html set nowrap tabstop=4 shiftwidth=4
 au BufEnter *.css set nowrap tabstop=4 shiftwidth=4
