@@ -26,13 +26,17 @@ P_PLAIN_YELLOW="$P_ESC_PRE$P_PLAIN$P_YELLOW$P_ESC_POST"
 P_UNDERLINE_RED="$P_ESC_PRE$P_UNDERLINE$P_RED$P_ESC_POST"
 P_PLAIN_RED="$P_ESC_PRE$P_PLAIN$P_RED$P_ESC_POST"
 
-if [ "truist" == "$USER" ] || [ "narthur" == "$USER" ]; then
+if [ `/usr/bin/id -u` == 0 ]; then
+        USER_COLOR=$P_PLAIN_RED
+	SELF=0
+elif [ "truist" == `whoami` ] || [ "narthur" == `whoami` ]; then
         USER_COLOR=$P_PLAIN_GREEN
 	SELF=1
 else
-        USER_COLOR=$P_PLAIN_RED
+        USER_COLOR=$P_PLAIN_YELLOW
 	SELF=0
 fi
+
 if [ -z "$SSH_CLIENT" ]; then
 	if [ "1" == "$SELF" ]; then
 		HOST_COLOR=$P_PLAIN_GREEN
@@ -42,10 +46,11 @@ if [ -z "$SSH_CLIENT" ]; then
 else
         HOST_COLOR=$P_PLAIN_YELLOW
 fi
+
 BIT_COLOR=$P_PLAIN_GREEN
 
 get_path_color() {
-        if [[ "$PWD" =~ ^`eval echo ~$USER` ]]; then
+        if [[ "$PWD" =~ ^`eval echo ~\`whoami\`` ]]; then
                 echo "$P_PLAIN$P_GREEN"
         else
                 echo "$P_PLAIN$P_YELLOW"
@@ -85,9 +90,10 @@ if [ -f ~/.git-prompt.sh ]; then
 fi
 do_git() {
 	if [ 1 -eq $HAVE_GIT_PROMPT ]; then
-		GIT_PS1_SHOWDIRTYSTATE=1
+		# these next two are slow on large repos; turn them off per-repo as shown in each comment
+		GIT_PS1_SHOWDIRTYSTATE=1	# git config bash.showDirtyState false
+		GIT_PS1_SHOWUNTRACKEDFILES=1	# git config bash.showUntrackedFiles false
 		GIT_PS1_SHOWSTASHSTATE=1
-		GIT_PS1_SHOWUNTRACKEDFILES=1
 		GIT_PS1_SHOWUPSTREAM="auto verbose"
 		GIT_PS1_DESCRIBE_STYLE="default"
 		__git_ps1 ":%s"
