@@ -16,6 +16,9 @@ alias sudo='sudo '
 alias ls='ls -F'
 
 export HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:pwd"
+# type something then hit up/down to search history that matches what you already have
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
 
 export PAGER=less
 alias less='less -R'

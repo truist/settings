@@ -47,6 +47,9 @@ au BufEnter *.css set nowrap tabstop=4 shiftwidth=4
 vmap <tab> >gv
 vmap <s-tab> <gv
 
+" sudo write
+ca w!! w !sudo tee >/dev/null "%"
+
 " turn off all code folding
 autocmd BufEnter * set nofoldenable
 
@@ -65,7 +68,7 @@ au BufWinEnter *.sh let w:m2=matchadd('Search', '\%>80v.\+', -1)
 map ,# :s/^/#<CR>
 map ,## :s/^#<CR>
 
-" shortcut to wrap text to 80 columns
+" shortcut to wrap text to 75 columns
 map ,w !fmt<CR>
 
 " delete/change/etc text between parentheseis
