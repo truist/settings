@@ -104,7 +104,7 @@ do_git() {
 get_branch_color() {
         BRANCH=$(get_git_branch_if_branch)
         if [ -n "$BRANCH" ] && [ "master" == "$BRANCH" ]; then
-                echo "$P_PLAIN$P_GREEN"
+                echo "$P_PLAIN$P_BLUE"
         else
                 echo "$P_PLAIN$P_YELLOW"
         fi
