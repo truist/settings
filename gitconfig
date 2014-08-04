@@ -1,12 +1,12 @@
 [alias]
-	st = status -s
-	stat = status -s
+	cleanall = clean -d -x -f
 	graph = log --graph --all --pretty=format':%C(yellow)%h%Cred%d%Creset %s %Cgreen %an, %ar%Creset'
+	master-to-new-branch = "!master-to-new-branch"
 	search = "!f() { git log -p -G\"$1\" --diff-filter=M ; }; f"
+	st = status -s
 	undo-commit = reset --soft HEAD^
 	wdiff = diff --color-words
 	wshow = show --color-words
-	master-to-new-branch = "!master-to-new-branch"
 [color]
 	ui = true
 [color "diff"]
