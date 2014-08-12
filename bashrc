@@ -20,6 +20,25 @@ export HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:pwd"
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
+function cd()
+{
+	command cd $1 && pushd -n "$PWD" >/dev/null
+}
+function j()
+{
+	local STATS="$(dirs -l -p | sort | uniq -c | sort -nr)"
+	if [ -n "$1" ]; then
+		local MATCH="$(echo "$STATS" | sed 's/^[ [:digit:]]*//' | grep "${1}$" | head -n 1)"
+		if [ -n "$MATCH" ]; then
+			cd "$MATCH"
+		else
+			echo "No match" >&2
+		fi
+	else
+		echo "$STATS"
+	fi
+}
+
 export PAGER=less
 alias less='less -R'
 alias ack='ack --pager="less -R -X" -a'
@@ -29,7 +48,7 @@ if [ "$TERM" == "xterm-256color" ]; then
 	export TERM=xterm-color
 fi
 
-if [ `/usr/bin/id -u` == 0 ]; then
+if [ `/usr/bin/id -u` -eq 0 ]; then
 	export HOME=/root
 fi
 if [ -f ~/.prompt_spec ]; then
