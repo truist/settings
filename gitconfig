@@ -25,11 +25,15 @@
 	meta = yellow
 
 [core]
+#	autocrlf = true
 	excludesfile = ~/.gitignore
+	longpaths = true
 	pager = less -i
 
-#[credential]
+[credential]
+	helper = cache
 #	helper = osxkeychain
+#	helper = wincred
 
 [merge]
 	tool = vimdiff
@@ -38,4 +42,4 @@
 	rebase = true
 
 [push]
-	default = upstream
+	default = current
