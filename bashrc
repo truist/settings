@@ -55,6 +55,10 @@ else
 	# green
 	export PS1="\[\e[0;32m\][\u@\h \W]$ \[\e[m\]"
 fi
+if [ "$TERM" == "screen" ]; then
+        # make tmux show $PWD in the status line
+        export PROMPT_COMMAND="echo -ne \"\\033]0;\${USER}@${HOSTNAME}\\007\\033k\${PWD}\\033\\\\\""
+fi
 
 if [ -f ~/.git-completion.bash ]; then
 	. ~/.git-completion.bash
