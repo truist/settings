@@ -1,10 +1,27 @@
+
+# to use this on a host, add this to the top of the host's .bashrc or .profile:
+#. code/settings/bashrc
+
 # this file is automatically read by bash when it is run as an
 # interactive non-login shell, and is called by ~/.profile, which
 # is read by bash when it is run as a login shell
 
-PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R7/bin:/usr/X11R6/bin:/usr/pkg/bin
-PATH=${PATH}:/usr/pkg/sbin:/usr/games:/usr/local/bin:/usr/local/sbin
+if [ `/usr/bin/id -u` -eq 0 ] && [ -d /root ] && [ -n "$(find /root -user "root" -print -prune -o -prune > 2>/dev/null)" ]; then
+	export HOME=/root
+fi
+
+PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R7/bin:/usr/X11R6/bin
+# these prepend paths to PATH, so we're semi-careful and check the owner first
+if [ -d /usr/pkg/bin ] && [ -n "$(find . -user "root" -print -prune -o -prune > 2>/dev/null)" ]; then
+	PATH=/usr/pkg/bin:/usr/pkg/sbin:${PATH}
+	MANPATH=/usr/pkg/man:$MANPATH
+elif [ -d "$HOME/pkg/bin" ] && [ -n "$(find . -user "$(id -u)" -print -prune -o -prune)" ]; then
+	PATH=$HOME/pkg/bin:$HOME/pkg/sbin:${PATH}
+	MANPATH=$HOME/pkg/man:$MANPATH
+fi
+PATH=${PATH}:/usr/local/bin:/usr/local/sbin
 export PATH
+export MANPATH
 
 # also add these two lines to /root/.profile (for e.g. 'sudo -i crontab -e')
 export EDITOR=vim
@@ -20,27 +37,8 @@ export HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:pwd"
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
-function cd()
-{
-	command cd $1 && pushd -n "$PWD" >/dev/null
-}
-function j()
-{
-	local STATS="$(dirs -l -p | sort | uniq -c | sort -nr)"
-	if [ -n "$1" ]; then
-		local MATCH="$(echo "$STATS" | sed 's/^[ [:digit:]]*//' | grep "${1}$" | head -n 1)"
-		if [ -n "$MATCH" ]; then
-			cd "$MATCH"
-		else
-			echo "No match" >&2
-		fi
-	else
-		echo "$STATS"
-	fi
-}
-
 export PAGER=less
-alias less='less -R'
+alias less='less -R -X'
 alias ack='ack --pager="less -R -X" -a'
 
 if [ "$TERM" == "xterm-256color" ]; then
@@ -48,11 +46,8 @@ if [ "$TERM" == "xterm-256color" ]; then
 	export TERM=xterm-color
 fi
 
-if [ `/usr/bin/id -u` -eq 0 ]; then
-	export HOME=/root
-fi
 if [ -f ~/.prompt_spec ]; then
-	source ~/.prompt_spec
+	. ~/.prompt_spec
 elif [ `/usr/bin/id -u` == 0 ]; then
 	# red
 	export PS1="\[\e[0;31m\][\u@\h \W]$ \[\e[m\]"
@@ -62,7 +57,7 @@ else
 fi
 
 if [ -f ~/.git-completion.bash ]; then
-	source ~/.git-completion.bash
+	. ~/.git-completion.bash
 fi
 
 # mosh sets this to en_US.UTF-8, which makes perl angry
@@ -70,7 +65,7 @@ unset LANG
 
 export PERL_CPANM_OPT="-v -S"
 
-if ( tty -s ); then
+if ( tty -s ) && [ -x /usr/games/fortune ]; then
 	/usr/games/fortune
 fi
 
