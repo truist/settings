@@ -60,8 +60,8 @@ if [ -f ~/.git-completion.bash ]; then
 	. ~/.git-completion.bash
 fi
 
-# mosh sets this to en_US.UTF-8, which makes perl angry
-unset LANG
+# mosh sets this to en_US.UTF-8, which makes perl angry, so do this on mosh servers, if necessary
+#unset LANG
 
 export PERL_CPANM_OPT="-v -S"
 
