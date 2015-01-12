@@ -1,6 +1,18 @@
 " reload changes automatically when saved
 autocmd! bufwritepost .vimrc source ~/.vimrc
 
+set runtimepath+=~/.vim
+
+if has("multi_byte")
+	if &termencoding == ""
+		let &termencoding = &encoding
+	endif
+	set encoding=utf-8
+	setglobal fileencoding=utf-8
+	"setglobal bomb
+	set fileencodings=ucs-bom,utf-8,latin1
+endif
+
 " pathogen (https://github.com/tpope/vim-pathogen)
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
@@ -38,10 +50,12 @@ au BufEnter * set nowrap tabstop=4 shiftwidth=4
 au BufEnter *.sh set nowrap tabstop=4 shiftwidth=4
 au BufEnter *.tt set nowrap tabstop=4 shiftwidth=4
 au BufEnter *.md set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
+au BufEnter *.mdwn set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
 au BufEnter *.js set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
 au BufEnter *.ep set nowrap tabstop=4 shiftwidth=4
 au BufEnter *.html set nowrap tabstop=4 shiftwidth=4
 au BufEnter *.css set nowrap tabstop=4 shiftwidth=4
+au BufEnter *.xml set nowrap tabstop=4 shiftwidth=4
 
 " indent/unindent selected lines in visual mode
 vmap <tab> >gv
