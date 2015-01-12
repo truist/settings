@@ -1,3 +1,11 @@
+# Use this file like so:
+#[include]
+#	path = code/settings/gitconfig
+
+[user]
+	name = Nathan Arthur
+#	email = SET ONE IN YOUR LOCAL FILE
+
 [alias]
 	cleanall = clean -d -x -f
 	graph = log --graph --all --pretty=format':%C(yellow)%h%Cred%d%Creset %s %Cgreen %an, %ar%Creset'
@@ -7,18 +15,27 @@
 	undo-commit = reset --soft HEAD^
 	wdiff = diff --color-words
 	wshow = show --color-words
+
+[branch]
+	autosetuprebase = always
+
 [color]
 	ui = true
 [color "diff"]
 	meta = yellow
+
 [core]
 	excludesfile = ~/.gitignore
 	pager = less -i
+
+#[credential]
+#	helper = osxkeychain
+
 [merge]
 	tool = vimdiff
-[branch]
-	autosetuprebase = always
+
 [pull]
 	rebase = true
+
 [push]
 	default = upstream
