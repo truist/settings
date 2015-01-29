@@ -80,7 +80,7 @@ fi
 
 export PERL_CPANM_OPT="-v -S"
 
-if ( tty -s ) && [ -x /usr/games/fortune ]; then
+if ( command -v tty ) && ( tty -s ) && [ -x /usr/games/fortune ]; then
 	/usr/games/fortune
 fi
 
