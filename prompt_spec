@@ -27,13 +27,16 @@ P_UNDERLINE_RED="$P_ESC_PRE$P_UNDERLINE$P_RED$P_ESC_POST"
 P_PLAIN_RED="$P_ESC_PRE$P_PLAIN$P_RED$P_ESC_POST"
 
 if [ `/usr/bin/id -u` == 0 ]; then
-        USER_COLOR=$P_PLAIN_RED
+	USER_COLOR=$P_PLAIN_RED
+	PROMPT_CHAR='#'
 	SELF=0
 elif [ "truist" == `whoami` ] || [ "narthur" == `whoami` ]; then
-        USER_COLOR=$P_PLAIN_GREEN
+	USER_COLOR=$P_PLAIN_GREEN
+	PROMPT_CHAR='$'
 	SELF=1
 else
-        USER_COLOR=$P_PLAIN_YELLOW
+	USER_COLOR=$P_PLAIN_YELLOW
+	PROMPT_CHAR='%'
 	SELF=0
 fi
 
@@ -41,46 +44,47 @@ if [ -z "$SSH_CLIENT" ]; then
 	if [ "1" == "$SELF" ]; then
 		HOST_COLOR=$P_PLAIN_GREEN
 	else
+		# the SSH_CLIENT var won't survive a 'sudo', so we can't be sure if we're local
 		HOST_COLOR=$P_PLAIN_RED
 	fi
 else
-        HOST_COLOR=$P_PLAIN_YELLOW
+	HOST_COLOR=$P_PLAIN_YELLOW
 fi
 
 BIT_COLOR=$P_PLAIN_GREEN
 
 get_path_color() {
-        if [[ "$PWD" =~ ^`eval echo ~\`whoami\`` ]]; then
-                echo "$P_PLAIN$P_GREEN"
-        else
-                echo "$P_PLAIN$P_YELLOW"
-        fi
+	if [[ "$PWD" =~ ^`eval echo ~\`whoami\`` ]]; then
+		echo "$P_PLAIN$P_GREEN"
+	else
+		echo "$P_PLAIN$P_YELLOW"
+	fi
 }
 
 get_git_branch_if_branch() {
-        git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' | sed -e 's/* \(.*\)/\1/'
+	git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' | sed -e 's/* \(.*\)/\1/'
 }
 
 wrap_result() {
-        if [ -n "$1" ]; then
-                PREFIX=$2
-                [ -n "$PREFIX" ] || PREFIX='('
-                SUFFIX=$3
-                [ -n "$SUFFIX" ] || SUFFIX=')'
+	if [ -n "$1" ]; then
+		PREFIX=$2
+		[ -n "$PREFIX" ] || PREFIX='('
+		SUFFIX=$3
+		[ -n "$SUFFIX" ] || SUFFIX=')'
 
-                echo "$PREFIX$1$SUFFIX"
-        fi
+		echo "$PREFIX$1$SUFFIX"
+	fi
 }
 
 show_git_branch_if_branch() {
-        wrap_result "$(get_git_branch_if_branch)" "$@"
+	wrap_result "$(get_git_branch_if_branch)" "$@"
 }
 
 show_git_branch_if_not_master() {
-        BRANCH=$(get_git_branch_if_branch)
-        if [ -n "$BRANCH" ] && [ "master" != "$BRANCH" ]; then
-                wrap_result "$BRANCH" "$@"
-        fi
+	BRANCH=$(get_git_branch_if_branch)
+	if [ -n "$BRANCH" ] && [ "master" != "$BRANCH" ]; then
+		wrap_result "$BRANCH" "$@"
+	fi
 }
 
 HAVE_GIT_PROMPT=0
@@ -102,19 +106,34 @@ do_git() {
 	fi
 }
 get_branch_color() {
-        BRANCH=$(get_git_branch_if_branch)
-        if [ -n "$BRANCH" ] && [ "master" == "$BRANCH" ]; then
-                echo "$P_PLAIN$P_BLUE"
-        else
-                echo "$P_PLAIN$P_YELLOW"
-        fi
+	BRANCH=$(get_git_branch_if_branch)
+	if [ -n "$BRANCH" ] && [ "master" == "$BRANCH" ]; then
+		echo "$P_PLAIN$P_BLUE"
+	else
+		echo "$P_PLAIN$P_YELLOW"
+	fi
 }
 
 
-export PS1="$BIT_COLOR[$USER_COLOR\u$BIT_COLOR@$HOST_COLOR\h$BIT_COLOR $P_ESC_PRE\$(get_path_color)$P_ESC_POST\W$P_ESC_PRE\$(get_branch_color)$P_ESC_POST\$(do_git ':' $P_ESC_RESET)$BIT_COLOR]$ $P_ESC_RESET"
+# set the terminal title
+PS1="\[\033]0;\u@\h:\w\007\]"
 
-if [ "$TERM" == "screen" ] || [ "$TERM" == "screen-256color" ] ; then
-        # make tmux show $PWD in the status line
-        export PROMPT_COMMAND="echo -ne \"\\033]0;\${USER}@${HOSTNAME}\\007\\033k\${PWD}\\033\\\\\""
-fi
+PS1+="\n"
+PS1+="$BIT_COLOR["
+PS1+="$USER_COLOR\u"
+PS1+="$BIT_COLOR@"
+PS1+="$HOST_COLOR\h"
+PS1+="$BIT_COLOR "
+PS1+="$P_ESC_PRE\$(get_path_color)$P_ESC_POST\W"
+PS1+="$P_ESC_PRE\$(get_branch_color)$P_ESC_POST\$(do_git ':' $P_ESC_RESET)"
+PS1+="$BIT_COLOR]"
+PS1+="\n"
+PS1+="$USER_COLOR$PROMPT_CHAR $P_ESC_RESET"
+
+export PS1
+
+#if [ "$TERM" == "screen" ] || [ "$TERM" == "screen-256color" ] ; then
+	# make tmux show $PWD in the status line
+#	export PROMPT_COMMAND="echo -ne \"\\033]0;\${USER}@${HOSTNAME}\\007\\033k\${PWD}\\033\\\\\""
+#fi
 
