@@ -27,19 +27,28 @@ export MANPATH
 export EDITOR=vim
 alias vi=vim
 
+alias ls='ls -F'
+
+export PAGER=less
+alias less='less -R -X'
+alias ack='ack --pager="less -R -X" -a'
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+
 # http://www.shellperson.net/using-sudo-with-an-alias/   (fixes "sudo vi <whatever>" not using vim)
 alias sudo='sudo '
 
-alias ls='ls -F'
+alias notify='tput bel'
+
+command -v grunt > /dev/null && alias grunt="grunt --stack"
 
 export HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:pwd"
 # type something then hit up/down to search history that matches what you already have
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
-
-export PAGER=less
-alias less='less -R -X'
-alias ack='ack --pager="less -R -X" -a'
 
 if [ "$TERM" = "xterm-256color" ] && [ `uname` != "Darwin" ]; then
 	# 256color isn't recognized by too many things, still

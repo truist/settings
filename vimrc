@@ -21,6 +21,7 @@ execute pathogen#infect()
 set showmatch
 set ruler
 set showmode
+set title
 " turn off beeps
 set vb
 " margin while scrolling
@@ -49,9 +50,11 @@ set backspace=indent,eol,start
 au BufEnter * set nowrap tabstop=4 shiftwidth=4
 au BufEnter *.sh set nowrap tabstop=4 shiftwidth=4
 au BufEnter *.tt set nowrap tabstop=4 shiftwidth=4
-au BufEnter *.md set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
 au BufEnter *.mdwn set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
+autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
+"au BufEnter *.md set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
 au BufEnter *.js set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
+autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
 au BufEnter *.ep set nowrap tabstop=4 shiftwidth=4
 au BufEnter *.html set nowrap tabstop=4 shiftwidth=4
 au BufEnter *.css set nowrap tabstop=4 shiftwidth=4
@@ -98,8 +101,8 @@ let g:SuperTabMidWordCompletion = "0"
 if &term == "screen" || &term == "screen-256color"
         set t_ts=
 endif
-if &term == "screen" || &term == "screen-256color" || &term == "xterm" || &term == "xterm-color" || &term == "xterm-256color"
+"if &term == "screen" || &term == "screen-256color" || &term == "xterm" || &term == "xterm-color" || &term == "xterm-256color"
         set title
-endif
+"endif
 autocmd BufEnter * let &titlestring = "vim " . expand("%:h") . "/" . expand("%:t")
 

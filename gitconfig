@@ -1,17 +1,27 @@
-# Use this file like so:
+# Reference this file from your ~/.gitconfig like so:
 #[include]
-#	path = code/settings/gitconfig
+#	path = path/to/this/file
 
 [user]
 	name = Nathan Arthur
-#	email = SET ONE IN YOUR LOCAL FILE
+# set this in your ~/.gitconfig
+#	email = your@email
 
 [alias]
+	branches = branch -a
+	# reset the working directory to exactly what it would be if you had just cloned
 	cleanall = clean -d -x -f
-	graph = log --graph --all --pretty=format':%C(yellow)%h%Cred%d%Creset %s %Cgreen %an, %ar%Creset'
+	# summarize contributors and commit count
+	contributors = shortlog --summary --numbered
+	# awesome way to view commit history
+	graph = log --color --graph --all --pretty=format':%C(yellow)%h%Cred%d%Creset %s %Cgreen %an, %ar%Creset'
+	# I just always work on master, and retroactively move work to a branch if needed
 	master-to-new-branch = "!master-to-new-branch"
+	remotes = remote -v
+	# find a commit that changes a particular bit of code
 	search = "!f() { git log -p -G\"$1\" --diff-filter=M ; }; f"
 	st = status -s
+	tags = tag -l
 	undo-commit = reset --soft HEAD^
 	wdiff = diff --color-words
 	wshow = show --color-words
@@ -25,17 +35,29 @@
 	meta = yellow
 
 [core]
+# uncomment this on windows
 #	autocrlf = true
 	excludesfile = ~/.gitignore
 	longpaths = true
 	pager = less -i
 
-[credential]
+	# Make `git rebase` safer on OS X
+	# More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+	trustctime = false
+
+	# Prevent showing files whose names contain non-ASCII symbols as unversioned (on OSX).
+	# http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
+	precomposeunicode = false
+
+# pick one of these, depending on OS
+#[credential]
 #	helper = cache
 #	helper = osxkeychain
 #	helper = wincred
 
 [merge]
+	# Include summaries of merged commits in newly created merge commit messages
+	log = true
 	tool = vimdiff
 
 [pull]
