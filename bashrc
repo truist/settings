@@ -8,6 +8,8 @@
 
 if [ `/usr/bin/id -u` -eq 0 ] && [ -d /root ] && [ -n "$(find /root -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
 	export HOME=/root
+elif [ `/usr/bin/id -u` -eq 0 ] && [ -d /var/root ] && [ -n "$(find /var/root -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
+	export HOME=/var/root
 fi
 
 PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R7/bin:/usr/X11R6/bin
