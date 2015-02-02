@@ -2,10 +2,6 @@
 # to use this on a host, add this to the top of the host's .bashrc or .profile:
 #. code/settings/bashrc
 
-# this file is automatically read by bash when it is run as an
-# interactive non-login shell, and is called by ~/.profile, which
-# is read by bash when it is run as a login shell
-
 if [ `/usr/bin/id -u` -eq 0 ] && [ -d /root ] && [ -n "$(find /root -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
 	export HOME=/root
 elif [ `/usr/bin/id -u` -eq 0 ] && [ -d /var/root ] && [ -n "$(find /var/root -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
@@ -66,10 +62,6 @@ else
 	# green
 	export PS1="\[\e[0;32m\][\u@\h \W]$ \[\e[m\]"
 fi
-if [ "$TERM" == "screen" ]; then
-        # make tmux show $PWD in the status line
-        export PROMPT_COMMAND="echo -ne \"\\033]0;\${USER}@${HOSTNAME}\\007\\033k\${PWD}\\033\\\\\""
-fi
 
 if [ -f ~/.git-completion.bash ]; then
 	. ~/.git-completion.bash
@@ -80,7 +72,7 @@ fi
 
 export PERL_CPANM_OPT="-v -S"
 
-if ( command -v tty ) && ( tty -s ) && [ -x /usr/games/fortune ]; then
+if ( command -v tty >/dev/null ) && ( tty -s ) && [ -x /usr/games/fortune ]; then
 	/usr/games/fortune
 fi
 

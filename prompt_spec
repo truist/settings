@@ -30,7 +30,7 @@ if [ `/usr/bin/id -u` == 0 ]; then
 	USER_COLOR=$P_PLAIN_RED
 	PROMPT_CHAR='#'
 	SELF=0
-elif [ "truist" == `whoami` ] || [ "narthur" == `whoami` ]; then
+elif [ "truist" == `whoami` ] || [ "narthur" == `whoami` ] || [ "preint\\narthur" == `whoami` ]; then
 	USER_COLOR=$P_PLAIN_GREEN
 	PROMPT_CHAR='$'
 	SELF=1
@@ -53,8 +53,13 @@ fi
 
 BIT_COLOR=$P_PLAIN_GREEN
 
+if echo `uname` | grep -E ^MINGW > /dev/null ; then
+	ME_HOMEDIR=$HOME
+else
+	ME_HOMEDIR=`eval echo ~\`whoami\`` > /dev/null
+fi
 get_path_color() {
-	if [[ "$PWD" =~ ^`eval echo ~\`whoami\`` ]]; then
+	if echo "$PWD" | grep -E ^$ME_HOMEDIR > /dev/null ; then
 		echo "$P_PLAIN$P_GREEN"
 	else
 		echo "$P_PLAIN$P_YELLOW"
@@ -76,12 +81,13 @@ wrap_result() {
 	fi
 }
 
-show_git_branch_if_branch() {
-	wrap_result "$(get_git_branch_if_branch)" "$@"
-}
+#show_git_branch_if_branch() {
+#	wrap_result "$(get_git_branch_if_branch)" "$@"
+#}
 
 show_git_branch_if_not_master() {
-	BRANCH=$(get_git_branch_if_branch)
+	# this should already be set by an earlier call to get_branch_color
+	#BRANCH=$(get_git_branch_if_branch)
 	if [ -n "$BRANCH" ] && [ "master" != "$BRANCH" ]; then
 		wrap_result "$BRANCH" "$@"
 	fi
@@ -90,16 +96,21 @@ show_git_branch_if_not_master() {
 HAVE_GIT_PROMPT=0
 if [ -f ~/.git-prompt.sh ]; then
 	source ~/.git-prompt.sh
-	HAVE_GIT_PROMPT=1
 fi
+if [ `type -t __git_ps1` == "function" ]; then
+	HAVE_GIT_PROMPT=1
+
+	# these next two are slow on large repos; turn them off per-repo as shown in each comment
+	GIT_PS1_SHOWDIRTYSTATE=1	# git config bash.showDirtyState false
+	GIT_PS1_SHOWUNTRACKEDFILES=1	# git config bash.showUntrackedFiles false
+
+	GIT_PS1_SHOWSTASHSTATE=1
+	GIT_PS1_SHOWUPSTREAM="auto verbose"
+	GIT_PS1_DESCRIBE_STYLE="default"
+fi
+
 do_git() {
 	if [ 1 -eq $HAVE_GIT_PROMPT ]; then
-		# these next two are slow on large repos; turn them off per-repo as shown in each comment
-		GIT_PS1_SHOWDIRTYSTATE=1	# git config bash.showDirtyState false
-		GIT_PS1_SHOWUNTRACKEDFILES=1	# git config bash.showUntrackedFiles false
-		GIT_PS1_SHOWSTASHSTATE=1
-		GIT_PS1_SHOWUPSTREAM="auto verbose"
-		GIT_PS1_DESCRIBE_STYLE="default"
 		__git_ps1 ":%s"
 	else
 		show_git_branch_if_not_master "$@"
