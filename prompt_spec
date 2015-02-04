@@ -26,11 +26,11 @@ P_PLAIN_YELLOW="$P_ESC_PRE$P_PLAIN$P_YELLOW$P_ESC_POST"
 P_UNDERLINE_RED="$P_ESC_PRE$P_UNDERLINE$P_RED$P_ESC_POST"
 P_PLAIN_RED="$P_ESC_PRE$P_PLAIN$P_RED$P_ESC_POST"
 
-if [ `/usr/bin/id -u` == 0 ]; then
+if [ "`/usr/bin/id -u`" == 0 ]; then
 	USER_COLOR=$P_PLAIN_RED
 	PROMPT_CHAR='#'
 	SELF=0
-elif [ "truist" == `whoami` ] || [ "narthur" == `whoami` ] || [ "preint\\narthur" == `whoami` ]; then
+elif [ "truist" == `whoami` ] || [ "narthur" == `whoami` ] || [ "preint\\narthur" == `whoami` ] || [ "ec2-user" == `whoami` ]; then
 	USER_COLOR=$P_PLAIN_GREEN
 	PROMPT_CHAR='$'
 	SELF=1
@@ -97,7 +97,7 @@ HAVE_GIT_PROMPT=0
 if [ -f ~/.git-prompt.sh ]; then
 	source ~/.git-prompt.sh
 fi
-if [ `type -t __git_ps1` == "function" ]; then
+if [ "`type -t __git_ps1`" == "function" ]; then
 	HAVE_GIT_PROMPT=1
 
 	# these next two are slow on large repos; turn them off per-repo as shown in each comment

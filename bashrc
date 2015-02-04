@@ -1,6 +1,6 @@
 
 # to use this on a host, add this to the top of the host's .bashrc or .profile:
-#. code/settings/bashrc
+#. ~/code/settings/bashrc
 
 if [ `/usr/bin/id -u` -eq 0 ] && [ -d /root ] && [ -n "$(find /root -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
 	export HOME=/root
