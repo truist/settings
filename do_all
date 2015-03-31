@@ -1,12 +1,39 @@
 #!/bin/sh
 
+if [ "$1" == "-q" ]; then
+	shift
+	QUIET=true
+fi
+
+# make a progress marker
+if [ "$QUIET" == true ]; then
+	for DIR in *; do
+		if [ -d "$DIR" ]; then 
+			echo -n " "
+		fi
+	done
+	echo -en "|\033[100D"
+fi
+
 CURDIR=`pwd`
 for DIR in *; do
 	cd "$CURDIR"
 	if [ -d "$DIR" ]; then 
-		echo === $DIR ===
 		cd "$DIR"
-		$@
-		echo
+		if [ "$QUIET" == true ]; then
+			echo -n .
+			ERROUT=$("$@" 2>&1 >/dev/null)
+			RESULT=$?
+			if [ $RESULT -gt 0 ]; then
+				echo
+				echo $DIR exited $RESULT:
+				echo $ERROUT
+				echo
+			fi
+		else
+			echo
+			echo === $DIR ===
+			"$@"
+		fi
 	fi
 done
