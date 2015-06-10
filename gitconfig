@@ -18,6 +18,7 @@
 	# I just always work on master, and retroactively move work to a branch if needed
 	master-to-new-branch = "!master-to-new-branch"
 	prune-stale-branches = remote prune origin
+	pullstash = "!f() { git stash && git pull && git stash pop ; }; f"
 	remotes = remote -v
 	# find a commit that changes a particular bit of code
 	search = "!f() { git log -p -G\"$1\" --diff-filter=M ; }; f"
