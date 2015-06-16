@@ -26,11 +26,16 @@ P_PLAIN_YELLOW="$P_ESC_PRE$P_PLAIN$P_YELLOW$P_ESC_POST"
 P_UNDERLINE_RED="$P_ESC_PRE$P_UNDERLINE$P_RED$P_ESC_POST"
 P_PLAIN_RED="$P_ESC_PRE$P_PLAIN$P_RED$P_ESC_POST"
 
+if echo `uname` | grep -E ^MINGW > /dev/null ; then
+	ME=$USERNAME
+else
+	ME=`whoami`
+fi
 if [ "`/usr/bin/id -u`" == 0 ]; then
 	USER_COLOR=$P_PLAIN_RED
 	PROMPT_CHAR='#'
 	SELF=0
-elif [ "truist" == `whoami` ] || [ "narthur" == `whoami` ] || [ "preint\\narthur" == `whoami` ] || [ "ec2-user" == `whoami` ]; then
+elif [ "truist" == "$ME" ] || [ "narthur" == "$ME" ] || [ "NArthur" == "$ME" ] || [ "preint\\narthur" == "$ME" ] || [ "ec2-user" == "$ME" ]; then
 	USER_COLOR=$P_PLAIN_GREEN
 	PROMPT_CHAR='$'
 	SELF=1
