@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [ "$#" -ne 1 ] || [ -z "$1" ]; then
+	echo "args: <user@host>" >&2
+	exit 1
+fi
+REMOTE=$1
+
+SSH_CONF_DIR_RELATIVE=.ssh
+SSH_CONF_DIR=~/$SSH_CONF_DIR_RELATIVE
+PRIVATE_KEY_FILE=$SSH_CONF_DIR/id_rsa
+PUBLIC_KEY_FILE=$SSH_CONF_DIR/id_rsa.pub
+REMOTE_AUTH_KEYS_FILE=$SSH_CONF_DIR_RELATIVE/authorized_keys
+
+if [ ! -d $SSH_CONF_DIR ]; then
+	mkdir -m 700 $SSH_CONF_DIR
+fi
+chmod 700 $SSH_CONF_DIR
+
+if [ ! -f $PRIVATE_KEY_FILE ]; then
+	ssh-keygen -t rsa -f $PRIVATE_KEY_FILE
+fi
+
+#ssh $REMOTE mkdir -m 700 -p $SSH_CONF_DIR_RELATIVE
+#
+#cat $PUBLIC_KEY_FILE | ssh $REMOTE "cat >> $REMOTE_AUTH_KEYS_FILE"
+
+cat $PUBLIC_KEY_FILE | ssh $REMOTE "mkdir -m 700 -p $SSH_CONF_DIR_RELATIVE >/dev/null 2>&1 && cat >> $REMOTE_AUTH_KEYS_FILE"
+
+echo "You may now 'ssh $REMOTE' without a password"
+
