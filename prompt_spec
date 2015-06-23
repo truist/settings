@@ -56,6 +56,12 @@ else
 	HOST_COLOR=$P_PLAIN_YELLOW
 fi
 
+if echo `uname` | grep -E ^Darwin > /dev/null ; then
+	ME_HOST=`scutil --get ComputerName`
+else
+	ME_HOST="\h"
+fi
+
 BIT_COLOR=$P_PLAIN_GREEN
 
 if echo `uname` | grep -E ^MINGW > /dev/null ; then
@@ -132,13 +138,13 @@ get_branch_color() {
 
 
 # set the terminal title
-PS1="\[\033]0;\u@\h:\w\007\]"
+PS1="\[\033]0;\u@$ME_HOST:\w\007\]"
 
 PS1+="\n"
 PS1+="$BIT_COLOR["
 PS1+="$USER_COLOR\u"
 PS1+="$BIT_COLOR@"
-PS1+="$HOST_COLOR\h"
+PS1+="$HOST_COLOR$ME_HOST"
 PS1+="$BIT_COLOR "
 PS1+="$P_ESC_PRE\$(get_path_color)$P_ESC_POST\W"
 PS1+="$P_ESC_PRE\$(get_branch_color)$P_ESC_POST\$(do_git ':' $P_ESC_RESET)"
