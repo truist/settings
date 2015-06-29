@@ -1,6 +1,8 @@
 " reload changes automatically when saved
 autocmd! bufwritepost .vimrc source ~/.vimrc
 
+set nocompatible
+
 set runtimepath+=~/.vim
 
 if has("multi_byte")
@@ -21,6 +23,8 @@ execute pathogen#infect()
 set showmatch
 set ruler
 set showmode
+"show e.g. number of lines selected
+set showcmd
 set title
 " turn off beeps
 set vb
@@ -31,6 +35,24 @@ set scrolloff=3
 set incsearch
 set ignorecase
 set smartcase
+set hlsearch
+"clear search highlighting by hitting enter
+nnoremap <cr> :noh<CR><CR>:<backspace>
+
+if has('mouse')
+  set mouse=a
+  " use with <alt> on OSX; set cursor position; scroll
+endif
+
+" When editing a file, always jump to the last known cursor position.
+" Don't do it when the position is invalid or when inside an event handler
+" (happens when dropping a file on gvim).
+" Also don't do it when the mark is in the first line, that is the default
+" position when opening a file.
+autocmd BufReadPost *
+  \ if line("'\"") > 1 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
 
 " syntax highlight and indentation settings
 syntax on
