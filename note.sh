@@ -23,6 +23,9 @@ else
 	fi
 fi
 
+# be prepared in case they background vi during the edit session
+wait
+
 if [ -f "$FILE" ]; then
 	git add "$FILE" && git commit -m "update $FILE"
 fi
