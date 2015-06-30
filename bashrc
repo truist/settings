@@ -80,3 +80,12 @@ if ( command -v tty >/dev/null ) && ( tty -s ) && [ -x /usr/games/fortune ]; the
 	/usr/games/fortune
 fi
 
+NOTEDIR="$HOME/OneDrive/Scratch"
+if [ -d "$NOTEDIR" ]; then
+	_noteComplete()
+	{
+		local files=("$NOTEDIR/$2"*)
+		[[ -e ${files[0]} ]] && COMPREPLY=( "${files[@]##*/}" )
+	}
+	complete -o bashdefault -o default -o filenames -F _noteComplete note
+fi
