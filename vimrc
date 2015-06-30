@@ -1,3 +1,6 @@
+" ensure autocmd's don't get defined twice
+autocmd!
+
 " reload changes automatically when saved
 autocmd! bufwritepost .vimrc source ~/.vimrc
 
@@ -56,52 +59,53 @@ autocmd BufReadPost *
 
 " syntax highlight and indentation settings
 syntax on
-autocmd BufRead,BufNewFile *.t set filetype=perl
-autocmd BufRead,BufNewFile *.mdwn set filetype=ikiwiki
-
-" vim-gitgutter
-highlight clear SignColumn
-
-" indentation / tabbing
 set autoindent
 filetype plugin indent on
 set cindent
 " make the backspace key work with autoindent
 set backspace=indent,eol,start
-
-au BufEnter * set nowrap tabstop=4 shiftwidth=4
-au BufEnter *.sh set nowrap tabstop=4 shiftwidth=4
-au BufEnter *.tt set nowrap tabstop=4 shiftwidth=4
-au BufEnter *.mdwn set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
-autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
-"au BufEnter *.md set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
-au BufEnter *.js set expandtab nowrap tabstop=4 shiftwidth=4 softtabstop=4
-autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
-au BufEnter *.ep set nowrap tabstop=4 shiftwidth=4
-au BufEnter *.html set nowrap tabstop=4 shiftwidth=4
-au BufEnter *.css set nowrap tabstop=4 shiftwidth=4
-au BufEnter *.xml set nowrap tabstop=4 shiftwidth=4
-
 " indent/unindent selected lines in visual mode
 vmap <tab> >gv
 vmap <s-tab> <gv
+" if wrap is turned on, we want these setttings
+set linebreak
+set nolist
+" turn off all code folding
+autocmd BufEnter * set nofoldenable
+
+" type identification help
+autocmd BufRead,BufNewFile *.t setfiletype perl
+" make this explicit so the markdown plugin doesn't take it
+autocmd BufRead,BufNewFile *.mdwn setfiletype ikiwiki
+autocmd BufRead,BufNewFile *.md setfiletype markdown
+autocmd BufRead,BufNewFile *.json setfiletype javascript syntax=javascript
+
+" defaults
+autocmd BufEnter * setlocal nowrap tabstop=4 shiftwidth=4 softtabstop=4
+
+" type-specific settings
+autocmd BufEnter *.txt setlocal wrap
+" markdown
+autocmd FileType mkd setlocal expandtab
+autocmd FileType ikiwiki setlocal expandtab
+autocmd FileType javascript setlocal expandtab
+
+" highlight text past 80 columns, for these types
+autocmd BufWinEnter *.t let w:m2=matchadd('Search', '\%>80v.\+', -1)
+autocmd BufWinEnter *.p? let w:m2=matchadd('Search', '\%>80v.\+', -1)
+autocmd BufWinEnter *.sh let w:m2=matchadd('Search', '\%>80v.\+', -1)
+
+" vim-gitgutter
+highlight clear SignColumn
 
 " sudo write
 ca w!! w !sudo tee >/dev/null "%"
-
-" turn off all code folding
-autocmd BufEnter * set nofoldenable
 
 " shortcuts for paste mode in normal and insert modes
 " DON'T REMEMBER WHAT THIS DOES, AND IT CAUSES A ONE-SECOND DELAY AFTER
 " HITTING :
 "nnoremap  :set invpaste paste?<CR>
 "set pastetoggle=
-
-" highlight text past 80 columns
-au BufWinEnter *.t let w:m2=matchadd('Search', '\%>80v.\+', -1)
-au BufWinEnter *.p? let w:m2=matchadd('Search', '\%>80v.\+', -1)
-au BufWinEnter *.sh let w:m2=matchadd('Search', '\%>80v.\+', -1)
 
 " shortcuts to comment/uncomment lines
 map ,# :s/^/#<CR>
@@ -113,7 +117,6 @@ map ,w !fmt<CR>
 " delete/change/etc text between parentheseis
 " to use: type 'dp' or 'cp' (etc.) while in normal mode
 onoremap p i(
-
 
 " configure Supertab
 let g:SuperTabDefaultCompletionType = "context"
