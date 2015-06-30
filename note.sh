@@ -10,7 +10,13 @@ fi
 NOTEDIR="$HOME/OneDrive/Scratch"
 cd "$NOTEDIR"
 
-vi "$FILE"
+
+if [ -f "$FILE" ]; then
+	vi "$FILE"
+else
+	DATESTAMP=$(date +"%a %b %d, %Y - %l:%M %p %Z")
+	vi -c ":normal i$DATESTAMP" "$FILE"
+fi
 
 if [ -f "$FILE" ]; then
 	git add "$FILE" && git commit -m "update $FILE"
