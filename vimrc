@@ -34,6 +34,14 @@ set vb
 " margin while scrolling
 set scrolloff=3
 
+" Persistent undo
+let undodir = expand('~/.vim/undo')
+if !isdirectory(undodir)
+  call mkdir(undodir)
+endif
+set undodir=~/.vim/undo
+set undofile " Create FILE.un~ files for persistent undo
+
 " search settings
 set incsearch
 set ignorecase
@@ -70,8 +78,17 @@ vmap <s-tab> <gv
 " if wrap is turned on, we want these setttings
 set linebreak
 set nolist
+" prevent hard-wrapping
+set textwidth=0 wrapmargin=0
 " turn off all code folding
 autocmd BufEnter * set nofoldenable
+
+" hybrid relative and absolute number for current line;
+" if v:version <= 703, we only get 'relativenumber'
+set number
+set relativenumber
+highlight LineNr cterm=NONE ctermfg=DarkGrey ctermbg=NONE
+highlight CursorLineNr cterm=NONE ctermfg=Yellow ctermbg=NONE
 
 " type identification help
 autocmd BufRead,BufNewFile *.t setfiletype perl
@@ -114,13 +131,12 @@ map ,## :s/^#<CR><CR>
 " shortcut to wrap text to 75 columns
 map ,w !fmt<CR>
 
-" delete/change/etc text between parentheseis
-" to use: type 'dp' or 'cp' (etc.) while in normal mode
-onoremap p i(
-
 " configure Supertab
 let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabMidWordCompletion = "0"
+
+" auto-complete when in command-mode
+set wildmenu
 
 " make the tmux status line show the currently-edited file
 if &term == "screen" || &term == "screen-256color"
