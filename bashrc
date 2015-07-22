@@ -13,17 +13,19 @@ PATH=$HOME/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R7/bin:/usr/X11R6/bin
 # these prepend paths to PATH, so we're semi-careful and check the owner first
 if [ -d /usr/pkg/bin ] && [ -n "$(find /usr/pkg/bin -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
 	PATH=/usr/pkg/bin:/usr/pkg/sbin:${PATH}
-	MANPATH=/usr/pkg/man:$MANPATH
+	# $MANPATH isn't usually set, so this breaks all the default search locations
+	#MANPATH=/usr/pkg/man:$MANPATH
 elif [ -d "$HOME/pkg/bin" ] && [ -n "$(find "$HOME/pkg/bin" -user "$(id -u)" -print -prune -o -prune)" ]; then
 	PATH=$HOME/pkg/bin:$HOME/pkg/sbin:${PATH}
-	MANPATH=$HOME/pkg/man:$MANPATH
+	# $MANPATH isn't usually set, so this breaks all the default search locations
+	#MANPATH=$HOME/pkg/man:$MANPATH
 fi
 PATH=${PATH}:/usr/local/bin:/usr/local/sbin
 if echo `uname` | grep -E ^MINGW > /dev/null ; then
 	PATH=${PATH}:$ORIG_PATH
 fi
 export PATH
-export MANPATH
+#export MANPATH
 
 # also add these two lines to /root/.profile (for e.g. 'sudo -i crontab -e')
 export EDITOR=vim

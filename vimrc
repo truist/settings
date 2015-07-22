@@ -65,6 +65,7 @@ autocmd BufReadPost *
   \   exe "normal! g`\"" |
   \ endif
 
+set background=dark
 " syntax highlight and indentation settings
 syntax on
 set autoindent
@@ -87,7 +88,7 @@ autocmd BufEnter * set nofoldenable
 " if v:version <= 703, we only get 'relativenumber'
 set number
 set relativenumber
-highlight LineNr cterm=NONE ctermfg=DarkGrey ctermbg=NONE
+highlight LineNr cterm=NONE ctermfg=Grey ctermbg=NONE
 highlight CursorLineNr cterm=NONE ctermfg=Yellow ctermbg=NONE
 
 " type identification help
