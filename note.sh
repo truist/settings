@@ -2,6 +2,12 @@
 
 set -e
 
+DELETING=0
+if [ "-d" == "$1" ]; then
+	DELETING=1
+	shift
+fi
+
 FILE="$*"
 if [ ! -z "$FILE" ] && echo "$FILE" | grep -v -q "\." ; then
 	FILE="$FILE.txt"
@@ -10,7 +16,9 @@ fi
 NOTEDIR="$HOME/OneDrive/Scratch"
 cd "$NOTEDIR"
 
-if [ -f "$FILE" ]; then
+if [ "$DELETING" == 1 ]; then
+	git rm "$FILE" && git commit -m "delete $FILE"
+elif [ -f "$FILE" ]; then
 	vi "$FILE"
 else
 	DATESTAMP=$(date +"%a %b %d, %Y - %l:%M %p %Z")
