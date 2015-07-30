@@ -119,6 +119,9 @@ highlight clear SignColumn
 " sudo write
 ca w!! w !sudo tee >/dev/null "%"
 
+" make vim's clipboard use the system clipboard by default (needs testing on non-OSX)
+set clipboard=unnamed
+
 " shortcuts for paste mode in normal and insert modes
 " DON'T REMEMBER WHAT THIS DOES, AND IT CAUSES A ONE-SECOND DELAY AFTER
 " HITTING :
