@@ -8,12 +8,31 @@ if [ "-d" == "$1" ]; then
 	shift
 fi
 
+ARCHIVING=0
+if [ "-a" == "$1" ]; then
+	ARCHIVING=1
+	DELETING=1
+	ARCHIVE_PATH="$2"
+	shift
+	shift
+
+	if [ ! -d "$ARCHIVE_PATH" ]; then
+		echo "archive path ($ARCHIVE_PATH) is not a directory" >&2
+		exit 1
+	fi
+fi
+
 FILE="$*"
 if [ ! -z "$FILE" ] && echo "$FILE" | grep -v -q "\." ; then
 	FILE="$FILE.txt"
 fi
 
 NOTEDIR="$HOME/OneDrive/Scratch"
+
+if [ "$ARCHIVING" == 1 ]; then
+	cp -i "$NOTEDIR/$FILE" "$ARCHIVE_PATH" || exit 1
+fi
+
 cd "$NOTEDIR"
 
 if [ "$DELETING" == 1 ]; then
