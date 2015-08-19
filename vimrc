@@ -108,10 +108,10 @@ autocmd FileType mkd setlocal expandtab
 autocmd FileType ikiwiki setlocal expandtab
 autocmd FileType javascript setlocal expandtab
 
-" highlight text past 80 columns, for these types
-autocmd BufWinEnter *.t let w:m2=matchadd('Search', '\%>80v.\+', -1)
-autocmd BufWinEnter *.p? let w:m2=matchadd('Search', '\%>80v.\+', -1)
-autocmd BufWinEnter *.sh let w:m2=matchadd('Search', '\%>80v.\+', -1)
+" highlight text past 100 columns, for these types
+"autocmd BufWinEnter *.t let w:m2=matchadd('Search', '\%>100v.\+', -1)
+"autocmd BufWinEnter *.p? let w:m2=matchadd('Search', '\%>100v.\+', -1)
+"autocmd BufWinEnter *.sh let w:m2=matchadd('Search', '\%>100v.\+', -1)
 
 " vim-gitgutter
 highlight clear SignColumn

@@ -97,8 +97,7 @@ wrap_result() {
 #}
 
 show_git_branch_if_not_master() {
-	# this should already be set by an earlier call to get_branch_color
-	#BRANCH=$(get_git_branch_if_branch)
+	BRANCH=$(get_git_branch_if_branch)
 	if [ -n "$BRANCH" ] && [ "master" != "$BRANCH" ]; then
 		wrap_result "$BRANCH" "$@"
 	fi
