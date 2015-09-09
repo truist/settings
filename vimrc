@@ -86,8 +86,8 @@ autocmd BufEnter * set nofoldenable
 
 " hybrid relative and absolute number for current line;
 " if v:version <= 703, we only get 'relativenumber'
-set number
-set relativenumber
+"set number
+"set relativenumber
 highlight LineNr cterm=NONE ctermfg=Grey ctermbg=NONE
 highlight CursorLineNr cterm=NONE ctermfg=Yellow ctermbg=NONE
 
