@@ -17,7 +17,7 @@ REMOTE_AUTH_KEYS_FILE=$SSH_CONF_DIR_RELATIVE/authorized_keys
 if [ ! -d $SSH_CONF_DIR ]; then
 	mkdir -m 700 $SSH_CONF_DIR
 fi
-chmod 700 $SSH_CONF_DIR
+chmod 700 $SSH_CONF_DIR || echo "Error setting permissions on $SSH_CONF_DIR" >&2
 
 if [ ! -f $PRIVATE_KEY_FILE ]; then
 	ssh-keygen -t rsa -f $PRIVATE_KEY_FILE
