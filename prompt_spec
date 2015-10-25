@@ -105,7 +105,7 @@ show_git_branch_if_not_master() {
 
 HAVE_GIT_PROMPT=0
 if [ -f ~/.git-prompt.sh ]; then
-	source ~/.git-prompt.sh
+#	source ~/.git-prompt.sh
 fi
 if [ "`type -t __git_ps1`" == "function" ]; then
 	HAVE_GIT_PROMPT=1
@@ -120,11 +120,11 @@ if [ "`type -t __git_ps1`" == "function" ]; then
 fi
 
 do_git() {
-	if [ 1 -eq $HAVE_GIT_PROMPT ]; then
-		__git_ps1 ":%s"
-	else
+#	if [ 1 -eq $HAVE_GIT_PROMPT ]; then
+#		__git_ps1 ":%s"
+#	else
 		show_git_branch_if_not_master "$@"
-	fi
+#	fi
 }
 get_branch_color() {
 	BRANCH=$(get_git_branch_if_branch)
