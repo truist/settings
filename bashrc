@@ -91,3 +91,4 @@ if [ -d "$NOTEDIR" ]; then
 	}
 	complete -o bashdefault -o default -o filenames -F _noteComplete note
 fi
+
