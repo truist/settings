@@ -22,13 +22,19 @@ if [ "-a" == "$1" ]; then
 	fi
 fi
 
-FILE="$*"
-if [ ! -z "$FILE" ] && echo "$FILE" | grep -v -q "\." ; then
-	FILE="$FILE.txt"
-fi
+NOTEDIR="$HOME/OneDrive/Scratch"
 
-# set in bashrc
-#NOTEDIR="$HOME/OneDrive/Scratch"
+FILE="$*"
+if [ ! -z "$FILE" ]; then
+	echo "$FILE"
+	if [ -d "$NOTEDIR/$FILE" ]; then
+		echo "$FILE is a directory" >&2
+		exit 1
+	fi
+	if  echo "$FILE" | grep -v -q "\." ; then
+		FILE="$FILE.txt"
+	fi
+fi
 
 if [ "$ARCHIVING" == 1 ]; then
 	cp -i "$NOTEDIR/$FILE" "$ARCHIVE_PATH" || exit 1
