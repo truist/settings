@@ -39,8 +39,9 @@
 	meta = yellow
 
 [core]
-# uncomment this on windows
+# uncomment these on windows
 #	autocrlf = true
+#	fscache = true
 	excludesfile = ~/.gitignore
 	longpaths = true
 	pager = less -i
