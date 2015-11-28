@@ -82,7 +82,7 @@ if ( command -v tty >/dev/null ) && ( tty -s ) && [ -x /usr/games/fortune ]; the
 	/usr/games/fortune
 fi
 
-NOTEDIR="$HOME/OneDrive/Scratch"
+export NOTEDIR="$HOME/OneDrive/Scratch"
 if [ -d "$NOTEDIR" ]; then
 	_noteComplete()
 	{
