@@ -8,6 +8,8 @@ sudo -v
 # wait longer (12 hours) before going into standby mode
 pmset -a standbydelay 43200
 
+defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationMagnification -bool YES
+
 
 
 # Disable the sound effects on boot
