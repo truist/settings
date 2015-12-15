@@ -153,7 +153,7 @@ PS1+="$BIT_COLOR "
 PS1+="$P_ESC_PRE\$(get_path_color)$P_ESC_POST\W"
 PS1+="$P_ESC_PRE\$(get_branch_color)$P_ESC_POST\$(do_git ':' $P_ESC_RESET)"
 PS1+="$BIT_COLOR]"
-PS1+="\n"
+PS1+=$'\n'  # this syntax fixes issue on msys
 PS1+="$USER_COLOR$PROMPT_CHAR $P_ESC_RESET"
 
 export PS1
