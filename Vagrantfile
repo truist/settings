@@ -2,8 +2,7 @@
 
 $script = <<SCRIPT
 export DEBIAN_FRONTEND=noninteractive
-apt-get update > /dev/null
-apt-get -y install vim git-core > /dev/null
+apt-get -y install git-core > /dev/null
 SCRIPT
 
 Vagrant::Config.run do |config|
