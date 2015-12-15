@@ -99,7 +99,7 @@ autocmd BufRead,BufNewFile *.md setfiletype markdown
 autocmd BufRead,BufNewFile *.json setfiletype javascript syntax=javascript
 
 " defaults
-autocmd BufEnter * setlocal nowrap tabstop=4 shiftwidth=4 softtabstop=4
+autocmd BufEnter * setlocal tabstop=4 shiftwidth=4 softtabstop=4
 
 " type-specific settings
 autocmd BufEnter *.txt setlocal wrap
