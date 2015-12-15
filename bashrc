@@ -51,8 +51,11 @@ command -v grunt > /dev/null && alias grunt="grunt --stack"
 
 export HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:pwd"
 # type something then hit up/down to search history that matches what you already have
-bind '"\e[A": history-search-backward'
-bind '"\e[B": history-search-forward'
+if tty -s; then
+	bind '"\e[A": history-search-backward'
+	bind '"\e[B": history-search-forward'
+fi
+
 
 #if [ "$TERM" = "xterm-256color" ] && [ `uname` != "Darwin" ]; then
 #	# 256color isn't recognized by too many things, still
