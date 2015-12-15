@@ -54,10 +54,10 @@ export HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:pwd"
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
-if [ "$TERM" = "xterm-256color" ] && [ `uname` != "Darwin" ]; then
-	# 256color isn't recognized by too many things, still
-	export TERM=xterm-color
-fi
+#if [ "$TERM" = "xterm-256color" ] && [ `uname` != "Darwin" ]; then
+#	# 256color isn't recognized by too many things, still
+#	export TERM=xterm-color
+#fi
 
 if [ -f ~/.prompt_spec ]; then
 	. ~/.prompt_spec

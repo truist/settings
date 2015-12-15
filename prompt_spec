@@ -35,7 +35,7 @@ if [ "`/usr/bin/id -u`" == 0 ]; then
 	USER_COLOR=$P_PLAIN_RED
 	PROMPT_CHAR='#'
 	SELF=0
-elif [ "truist" == "$ME" ] || [ "narthur" == "$ME" ] || [ "NArthur" == "$ME" ] || [ "preint\\narthur" == "$ME" ] || [ "ec2-user" == "$ME" ]; then
+elif [ "truist" == "$ME" ] || [ "narthur" == "$ME" ] || [ "NArthur" == "$ME" ] || [ "preint\\narthur" == "$ME" ]; then
 	USER_COLOR=$P_PLAIN_GREEN
 	PROMPT_CHAR='$'
 	SELF=1
@@ -108,7 +108,8 @@ if [ -f ~/.git-prompt.sh ]; then
 	source ~/.git-prompt.sh
 fi
 if [ "`type -t __git_ps1`" == "function" ]; then
-	HAVE_GIT_PROMPT=1
+# disabling this entirely, for now - I don't think I want it
+#	HAVE_GIT_PROMPT=1
 
 	# these next two are slow on large repos; turn them off per-repo as shown in each comment
 	GIT_PS1_SHOWDIRTYSTATE=1	# git config bash.showDirtyState false
