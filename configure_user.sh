@@ -7,6 +7,7 @@ SETTINGS=src/settings
 
 clear_file() {
 	thefile="$1"
+	echo "$1..."
 	if [ -e "$thefile" ] || [ -L "$thefile" ]; then
 		if [ -f "$thefile" ]; then
 			mv "$thefile" "${thefile}.prior"
