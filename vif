@@ -1,25 +1,25 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 GIT=git
 
 SECOND_FILE=
 if [ "-o" == "$1" ]; then
-        SECOND_FILE=$3
-        shift
+	SECOND_FILE=$3
+	shift
 elif [ "-s" == "$1" ]; then
-        SEARCH_ONLY=1
-        shift
+	SEARCH_ONLY=1
+	shift
 fi
 
 if [ -z "$1" ]; then
-        echo "Must specify a file from within the current git repo" 1>&2
-        exit 1;
+	echo "Must specify a file from within the current git repo" 1>&2
+	exit 1;
 fi
 
 SEEK=$1
 
 WORKTREE_ROOT=
-if git rev-parse --show-toplevel ; then
+if git rev-parse --show-toplevel >/dev/null ; then
 	WORKTREE_ROOT=`git rev-parse --show-toplevel`
 else
 	echo "You must be within a git work tree" >&2
@@ -27,21 +27,25 @@ else
 fi
 
 cd $WORKTREE_ROOT
-FIND_COMMAND='find . -path "./.git" -prune -o -type f -path "*$SEEK*" -print'
+FIND_COMMAND='find . -path "./.git" -prune -o -type f -path "*$SEEK*" -print0'
+
+file_list=()
+while IFS= read -d $'\0' -r file ; do
+	file_list=("${file_list[@]}" "$file")
+done < <(eval ${FIND_COMMAND})
+
 if [ "1" == "$SEARCH_ONLY" ]; then
-        eval $FIND_COMMAND
-        exit 0;
+	printf '%s\n' "${file_list[@]}"
+	exit 0;
 elif [ -f $SEEK ]; then
-        FOUND=$SEEK
+	FOUND=$SEEK
 else
-        IFS=
-        FOUND=`eval $FIND_COMMAND | head -n 1`
-        if [ ! -n "$FOUND" ] || [ ! -f $FOUND ]; then
-                echo "Can't find '$SEEK' or '`pwd`/$SEEK' or anything matching '*$SEEK*' in '`pwd`'" 1>&2
-                exit 2;
-        fi
+	if [ -z "${file_list[*]}" ]; then
+		echo "Can't find '$SEEK' or '`pwd`/$SEEK' or anything matching '*$SEEK*' in '`pwd`'" 1>&2
+		exit 2;
+	fi
 fi
 
-echo "Editing '$FOUND'..."
-$EDITOR -o "$FOUND" $SECOND_FILE
+printf '%s\n' "${file_list[@]}"
+$EDITOR -o "${file_list[@]}" $SECOND_FILE
 
