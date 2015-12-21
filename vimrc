@@ -82,7 +82,7 @@ set nolist
 " prevent hard-wrapping
 set textwidth=0 wrapmargin=0
 " turn off all code folding
-autocmd BufEnter * set nofoldenable
+autocmd BufRead,BufNewFile * set nofoldenable
 
 " hybrid relative and absolute number for current line;
 " if v:version <= 703, we only get 'relativenumber'
@@ -99,10 +99,10 @@ autocmd BufRead,BufNewFile *.md setfiletype markdown
 autocmd BufRead,BufNewFile *.json setfiletype javascript syntax=javascript
 
 " defaults
-autocmd BufEnter * setlocal tabstop=4 shiftwidth=4 softtabstop=4
+autocmd BufRead,BufNewFile * setlocal tabstop=4 shiftwidth=4 softtabstop=4
 
 " type-specific settings
-autocmd BufEnter *.txt setlocal wrap
+autocmd BufRead,BufNewFile *.txt setlocal wrap
 " markdown
 autocmd FileType mkd setlocal expandtab
 autocmd FileType ikiwiki setlocal expandtab
@@ -112,6 +112,8 @@ autocmd FileType javascript setlocal expandtab
 "autocmd BufWinEnter *.t let w:m2=matchadd('Search', '\%>100v.\+', -1)
 "autocmd BufWinEnter *.p? let w:m2=matchadd('Search', '\%>100v.\+', -1)
 "autocmd BufWinEnter *.sh let w:m2=matchadd('Search', '\%>100v.\+', -1)
+
+autocmd BufNewFile,BufRead ~/src/fretless/* set nowrap tabstop=2 shiftwidth=2 expandtab
 
 " vim-gitgutter
 highlight clear SignColumn
