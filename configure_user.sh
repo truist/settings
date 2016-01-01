@@ -19,7 +19,7 @@ clear_file() {
 }
 
 cd ~
-for nodotfile in bash_profile bashrc gitignore prompt_spec vimrc ; do
+for nodotfile in bash_profile bashrc gitignore prompt_spec tmux.conf vimrc ; do
 	dotfile=".$nodotfile"
 	clear_file "$dotfile"
 	ln -s "$SETTINGS/$nodotfile" "$dotfile"
@@ -37,7 +37,7 @@ bindir="bin"
 relpath=".."
 mkdir -p "$bindir"
 cd "$bindir"
-for scriptfile in do_all master-to-new-branch vif ; do
+for scriptfile in do_all master-to-new-branch session vif ; do
 	clear_file "$scriptfile"
 	ln -s "$relpath/$SETTINGS/$scriptfile" "$scriptfile"
 done

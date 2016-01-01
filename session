@@ -1,16 +1,13 @@
 #!/bin/sh
 
+set -e
+
 if [ -z "$1" ]; then
         echo "usage: $0 <session-name>" 1>&2
         exit 1
 fi
 
-if [ "a" == $1 ] && ! tmux has-session -t $1 ; then # starting session 'a'
-        cd
-        # per the tmux author, this is the only way to get a specific pane size
-        tmux new-session -s $1\; split-window\; resize-pane -D 100\; resize-pane -U 10
-#       tmux new-session -s $1\; split-window "finch"\; resize-pane -D 100\; resize-pane -U 10
-elif tmux has-session -t $1; then
+if tmux has-session -t $1; then
         tmux attach-session -d -t $1
 else
         cd
