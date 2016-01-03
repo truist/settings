@@ -42,6 +42,8 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
+alias cdp=". ~/bin/cdp"
+
 # http://www.shellperson.net/using-sudo-with-an-alias/   (fixes "sudo vi <whatever>" not using vim)
 alias sudo='sudo '
 

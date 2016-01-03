@@ -37,7 +37,7 @@ bindir="bin"
 relpath=".."
 mkdir -p "$bindir"
 cd "$bindir"
-for scriptfile in do_all master-to-new-branch session vif ; do
+for scriptfile in cdp do_all master-to-new-branch session vif ; do
 	clear_file "$scriptfile"
 	ln -s "$relpath/$SETTINGS/$scriptfile" "$scriptfile"
 done

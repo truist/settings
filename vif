@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-GIT=git
+set -e
 
 SECOND_FILE=
 if [ "-o" == "$1" ]; then
@@ -18,15 +18,9 @@ fi
 
 SEEK=$1
 
-WORKTREE_ROOT=
-if git rev-parse --show-toplevel >/dev/null ; then
-	WORKTREE_ROOT=`git rev-parse --show-toplevel`
-else
-	echo "You must be within a git work tree" >&2
-	exit 1;
-fi
+# another utility script that must be in the path
+. `which cdp`
 
-cd $WORKTREE_ROOT
 FIND_COMMAND='find . -path "./.git" -prune -o -type f -path "*$SEEK*" -print0'
 
 file_list=()
