@@ -22,7 +22,8 @@
 	prune-stale-branches = remote prune origin
 	remotes = remote -v
 	# find a commit that changes a particular bit of code
-	search = "!f() { git log -p -G\"$1\" --diff-filter=M ; }; f"
+	#search = "!f() { git log -p -G\"$1\" --diff-filter=M ; }; f"
+	search = "!f() { git log -p -G\"$1\" -i ; }; f"
 	st = status -s
 	stashpull = "!f() { git stash && git pull && git stash pop ; }; f"
 	tags = tag -l
