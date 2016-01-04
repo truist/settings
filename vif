@@ -17,6 +17,7 @@ if [ -z "$1" ]; then
 fi
 
 SEEK=$1
+shift
 
 # another utility script that must be in the path
 . `which cdp`
