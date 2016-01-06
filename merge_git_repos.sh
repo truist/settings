@@ -32,7 +32,7 @@ git fetch $STARTDIR/$SECONDARY $SECONDARY_BRANCH:$NEWBRANCH
 if [ -n "$NEWSUBDIR" ]; then
 	git filter-branch --index-filter '
 		git ls-files -s |
-		sed "s,\t,&'"$NEWSUBDIR"'/," |
+		sed "s,	,&'"$NEWSUBDIR"'/," |
 		GIT_INDEX_FILE=$GIT_INDEX_FILE.new git update-index --index-info &&
 		mv $GIT_INDEX_FILE.new $GIT_INDEX_FILE
 	' $NEWBRANCH
