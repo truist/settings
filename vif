@@ -2,11 +2,7 @@
 
 set -e
 
-SECOND_FILE=
-if [ "-o" == "$1" ]; then
-	SECOND_FILE=$3
-	shift
-elif [ "-s" == "$1" ]; then
+if [ "-s" == "$1" ]; then
 	SEARCH_ONLY=1
 	shift
 fi
@@ -16,18 +12,23 @@ if [ -z "$1" ]; then
 	exit 1;
 fi
 
-SEEK=$1
-shift
-
+CDP_ARGS_WORKAROUND=("$@")
+set --
 # another utility script that must be in the path
 . `which cdp`
-
-FIND_COMMAND='find . -path "./.git" -prune -o -type f -path "*$SEEK*" -print0'
+set -- "${CDP_ARGS_WORKAROUND[@]}"
 
 file_list=()
-while IFS= read -d $'\0' -r file ; do
-	file_list=("${file_list[@]}" "$file")
-done < <(eval ${FIND_COMMAND})
+while [ -n "$1" ]; do
+	SEEK="$1"
+	shift
+
+	FIND_COMMAND='find . -path "./.git" -prune -o -type f -path "*$SEEK*" -print0'
+
+	while IFS= read -d $'\0' -r file ; do
+		file_list=("${file_list[@]}" "$file")
+	done < <(eval ${FIND_COMMAND})
+done
 
 if [ "1" == "$SEARCH_ONLY" ]; then
 	printf '%s\n' "${file_list[@]}"
