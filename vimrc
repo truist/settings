@@ -134,6 +134,10 @@ set clipboard=unnamed
 map ,# :s/^/#<CR><CR>
 map ,## :s/^#<CR><CR>
 
+" shortcuts to bullet/unbullet (markdown) lines
+map ,* :s/^\s*/* <CR><CR>
+map ,** :s/^* <CR><CR>
+
 " shortcut to wrap text to 75 columns
 map ,w !fmt<CR>
 
