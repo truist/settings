@@ -43,5 +43,5 @@ else
 fi
 
 printf '%s\n' "${file_list[@]}"
-$EDITOR -o "${file_list[@]}" $SECOND_FILE
+$EDITOR -o "${file_list[@]}"
 

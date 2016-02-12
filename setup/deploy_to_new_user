@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+
+set -eu
+
+SETTINGS=src/settings
+DOTFILES="$SETTINGS/dotfiles"
+SPECIALS="$DOTFILES/specials"
+BINFILES="$SETTINGS/bin"
+SETUPFILES="$SETTINGS/setup"
+
+cd ~
+if [ ! -d "$SETTINGS" ]; then
+	echo "$SETTINGS is missing - please clone from github.com/truist/settings" >&2
+	exit 1
+fi
+
+################# 
+
+main() {
+	do_dotfiles
+
+	do_bin_scripts
+
+	echo "vim plugins..."
+	cd ~
+	"$SETUPFILES/vim-pathogen"
+
+	if [ `uname` = 'Darwin' ]; then
+		echo "OSX configuration..."
+		cd ~
+		"$SETUPFILES/configure_osx"
+	fi
+
+	echo "done!"
+}
+
+do_dotfiles() {
+	echo "dotfiles..."
+
+	cd "$DOTFILES"
+	files=(*)
+
+	cd ~
+	for nodotfile in "${files[@]}" ; do
+		if [ -f "$DOTFILES/$nodotfile" ]; then
+			link_file "$DOTFILES/$nodotfile" ".$nodotfile"
+		fi
+	done
+
+	do_special_dotfiles
+}
+
+do_special_dotfiles() {
+	cd ~
+
+	# gitconfig
+	nodotfile="gitconfig"
+	dotfile=".$nodotfile"
+	clear_file "$dotfile"
+	cat << EOF > "$dotfile"
+[include]
+	path = $SPECIALS/$nodotfile
+EOF
+
+	# ssh UseRoaming
+	nodotfile="ssh_config"
+	echo "  $nodotfile"
+	sshdir=".ssh"
+	mkdir -p "$sshdir"
+	chmod 700 "$sshdir"
+	cat "$SPECIALS/$nodotfile" >> "$sshdir/config"
+
+	# .vagrant
+	vagdir=".vagrant.d"
+	mkdir -p "$vagdir"
+	cd "$vagdir"
+	nodotfile="Vagrantfile"
+	link_file "../$SPECIALS/$nodotfile" "$nodotfile"
+}
+
+do_bin_scripts() {
+	echo "bin scripts..."
+
+	cd ~
+
+	bindir="bin"
+	mkdir -p "$bindir"
+
+	cd "$BINFILES"
+	files=(*)
+	cd - >/dev/null
+
+	cd "$bindir"
+	for binfile in "${files[@]}" ; do
+		relpath="../$BINFILES/$binfile"
+		if [ -f "$relpath" ]; then
+			link_file "$relpath" "$binfile"
+		fi
+	done
+}
+
+link_file() {
+	source="$1"
+	dest="$2"
+	clear_file "$dest"
+	ln -s "$source" "$dest"
+}
+
+clear_file() {
+	thefile="$1"
+	echo "  $1"
+	if [ -e "$thefile" ] || [ -L "$thefile" ]; then
+		if [ -f "$thefile" ] || [ -L "$thefile" ]; then
+			mv "$thefile" "${thefile}.prior"
+		else
+			echo "error: $thefile exists and is not a file or symlink" >&2
+			exit 1
+		fi
+	fi
+}
+
+main
+
