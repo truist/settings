@@ -100,15 +100,15 @@ do_bin_scripts() {
 }
 
 link_file() {
-	source="$1"
+	src="$1"
 	dest="$2"
 	clear_file "$dest"
-	ln -s "$source" "$dest"
+	ln -s "$src" "$dest"
 }
 
 clear_file() {
 	thefile="$1"
-	echo "  $1"
+	echo "  $thefile"
 	if [ -e "$thefile" ] || [ -L "$thefile" ]; then
 		if [ -f "$thefile" ] || [ -L "$thefile" ]; then
 			mv "$thefile" "${thefile}.prior"
