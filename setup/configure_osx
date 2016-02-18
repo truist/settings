@@ -10,6 +10,8 @@ pmset -a standbydelay 43200
 
 defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationMagnification -bool YES
 
+defaults write NSGlobalDomain KeyRepeat -int 0
+
 
 
 # Disable the sound effects on boot
