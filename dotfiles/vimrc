@@ -33,6 +33,7 @@ set title
 set vb
 " margin while scrolling
 set scrolloff=3
+set showtabline=1
 
 " Persistent undo
 let undodir = expand('~/.vim/undo')
