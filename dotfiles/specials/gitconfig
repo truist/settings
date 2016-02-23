@@ -70,5 +70,5 @@
 
 # also see https://github.com/git/git/blob/master/contrib/rerere-train.sh
 [rerere]
-	enabled = true
+	enabled = false
 
