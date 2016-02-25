@@ -31,6 +31,11 @@ main() {
 		"$SETUPFILES/configure_osx"
 	fi
 
+	cd ~/src
+	if [ ! -e 'z' ]; then
+		git clone https://github.com/rupa/z
+	fi
+
 	echo "done!"
 }
 
