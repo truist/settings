@@ -149,6 +149,9 @@ let g:SuperTabMidWordCompletion = "0"
 " auto-complete when in command-mode
 set wildmenu
 
+" configure ag to search from project root
+let g:ag_working_path_mode="r"
+
 " make the tmux status line show the currently-edited file
 if &term == "screen" || &term == "screen-256color"
         set t_ts=

@@ -29,6 +29,8 @@ clone_or_update 'vim-scripts' 'ikiwiki-syntax'
 clone_or_update 'ervandew' 'supertab'
 clone_or_update 'PProvost' 'vim-ps1'
 clone_or_update 'blueyed' 'vim-autoclose'
+clone_or_update 'rking' 'ag.vim'
+clone_or_update 'Chun-Yang' 'vim-action-ag'
 
 # tpope
 clone_or_update 'tpope' 'vim-repeat'
