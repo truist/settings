@@ -114,8 +114,6 @@ autocmd FileType javascript setlocal expandtab
 "autocmd BufWinEnter *.p? let w:m2=matchadd('Search', '\%>100v.\+', -1)
 "autocmd BufWinEnter *.sh let w:m2=matchadd('Search', '\%>100v.\+', -1)
 
-let mapleader = ","
-
 autocmd BufNewFile,BufRead ~/src/fretless/* set nowrap tabstop=2 shiftwidth=2 expandtab
 
 " vim-gitgutter
@@ -133,6 +131,11 @@ set clipboard=unnamed
 " HITTING :
 "nnoremap  :set invpaste paste?<CR>
 "set pastetoggle=
+
+let mapleader = ","
+
+" shortcut to switch background setting
+map <Leader>bg :let &background = ( &background == "dark"? "light" : "dark" )<CR> )
 
 " shortcuts to comment/uncomment lines
 map <Leader># :s/^/#<CR><CR>
