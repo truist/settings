@@ -24,6 +24,8 @@
 	# find a commit that changes a particular bit of code
 	#search = "!f() { git log -p -G\"$1\" --diff-filter=M ; }; f"
 	search = "!f() { git log -p -G\"$1\" -i ; }; f"
+	# find files that are .gitignore'd but are already tracked
+	showtrackedignored = ls-files -i --exclude-standard
 	st = status -s
 	stashpull = "!f() { git stash && git pull && git stash pop ; }; f"
 	tags = tag -l
@@ -45,7 +47,7 @@
 #	fscache = true
 	excludesfile = ~/.gitignore
 	longpaths = true
-	pager = less -i
+	pager = less -i -S
 
 	# Make `git rebase` safer on OS X
 	# More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
@@ -56,6 +58,9 @@
 #	helper = cache
 #	helper = osxkeychain
 #	helper = wincred
+
+[fetch]
+	prune = true
 
 [merge]
 	# Include summaries of merged commits in newly created merge commit messages

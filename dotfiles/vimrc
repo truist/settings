@@ -152,7 +152,7 @@ map <Leader>## :s/^#<CR><CR>
 map <Leader>* :s/^\s*/* <CR><CR>
 map <Leader>** :s/^* <CR><CR>
 
-" shortcut to wrap text to 75 columns
+" shortcut to wrap text
 map <Leader>w !fmt<CR>
 
 "configure NERDtree

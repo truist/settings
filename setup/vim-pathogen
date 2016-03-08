@@ -50,6 +50,9 @@ clone_or_update 'tpope' 'vim-surround'
 clone_or_update 'tpope' 'vim-unimpaired'
 clone_or_update 'tpope' 'vim-vinegar'
 
+# truist
+clone_or_update 'truist' 'vim-open-url'
+
 
 cd - >/dev/null
 
