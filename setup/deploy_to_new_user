@@ -35,6 +35,10 @@ main() {
 	if [ ! -e 'z' ]; then
 		git clone https://github.com/rupa/z
 	fi
+	if [ ! -e 'fonts' ]; then
+		git clone https://github.com/powerline/fonts
+		echo "Reminder to install ~/src/fonts/SourceCodePro"
+	fi
 
 	echo "done!"
 }

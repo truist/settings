@@ -38,7 +38,7 @@ set showtabline=1
 " Persistent undo
 let undodir = expand('~/.vim/undo')
 if !isdirectory(undodir)
-  call mkdir(undodir)
+	call mkdir(undodir)
 endif
 set undodir=~/.vim/undo
 set undofile " Create FILE.un~ files for persistent undo
@@ -52,8 +52,8 @@ set hlsearch
 nnoremap <cr> :noh<CR><CR>:<backspace>
 
 if has('mouse')
-  set mouse=a
-  " use with <alt> on OSX; set cursor position; scroll
+	set mouse=a
+	" use with <alt> on OSX; set cursor position; scroll
 endif
 
 " When editing a file, always jump to the last known cursor position.
@@ -62,9 +62,9 @@ endif
 " Also don't do it when the mark is in the first line, that is the default
 " position when opening a file.
 autocmd BufReadPost *
-  \ if line("'\"") > 1 && line("'\"") <= line("$") |
-  \   exe "normal! g`\"" |
-  \ endif
+	\ if line("'\"") > 1 && line("'\"") <= line("$") |
+	\   exe "normal! g`\"" |
+	\ endif
 
 set background=dark
 " syntax highlight and indentation settings
@@ -84,6 +84,9 @@ set nolist
 set textwidth=0 wrapmargin=0
 " turn off all code folding
 autocmd BufRead,BufNewFile * set nofoldenable
+
+" start using buffers the way they were meant to be used
+set hidden
 
 " hybrid relative and absolute number for current line;
 " if v:version <= 703, we only get 'relativenumber'
@@ -113,6 +116,10 @@ autocmd FileType javascript setlocal expandtab
 "autocmd BufWinEnter *.t let w:m2=matchadd('Search', '\%>100v.\+', -1)
 "autocmd BufWinEnter *.p? let w:m2=matchadd('Search', '\%>100v.\+', -1)
 "autocmd BufWinEnter *.sh let w:m2=matchadd('Search', '\%>100v.\+', -1)
+if (exists('+colorcolumn'))
+	set colorcolumn=80
+	highlight ColorColumn ctermbg=233
+endif
 
 autocmd BufNewFile,BufRead ~/src/fretless/* set nowrap tabstop=2 shiftwidth=2 expandtab
 
@@ -148,6 +155,16 @@ map <Leader>** :s/^* <CR><CR>
 " shortcut to wrap text to 75 columns
 map <Leader>w !fmt<CR>
 
+"configure NERDtree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+map <C-n> :NERDTreeToggle<CR>
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+"configure airline
+"let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+
 " configure Supertab
 let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabMidWordCompletion = "0"
@@ -160,10 +177,10 @@ let g:ag_working_path_mode="r"
 
 " make the tmux status line show the currently-edited file
 if &term == "screen" || &term == "screen-256color"
-        set t_ts=
+	set t_ts=
 endif
 "if &term == "screen" || &term == "screen-256color" || &term == "xterm" || &term == "xterm-color" || &term == "xterm-256color"
-        set title
+	set title
 "endif
 autocmd BufEnter * let &titlestring = "vim " . expand("%:h") . "/" . expand("%:t")
 
