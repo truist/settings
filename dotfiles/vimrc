@@ -162,12 +162,14 @@ map <C-n> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 "configure airline
-"let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
 " configure Supertab
 let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabMidWordCompletion = "0"
+
+" configure minibufexplorer
+map <Leader>b :MBEFocus<cr>
 
 " auto-complete when in command-mode
 set wildmenu

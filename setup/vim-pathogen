@@ -30,6 +30,8 @@ clone_or_update 'ervandew' 'supertab'
 clone_or_update 'PProvost' 'vim-ps1'
 clone_or_update 'blueyed' 'vim-autoclose'
 clone_or_update 'ntpeters' 'vim-better-whitespace'
+clone_or_update 'vim-airline' 'vim-airline'
+clone_or_update 'weynhamz' 'vim-plugin-minibufexpl'
 
 # search for files
 clone_or_update 'rking' 'ag.vim'
