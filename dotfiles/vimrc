@@ -163,6 +163,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 
 "configure airline
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#wordcount#enabled = 0
 
 " configure Supertab
 let g:SuperTabDefaultCompletionType = "context"
