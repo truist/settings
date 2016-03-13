@@ -38,10 +38,6 @@ clone_or_update 'rking' 'ag.vim'
 clone_or_update 'Chun-Yang' 'vim-action-ag'
 clone_or_update 'ctrlpvim' 'ctrlp.vim'
 
-# nerdtree
-clone_or_update 'scrooloose' 'nerdtree'
-clone_or_update 'Xuyuanp' 'nerdtree-git-plugin'
-
 # tpope
 clone_or_update 'tpope' 'vim-commentary'
 clone_or_update 'tpope' 'vim-endwise'
