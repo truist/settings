@@ -106,7 +106,7 @@ autocmd BufRead,BufNewFile *.json setfiletype javascript syntax=javascript
 autocmd BufRead,BufNewFile * setlocal tabstop=4 shiftwidth=4 softtabstop=4
 
 " type-specific settings
-autocmd BufRead,BufNewFile *.txt setlocal wrap
+autocmd BufRead,BufNewFile *.txt setlocal nowrap
 " markdown
 autocmd FileType mkd setlocal expandtab
 autocmd FileType ikiwiki setlocal expandtab
@@ -158,6 +158,7 @@ set updatetime=250
 "configure airline
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#wordcount#enabled = 0
+set noshowmode
 
 " configure Supertab
 let g:SuperTabDefaultCompletionType = "context"
