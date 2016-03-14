@@ -28,6 +28,7 @@
 	showtrackedignored = ls-files -i --exclude-standard
 	st = status -s
 	stashpull = "!f() { git stash && git pull && git stash pop ; }; f"
+	sync = "!f() { git pull && git push ; }; f"
 	tags = tag -l
 	undo-commit = reset --soft HEAD^
 	wdiff = diff --color-words
