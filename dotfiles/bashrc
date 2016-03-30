@@ -8,19 +8,25 @@ elif [ `/usr/bin/id -u` -eq 0 ] && [ -d /var/root ] && [ -n "$(find /var/root -u
 	export HOME=/var/root
 fi
 
+_check_path_ownership() {
+	[ -d "$1" ] && [ -n "$(find "$1" -user "$2" -print -prune -o -prune 2>/dev/null)" ]
+}
+
 ORIG_PATH=$PATH
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R7/bin:/usr/X11R6/bin
-# these prepend paths to PATH, so we're semi-careful and check the owner first
-if [ -d /usr/pkg/bin ] && [ -n "$(find /usr/pkg/bin -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
-	PATH=/usr/pkg/bin:/usr/pkg/sbin:${PATH}
-	# $MANPATH isn't usually set, so if we set it, it breaks all the default search locations
-	#MANPATH=/usr/pkg/man:$MANPATH
-elif [ -d "$HOME/pkg/bin" ] && [ -n "$(find "$HOME/pkg/bin" -user "$(id -u)" -print -prune -o -prune)" ]; then
-	PATH=$HOME/pkg/bin:$HOME/pkg/sbin:${PATH}
-	# $MANPATH isn't usually set, so if we set it, it breaks all the default search locations
-	#MANPATH=$HOME/pkg/man:$MANPATH
-fi
 PATH=${PATH}:/usr/local/bin:/usr/local/sbin
+# pkgin on osx, probably
+if _check_path_ownership /opt/pkg/bin root ; then
+	PATH=/opt/pkg/bin:/opt/pkg/sbin:${PATH}
+fi
+# standard pkgsrc
+if _check_path_ownership /usr/pkg/bin root ; then
+	PATH=/usr/pkg/bin:/usr/pkg/sbin:${PATH}
+fi
+# user-specific pkgsrc
+if _check_path_ownership "$HOME/pkg/bin" "$(id -u)" ; then
+	PATH=$HOME/pkg/bin:$HOME/pkg/sbin:${PATH}
+fi
 if echo `uname` | grep -E ^MINGW > /dev/null ; then
 	PATH=${PATH}:$ORIG_PATH
 fi
@@ -59,12 +65,6 @@ if tty -s; then
 	bind '"\e[A": history-search-backward'
 	bind '"\e[B": history-search-forward'
 fi
-
-
-#if [ "$TERM" = "xterm-256color" ] && [ `uname` != "Darwin" ]; then
-#	# 256color isn't recognized by too many things, still
-#	export TERM=xterm-color
-#fi
 
 if [ -f ~/.prompt_spec ]; then
 	. ~/.prompt_spec
