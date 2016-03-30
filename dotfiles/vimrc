@@ -51,10 +51,10 @@ set hlsearch
 "clear search highlighting by hitting enter
 nnoremap <cr> :noh<CR><CR>:<backspace>
 
-" if has('mouse')
-" 	set mouse=a
-" 	" use with <alt> on OSX; set cursor position; scroll
-" endif
+if has('mouse')
+	set mouse=a
+	" use with <alt> or <fn> on OSX; set cursor position; scroll
+endif
 
 " When editing a file, always jump to the last known cursor position.
 " Don't do it when the position is invalid or when inside an event handler
