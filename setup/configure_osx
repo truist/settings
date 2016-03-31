@@ -2,17 +2,19 @@
 
 # based on https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 
+# do this before sudo, so we don't change the file permissions
+defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationMagnification -bool YES
+
+
 sudo -v
 
 
 # wait longer (12 hours) before going into standby mode
 pmset -a standbydelay 43200
 
-defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationMagnification -bool YES
 
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 defaults write NSGlobalDomain KeyRepeat -int 0
-
 
 
 # Disable the sound effects on boot
