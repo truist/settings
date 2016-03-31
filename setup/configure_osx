@@ -4,6 +4,8 @@
 
 # do this before sudo, so we don't change the file permissions
 defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationMagnification -bool YES
+defaults write ~/Library/Preferences/.GlobalPreferences KeyRepeat 2
+defaults write ~/Library/Preferences/.GlobalPreferences InitialKeyRepeat 15
 
 
 sudo -v
