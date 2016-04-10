@@ -21,6 +21,7 @@ endif
 " pathogen (https://github.com/tpope/vim-pathogen)
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
+Helptags
 
 "general ui
 set showmatch
