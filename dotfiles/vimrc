@@ -111,6 +111,7 @@ autocmd BufRead,BufNewFile * setlocal tabstop=4 shiftwidth=4 softtabstop=4
 autocmd BufRead,BufNewFile *.txt setlocal nowrap
 " markdown
 autocmd FileType mkd setlocal expandtab
+autocmd FileType markdown setlocal expandtab
 autocmd FileType ikiwiki setlocal expandtab
 autocmd FileType javascript setlocal expandtab
 
