@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd ~/src/reveal.js
+./start_show.sh "$1"
+
