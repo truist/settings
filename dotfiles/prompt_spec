@@ -35,7 +35,7 @@ if [ "`/usr/bin/id -u`" == 0 ]; then
 	USER_COLOR=$P_PLAIN_RED
 	PROMPT_CHAR='#'
 	SELF=0
-elif [ "truist" == "$ME" ] || [ "narthur" == "$ME" ] || [ "NArthur" == "$ME" ] || [ "preint\\narthur" == "$ME" ]; then
+elif [ "truist" == "$ME" ] || [ "narthur" == "$ME" ] || [ "NArthur" == "$ME" ] || [ "preint\\narthur" == "$ME" ] || [ "Nathan" == "$ME" ]; then
 	USER_COLOR=$P_PLAIN_GREEN
 	PROMPT_CHAR='$'
 	SELF=1
