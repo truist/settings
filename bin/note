@@ -2,6 +2,9 @@
 
 set -e
 
+LIGHTSCRIPT="$HOME/.vim/light.script"
+VIM="vim -S $LIGHTSCRIPT"
+
 DELETING=0
 if [ "-d" == "$1" ]; then
 	DELETING=1
@@ -20,6 +23,21 @@ if [ "-a" == "$1" ]; then
 		echo "archive path ($ARCHIVE_PATH) is not a directory" >&2
 		exit 1
 	fi
+fi
+
+if [ "--light" == "$1" ]; then
+	shift
+	osascript -e 'tell application "Terminal"' -e 'set current settings of selected tab of window 1 to settings set "Novel"' -e 'end tell'
+	(
+		cat <<-EOF
+			set bg=light
+			AirlineTheme papercolor
+			set colorcolumn=
+			set wrap
+EOF
+	) > $LIGHTSCRIPT
+else
+	echo "" > $LIGHTSCRIPT
 fi
 
 NOTEDIR="$HOME/OneDrive/Scratch"
@@ -45,20 +63,22 @@ cd "$NOTEDIR"
 if [ "$DELETING" == 1 ]; then
 	git rm "$FILE" && git commit -m "delete $FILE"
 elif [ -f "$FILE" ]; then
-	vi "$FILE"
+	$VIM "$FILE"
 else
 	DATESTAMP=$(date +"%a %b %d, %Y - %l:%M %p %Z")
 	DATEARG=":normal i$DATESTAMP"
 	MODARG=":set nomodified"
 	if [ -z "$FILE" ]; then
-		vi -c "$DATEARG" -c "$MODARG"
+		$VIM -c "$DATEARG" -c "$MODARG"
 	else
-		vi -c "$DATEARG" -c "$MODARG" "$FILE"
+		$VIM -c "$DATEARG" -c "$MODARG" "$FILE"
 	fi
 fi
 
 # be prepared in case they background vi during the edit session
 wait
+
+osascript -e 'tell application "Terminal"' -e 'set current settings of selected tab of window 1 to settings set "Pro"' -e 'end tell'
 
 if [ -f "$FILE" ]; then
 	git add "$FILE" && git commit -m "update $FILE"
