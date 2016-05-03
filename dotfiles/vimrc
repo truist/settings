@@ -154,6 +154,11 @@ map <Leader>** :s/^* <CR><CR>
 " shortcut to wrap text
 map <Leader>w !fmt<CR>
 
+" configure yankstack
+let g:yankstack_map_keys = 0
+nmap π <Plug>yankstack_substitute_older_paste
+nmap ∏ <Plug>yankstack_substitute_newer_paste
+
 " configure vim-gitgutter
 highlight clear SignColumn
 set updatetime=250

@@ -32,10 +32,11 @@ clone_or_update 'blueyed' 'vim-autoclose'
 clone_or_update 'ntpeters' 'vim-better-whitespace'
 clone_or_update 'vim-airline' 'vim-airline'
 clone_or_update 'weynhamz' 'vim-plugin-minibufexpl'
+clone_or_update 'maxbrunsfeld' 'vim-yankstack'
 
 # search for files
-clone_or_update 'rking' 'ag.vim'
-clone_or_update 'Chun-Yang' 'vim-action-ag'
+#clone_or_update 'rking' 'ag.vim'
+#clone_or_update 'Chun-Yang' 'vim-action-ag'
 clone_or_update 'ctrlpvim' 'ctrlp.vim'
 
 # tpope
