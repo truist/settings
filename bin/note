@@ -27,7 +27,7 @@ fi
 
 if [ "--light" == "$1" ]; then
 	shift
-	osascript -e 'tell application "Terminal"' -e 'set current settings of selected tab of window 1 to settings set "Novel"' -e 'end tell'
+	osascript -e 'tell application "Terminal"' -e 'set current settings of selected tab of front window to settings set "Novel"' -e 'end tell'
 	(
 		cat <<-EOF
 			set bg=light
@@ -78,7 +78,7 @@ fi
 # be prepared in case they background vi during the edit session
 wait
 
-osascript -e 'tell application "Terminal"' -e 'set current settings of selected tab of window 1 to settings set "Pro"' -e 'end tell'
+osascript -e 'tell application "Terminal"' -e 'set current settings of selected tab of front window to settings set "Pro"' -e 'end tell'
 
 if [ -f "$FILE" ]; then
 	git add "$FILE" && git commit -m "update $FILE"
