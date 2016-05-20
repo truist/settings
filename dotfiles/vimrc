@@ -109,11 +109,12 @@ autocmd BufRead,BufNewFile * setlocal tabstop=4 shiftwidth=4 softtabstop=4
 
 " type-specific settings
 autocmd BufRead,BufNewFile *.txt setlocal nowrap
+autocmd FileType javascript setlocal expandtab
 " markdown
 autocmd FileType mkd setlocal expandtab
 autocmd FileType markdown setlocal expandtab
 autocmd FileType ikiwiki setlocal expandtab
-autocmd FileType javascript setlocal expandtab
+autocmd BufEnter *.md exe 'noremap <leader>m :! /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome %:p<CR>' 
 
 " highlight text past 100 columns, for these types
 "autocmd BufWinEnter *.t let w:m2=matchadd('Search', '\%>100v.\+', -1)
