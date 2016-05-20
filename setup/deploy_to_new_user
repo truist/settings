@@ -14,7 +14,7 @@ if [ ! -d "$SETTINGS" ]; then
 	exit 1
 fi
 
-################# 
+#################
 
 main() {
 	do_dotfiles
@@ -33,9 +33,12 @@ main() {
 
 	cd ~/src
 	if [ ! -e 'z' ]; then
+		echo "z..."
 		git clone https://github.com/rupa/z
 	fi
+
 	if [ ! -e 'fonts' ]; then
+		echo "powerline fonts..."
 		git clone https://github.com/powerline/fonts
 		echo "Reminder to install ~/src/fonts/SourceCodePro"
 	fi

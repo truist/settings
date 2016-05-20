@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -e
+
+LIGHTSCRIPT="$HOME/.vim/light.script"
+VIM="vim -S $LIGHTSCRIPT"
+
+osascript -e 'tell application "Terminal"' -e 'set current settings of selected tab of front window to settings set "Novel"' -e 'end tell'
+
+(
+	cat <<-EOF
+		set bg=light
+		AirlineTheme papercolor
+		set colorcolumn=
+		set wrap
+EOF
+) > $LIGHTSCRIPT
+
+$VIM "$@"
+
+# be prepared in case they background vi during the edit session
+wait
+
+osascript -e 'tell application "Terminal"' -e 'set current settings of selected tab of front window to settings set "Pro"' -e 'end tell'
+
+

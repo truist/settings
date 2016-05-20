@@ -2,9 +2,6 @@
 
 set -e
 
-LIGHTSCRIPT="$HOME/.vim/light.script"
-VIM="vim -S $LIGHTSCRIPT"
-
 DELETING=0
 if [ "-d" == "$1" ]; then
 	DELETING=1
@@ -27,17 +24,9 @@ fi
 
 if [ "--light" == "$1" ]; then
 	shift
-	osascript -e 'tell application "Terminal"' -e 'set current settings of selected tab of front window to settings set "Novel"' -e 'end tell'
-	(
-		cat <<-EOF
-			set bg=light
-			AirlineTheme papercolor
-			set colorcolumn=
-			set wrap
-EOF
-	) > $LIGHTSCRIPT
+	VIM="lvim"
 else
-	echo "" > $LIGHTSCRIPT
+	VIM="vim"
 fi
 
 NOTEDIR="$HOME/OneDrive/Scratch"
@@ -77,8 +66,6 @@ fi
 
 # be prepared in case they background vi during the edit session
 wait
-
-osascript -e 'tell application "Terminal"' -e 'set current settings of selected tab of front window to settings set "Pro"' -e 'end tell'
 
 if [ -f "$FILE" ]; then
 	git add "$FILE" && git commit -m "update $FILE"

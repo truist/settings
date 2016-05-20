@@ -2,6 +2,13 @@
 
 set -e
 
+if [ "--light" == "$1" ]; then
+	shift
+	VIM="lvim"
+else
+	VIM="vim"
+fi
+
 if [ "-s" == "$1" ]; then
 	SEARCH_ONLY=1
 	shift
@@ -43,5 +50,5 @@ else
 fi
 
 printf '%s\n' "${file_list[@]}"
-$EDITOR -o "${file_list[@]}"
+$VIM "${file_list[@]}"
 
