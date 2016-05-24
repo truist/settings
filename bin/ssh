@@ -1,5 +1,0 @@
-#!/bin/sh
-if [ -t 1 ]; then
-	echo "Did you mean to say 'mosh'?"
-fi
-/usr/bin/ssh "$@"
