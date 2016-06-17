@@ -8,17 +8,16 @@ fi
 # make a progress marker
 if [ "$QUIET" == true ]; then
 	for DIR in *; do
-		if [ -d "$DIR" ]; then 
+		if [ -d "$DIR" ]; then
 			echo -n " "
 		fi
 	done
 	echo -en "|\033[100D"
 fi
 
-CURDIR=`pwd`
+BASEDIR=`pwd`
 for DIR in *; do
-	cd "$CURDIR"
-	if [ -d "$DIR" ]; then 
+	if [ -d "$DIR" ]; then
 		cd "$DIR"
 		if [ "$QUIET" == true ]; then
 			echo -n .
@@ -36,4 +35,6 @@ for DIR in *; do
 			"$@"
 		fi
 	fi
+	cd "$BASEDIR"
 done
+
