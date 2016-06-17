@@ -1,0 +1,28 @@
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+foreach my $line (<>) {
+	chomp($line);
+
+	my ($initial_whitespace, $remainder) = $line =~ m/^(\s*)(.*)$/;
+	unless ($remainder) {
+		print "$line\n";
+		next;
+	}
+
+	if (length($initial_whitespace) == 0) {
+		print "\n## $remainder\n";
+	} else {
+		$initial_whitespace =~ s/\t/    /g;
+		my $indent_level = $initial_whitespace =~ s/    //g;
+		if ($indent_level) {
+			print "    " x ($indent_level - 1);
+			print $initial_whitespace; # be sure not to forget any extra spaces
+			print "* $remainder\n";
+		} else {
+			print "$line\n";
+		}
+	}
+}
