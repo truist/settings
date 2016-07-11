@@ -15,6 +15,7 @@
 	contributors = shortlog --summary --numbered
 	# awesome way to view commit history
 	graph = log --color --graph --pretty=format':%C(yellow)%h%Cred%d%Creset %s %Cgreen %an, %ad%Creset'
+	ignored = status --ignored -s
 	# from http://stackoverflow.com/questions/1527234/finding-a-branch-point-with-git
 	oldest-ancestor = !bash -c 'diff --old-line-format= --new-line-format= <(git rev-list --first-parent \"${1:-master}\") <(git rev-list --first-parent \"${2:-HEAD}\") | head -1' -
 	# I just always work on master, and retroactively move work to a branch if needed
