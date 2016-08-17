@@ -1,3 +1,20 @@
 #!/bin/sh
 
-note "$@" todo
+set -e
+
+FIRSTARG="$1"
+
+if [ ! -z "$FIRSTARG" ] && [ ! ${FIRSTARG:0:1} == "-" ]; then
+	ITEM="$*"
+
+	NOTEDIR="$HOME/OneDrive/Scratch"
+	TRICKY_MATCH='-------------'
+	BN=$'\\\n'
+
+	sed -i '' -e "s/^${TRICKY_MATCH}$/${TRICKY_MATCH}${BN}${ITEM}${BN}/" "${NOTEDIR}/todo.txt"
+
+else
+	note "$@" todo
+fi
+
+
