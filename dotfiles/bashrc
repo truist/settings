@@ -105,3 +105,5 @@ if [ -e $ZPATH ]; then
 	. $ZPATH
 fi
 
+alias gitjk="history 10 | tail -r | gitjk_cmd"
+
