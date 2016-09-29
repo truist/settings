@@ -14,7 +14,7 @@
 	# summarize contributors and commit count
 	contributors = shortlog --summary --numbered
 	# awesome way to view commit history
-	graph = log --color --graph --pretty=format':%C(yellow)%h%Cred%d%Creset %s %Cgreen %an, %ad%Creset'
+	graph = log --color --graph --pretty='format:%C(red)%h %C(yellow)%d%C(reset) %s  %C(green)%an, %ad%C(reset)' --date=short
 	ignored = status --ignored -s
 	# from http://stackoverflow.com/questions/1527234/finding-a-branch-point-with-git
 	oldest-ancestor = !bash -c 'diff --old-line-format= --new-line-format= <(git rev-list --first-parent \"${1:-master}\") <(git rev-list --first-parent \"${2:-HEAD}\") | head -1' -
@@ -30,7 +30,7 @@
 	st = status -s
 	stashpull = "!f() { git stash && git pull && git stash pop ; }; f"
 	sync = "!f() { git pull && git push ; }; f"
-	tags = tag -l
+	tags = log --date-order --tags --simplify-by-decoration --pretty='format:%C(green)%ad %C(red)%h %C(reset)%D' --date=short
 	undo-commit = reset --soft HEAD^
 	wdiff = diff --color-words
 	wshow = show --color-words
