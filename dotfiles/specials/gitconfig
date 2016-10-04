@@ -30,7 +30,8 @@
 	st = status -s
 	stashpull = "!f() { git stash && git pull && git stash pop ; }; f"
 	sync = "!f() { git pull && git push ; }; f"
-	tags = log --date-order --tags --simplify-by-decoration --pretty='format:%C(green)%ad %C(red)%h %C(reset)%D' --date=short
+	#tags = log --date-order --tags --simplify-by-decoration --pretty='format:%C(green)%ad %C(red)%h %C(reset)%D %C(yellow)%(taggerdate)' --date=short
+	tags = for-each-ref --format='%(color:green)%(*creatordate:short)%(committerdate:short) %(color:red)%(objectname:short) %(color:reset)%(refname:short) %(color:blue)(%(taggerdate:short))' --sort=-taggerdate refs/tags
 	undo-commit = reset --soft HEAD^
 	wdiff = diff --color-words
 	wshow = show --color-words
