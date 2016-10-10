@@ -91,12 +91,29 @@ fi
 
 export NOTEDIR="$HOME/OneDrive/Scratch"
 if [ -d "$NOTEDIR" ]; then
-	_noteComplete()
-	{
+	_noteComplete() {
 		local files=("$NOTEDIR/$2"*)
 		[[ -e ${files[0]} ]] && COMPREPLY=( "${files[@]##*/}" )
 	}
 	complete -o bashdefault -o default -o filenames -F _noteComplete note
+fi
+
+export INTERVIEWDIR="$HOME/OneDrive/People/Hiring/Candidates"
+if [ -d "$INTERVIEWDIR" ]; then
+	_interviewComplete() {
+		local files=("$INTERVIEWDIR/$2"*.txt)
+		[[ -e ${files[0]} ]] && COMPREPLY=( "${files[@]##*/}" )
+	}
+	complete -o bashdefault -o default -o filenames -F _interviewComplete interview
+fi
+
+export SLIDESDIR="$HOME/src/reveal.js/slides"
+if [ -d "$SLIDESDIR" ]; then
+	_slidesComplete() {
+		local files=("$SLIDESDIR/$2"*)
+		[[ -e ${files[0]} ]] && COMPREPLY=( "${files[@]##*/}" )
+	}
+	complete -o bashdefault -o default -o filenames -F _slidesComplete slides
 fi
 
 # see https://github.com/rupa/z
