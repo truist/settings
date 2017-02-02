@@ -2,7 +2,7 @@
 
 if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
 	echo "please 'source' this script, instead" >&2
-	echo 'HINT: alias cdp=". ~/bin/cdp"' >&2 
+	echo 'HINT: alias cdp=". ~/bin/cdp"' >&2
 	exit 1
 fi
 

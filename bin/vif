@@ -40,8 +40,8 @@ done
 if [ "1" == "$SEARCH_ONLY" ]; then
 	printf '%s\n' "${file_list[@]}"
 	exit 0;
-elif [ -f $SEEK ]; then
-	FOUND=$SEEK
+elif [ -f "$SEEK" ]; then
+	FOUND="$SEEK"
 else
 	if [ -z "${file_list[*]}" ]; then
 		echo "Can't find '$SEEK' or '`pwd`/$SEEK' or anything matching '*$SEEK*' in '`pwd`'" 1>&2
