@@ -52,6 +52,9 @@ clone_or_update 'tpope' 'vim-vinegar'
 # truist
 clone_or_update 'truist' 'vim-open-url'
 
+# ConradIrwin
+clone_or_update 'ConradIrwin' 'vim-bracketed-paste'
+
 
 cd - >/dev/null
 
