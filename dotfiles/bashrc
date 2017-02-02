@@ -124,3 +124,11 @@ fi
 
 alias gitjk="history 10 | tail -r | gitjk_cmd"
 
+function docfx {
+	mono $HOME/bin/docfx/docfx.exe
+}
+
+function docfx-serve {
+	mono $HOME/bin/docfx/docfx.exe serve $1
+}
+
