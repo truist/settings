@@ -16,6 +16,7 @@ if [ "-a" == "$1" ]; then
 	shift
 	shift
 
+	mkdir -p "$ARCHIVE_PATH"
 	if [ ! -d "$ARCHIVE_PATH" ]; then
 		echo "archive path ($ARCHIVE_PATH) is not a directory" >&2
 		exit 1
