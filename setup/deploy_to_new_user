@@ -88,6 +88,15 @@ EOF
 	cd "$vagdir"
 	nodotfile="Vagrantfile"
 	link_file "../$SPECIALS/$nodotfile" "$nodotfile"
+	cd -
+
+	# lvim light.script
+	vimdir=".vim"
+	mkdir -p "$vimdir"
+	nodotfile="light.script"
+	cd "$vimdir"
+	link_file "../$SPECIALS/$nodotfile" "$nodotfile"
+	cd -
 }
 
 do_bin_scripts() {
