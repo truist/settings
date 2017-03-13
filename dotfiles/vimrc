@@ -193,3 +193,7 @@ endif
 "endif
 autocmd BufEnter * let &titlestring = "vim " . expand("%:h") . "/" . expand("%:t")
 
+" fix backspace under tmux on netbsd
+if &term == "screen-256color"
+	set t_kb=
+endif
