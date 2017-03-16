@@ -1,0 +1,48 @@
+#!/bin/sh
+
+set -eu
+
+# destroy sandbox if it exists and isn't in use
+# create sandbox
+# build (all or specific)
+# check that all specified packages are built
+# 	on success:
+# 		destroy sandbox
+# 		pkgin update
+# mail results?
+
+FAST=
+if [ $# -gt 0 ] && [ '-f' = "$1" ]; then
+	FAST="$1"
+	shift
+fi
+
+PKGLIST="$@"
+
+# do this early in case there's any problem loading it
+. ~/bin/util/pkg_comp_util.sh  # this will also grab util.sh
+
+echo "Destroying old sandbox (and ignoring errors)..."
+pkg_comp sandbox-destroy || true
+
+echo "Creating new sandbox..."
+pkg_comp sandbox-create || die "Error creating sandbox"
+
+echo "Building..."
+pkg_comp auto $FAST "$PKGLIST" || die "Error during 'auto' build"
+
+if [ -n "$PKGLIST" ]; then
+	DESIRED_RAW="`echo "$PKGLIST" | tr " " "\n"`"
+fi
+
+echo "Checking that all desired packages exist..."
+_do_diff 'desired_package_names' 'current_package_files' || die "Some desired packages are missing"
+
+echo "Destroying new sandbox..."
+pkg_comp sandbox-destroy || die "Error destroying sandbox"
+
+echo "Running 'pkgin update'..."
+pkgin update || die "Error running 'pkgin update'"
+
+echo "Done!"
+exit 0

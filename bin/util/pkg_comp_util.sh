@@ -5,45 +5,58 @@ set -eu
 . ~/bin/util/util.sh
 
 PKG_LIST=/etc/pkglist
+test -f $PKG_LIST
+
 PKGSRC_PATH=/var/pkg_comp/pkgsrc
+test -d $PKGSRC_PATH
+
 PACKAGES_PATH=/var/pkg_comp/packages/All
+test -d $PACKAGES_PATH
 
+PKGIN=/usr/pkg/bin/pkgin
+test -x $PKGIN
+
+
+
+DESIRED_RAW=
 desired_raw() {
-	grep -v '^#' "$PKG_LIST" | sort
+	if [ -z "$DESIRED_RAW" ]; then
+		grep -v '^#' "$PKG_LIST" | sort
+	else
+		echo $DESIRED_RAW
+	fi
 }
 
-_DESIRED_PKG_NAME_CACHE=
-_uncached_desired_pkg_name() {
-	{
-		for p in `desired_raw`; do
-			cd "$PKGSRC_PATH/$p"
-			make show-var VARNAME=PKGNAME
-		done
-	} | sort
+_DESIRED_PACKAGE_NAME_CACHE=
+_uncached_desired_package_name() {
+	for p in `desired_raw`; do
+		cd "$PKGSRC_PATH/$p" || die $?
+		make show-var VARNAME=PKGNAME || die $?
+	done | sort
 }
-desired_pkg_name() {
-	if [ -z "$_DESIRED_PKG_NAME_CACHE" ]; then
-		_DESIRED_PKG_NAME_CACHE="`_uncached_desired_pkg_name`"
+desired_package_names() {
+	if [ -z "$_DESIRED_PACKAGE_NAME_CACHE" ]; then
+		_DESIRED_PACKAGE_NAME_CACHE="`_uncached_desired_package_name`"
 	fi
-	echo "$_DESIRED_PKG_NAME_CACHE"
+	echo "$_DESIRED_PACKAGE_NAME_CACHE"
 }
 
 current_keep() {
-	pkgin export | grep -v 'devel/bmake' | grep -v 'pkgtools/bootstrap-mk-files' | grep -v 'pkgtools/cwrappers' | grep -v 'pkgtools/pkg_install' | sort
+	$PKGIN export | grep -v 'devel/bmake' | grep -v 'pkgtools/bootstrap-mk-files' | grep -v 'pkgtools/cwrappers' | grep -v 'pkgtools/pkg_install' | sort
 }
 
 current_installed() {
-	DESIRED="`desired_pkg_name`"
-	pkgin list | cut -d ' ' -f 1 | grep -F "$DESIRED" | sort
+	DESIRED="`desired_package_names`"
+	$PKGIN list | cut -d ' ' -f 1 | grep -F "$DESIRED" | sort
 }
 
 current_available() {
-	DESIRED="`desired_pkg_name`"
-	pkgin avail | cut -d ' ' -f 1 | grep -F "$DESIRED" | sort
+	DESIRED="`desired_package_names`"
+	$PKGIN avail | cut -d ' ' -f 1 | grep -F "$DESIRED" | sort
 }
 
 current_package_files() {
-	DESIRED="`desired_pkg_name`"
+	DESIRED="`desired_package_names`"
 	ls "$PACKAGES_PATH/"*.tgz | xargs -I % -n 1 basename % .tgz | grep -F "$DESIRED" | sort
 }
 
@@ -60,7 +73,7 @@ diff_desired_keep() {
 }
 
 diff_desired_installed() {
-	_do_diff 'desired_pkg_name' 'current_installed'
+	_do_diff 'desired_package_names' 'current_installed'
 }
 
 diff_installed_available() {
