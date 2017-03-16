@@ -2,15 +2,6 @@
 
 set -eu
 
-# destroy sandbox if it exists and isn't in use
-# create sandbox
-# build (all or specific)
-# check that all specified packages are built
-# 	on success:
-# 		destroy sandbox
-# 		pkgin update
-# mail results?
-
 FAST=
 if [ $# -gt 0 ] && [ '-f' = "$1" ]; then
 	FAST="$1"
