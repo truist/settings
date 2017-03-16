@@ -13,27 +13,33 @@ PKGLIST="$@"
 # do this early in case there's any problem loading it
 . ~/bin/util/pkg_comp_util.sh  # this will also grab util.sh
 
+# do this early in case there are any invalid package names in the list
+echo "Initializing package name cache and checking for errors..."
+if [ -n "$PKGLIST" ]; then
+	# trick pkg_comp_util into using our shortened list
+	TEMPFILE="`tempname`"
+	echo "$PKGLIST" | tr ' ' "\n" > "$TEMPFILE"
+	PKG_LIST="$TEMPFILE"
+fi
+_uncached_desired_package_name >/dev/null || die $?
+
 echo "Destroying old sandbox (and ignoring errors)..."
 pkg_comp sandbox-destroy || true
 
 echo "Creating new sandbox..."
-pkg_comp sandbox-create || die "Error creating sandbox"
+pkg_comp sandbox-create || die $? "Error creating sandbox"
 
 echo "Building..."
-pkg_comp auto $FAST "$PKGLIST" || die "Error during 'auto' build"
-
-if [ -n "$PKGLIST" ]; then
-	DESIRED_RAW="`echo "$PKGLIST" | tr " " "\n"`"
-fi
+pkg_comp auto $FAST $PKGLIST || die $? "Error during 'auto' build"
 
 echo "Checking that all desired packages exist..."
-_do_diff 'desired_package_names' 'current_package_files' || die "Some desired packages are missing"
+_do_diff 'desired_package_names' 'current_package_files' || die $? "Some desired packages are missing"
 
 echo "Destroying new sandbox..."
-pkg_comp sandbox-destroy || die "Error destroying sandbox"
+pkg_comp sandbox-destroy || die $? "Error destroying sandbox"
 
 echo "Running 'pkgin update'..."
-pkgin update || die "Error running 'pkgin update'"
+pkgin update || die $? "Error running 'pkgin update'"
 
 echo "Done!"
 exit 0

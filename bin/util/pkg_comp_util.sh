@@ -17,22 +17,18 @@ PKGIN=/usr/pkg/bin/pkgin
 test -x $PKGIN
 
 
-
-DESIRED_RAW=
 desired_raw() {
-	if [ -z "$DESIRED_RAW" ]; then
-		grep -v '^#' "$PKG_LIST" | sort
-	else
-		echo $DESIRED_RAW
-	fi
+	grep -v '^#' "$PKG_LIST" | sort
 }
 
 _DESIRED_PACKAGE_NAME_CACHE=
 _uncached_desired_package_name() {
+	DRTEMP="`tempname`"
 	for p in `desired_raw`; do
 		cd "$PKGSRC_PATH/$p" || die $?
 		make show-var VARNAME=PKGNAME || die $?
-	done | sort
+	done > "$DRTEMP" || die $?
+	cat "$DRTEMP" | sort
 }
 desired_package_names() {
 	if [ -z "$_DESIRED_PACKAGE_NAME_CACHE" ]; then
