@@ -2,6 +2,9 @@
 
 set -eu
 
+PKG_COMP=/usr/pkg/sbin/pkg_comp
+PKGIN=/usr/pkg/bin/pkgin
+
 FAST=
 if [ $# -gt 0 ] && [ '-f' = "$1" ]; then
 	FAST="$1"
@@ -24,22 +27,22 @@ fi
 _uncached_desired_package_name >/dev/null || die $?
 
 echo "Destroying old sandbox (and ignoring errors)..."
-pkg_comp sandbox-destroy || true
+$PKG_COMP sandbox-destroy || true
 
 echo "Creating new sandbox..."
-pkg_comp sandbox-create || die $? "Error creating sandbox"
+$PKG_COMP sandbox-create || die $? "Error creating sandbox"
 
 echo "Building..."
-pkg_comp auto $FAST $PKGLIST || die $? "Error during 'auto' build"
+$PKG_COMP auto $FAST $PKGLIST || die $? "Error during 'auto' build"
 
 echo "Checking that all desired packages exist..."
 _do_diff 'desired_package_names' 'current_package_files' || die $? "Some desired packages are missing"
 
 echo "Destroying new sandbox..."
-pkg_comp sandbox-destroy || die $? "Error destroying sandbox"
+$PKG_COMP sandbox-destroy || die $? "Error destroying sandbox"
 
 echo "Running 'pkgin update'..."
-pkgin update || die $? "Error running 'pkgin update'"
+$PKGIN update || die $? "Error running 'pkgin update'"
 
 echo "Done!"
 exit 0
