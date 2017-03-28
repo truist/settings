@@ -42,7 +42,7 @@ alias ls='ls -F'
 
 export PAGER=less
 alias less='less -R -X'
-alias ack='ack --pager="less -R -X" -a'
+alias ack='ack --pager="less -R -X"'
 alias ag='ag --pager "less -R -X"'
 
 alias ..="cd .."

@@ -85,19 +85,19 @@ pkg_comp_hygiene() {
 	echo "-----------------------"
 	echo ""
 	echo "Desired packages:"
-	desired_raw
+	desired_raw || true
 	echo ""
 	echo "Diff against 'keep' list:"
-	diff_desired_keep
+	diff_desired_keep || true
 	echo ""
 	echo "Diff against installed list:"
-	diff_desired_installed
+	diff_desired_installed || true
 	echo ""
 	echo "Diff installed against available:"
-	diff_installed_available
+	diff_installed_available || true
 	echo ""
 	echo "Diff available against actual packages:"
-	diff_available_files
+	diff_available_files || true
 	echo ""
 	echo "Done!"
 }
