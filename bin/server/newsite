@@ -8,6 +8,7 @@ die()
 	exit ${exitcode}
 }
 
+die 1 "This script needs to be updated to handle permissions, not pre-create the log files (but yes pre-create the log directory)"
 
 if [ -z "$1" -o -z "$2" -o -z "$3" -o -z "$4" ]; then
 	die 1 "Usage: $0 user subdomain domain ext"
