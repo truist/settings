@@ -1,0 +1,32 @@
+/etc/pkglist
+/etc/bulk_build.conf
+	PRUNEPACKAGES=no  (probably what you want, in case the upgrade goes badly.  also removes manually-downloaded jre distfiles.  very bad)
+	PKGLIST=<magic>
+	REPORTS_DIR (from within the sandbox)
+	REPORTS_URL (full path)
+/etc/mk.conf
+	SPECIFIC_PKGS=1 (must be set, with supporting variable, for delete to work)
+	PKGSRC_LOCKTYPE=sleep (should probably be set)
+	OBJHOSTNAME=    # must be 'defined' because of PKGSRC_LOCKTYPE
+	need to handle concurrent builds (in mk.conf)
+crontab entry
+customize the config file
+
+need a non-pkg sendmail in /etc/mailer.conf, or use custom mail feature
+
+features:
+	bulk-build of a specific set of packages, in a chroot (so it doesn't uninstall existing packages)
+	fairly simple to configure
+	build scripts won't rebuild anything that's already built
+		...unless it depends on something that was rebuilt :)
+	installer script tries to be super-safe, but it's possible to get in trouble
+	if one package is broken, you find out before you try it in production
+	single package list (in /etc)
+	can hand-build packages, like usual
+
+remember util.sh
+
+
+
+
+make -f ../bsd.pkg.mk BATCH=#defined show-var VARNAME=INDEXFILE
