@@ -104,30 +104,30 @@ create)
 
 mount)
 	echo "Configuring vnd ($VND_DEVICE_FILE) for image ($IMAGE_FILE)..."
-    vndconfig -c $VND_DEVICE_FILE "$IMAGE_FILE"
+	vndconfig -c $VND_DEVICE_FILE "$IMAGE_FILE"
 
 	echo "Configuring cgd ($CGD_DEVICE) on vnd volume ($VND_VOLUME_FILE) with parameters ($CGD_PARAMS_FILE)..."
-    cgdconfig $CGD_DEVICE $VND_VOLUME_FILE $CGD_PARAMS_FILE
+	cgdconfig $CGD_DEVICE $VND_VOLUME_FILE $CGD_PARAMS_FILE
 
 	echo "Fsck-ing cgd volume ($CGD_VOLUME_FILE)..."
-    fsck -y $CGD_VOLUME_FILE
+	fsck -y $CGD_VOLUME_FILE
 
 	echo "Mounting cgd volume ($MOUNT_DIR)..."
-    mount $CGD_VOLUME_FILE "$MOUNT_DIR"
+	mount $CGD_VOLUME_FILE "$MOUNT_DIR"
 
-    ;;
+	;;
 
 umount)
 	echo "Unmounting cgd ($MOUNT_DIR)..."
 	umount "$MOUNT_DIR" || true
 
 	echo "Unconfiguring cgd ($CGD_DEVICE)..."
-    cgdconfig -u $CGD_DEVICE || true
+	cgdconfig -u $CGD_DEVICE || true
 
 	echo "Unconfiguring vnd ($VND_DEVICE_FILE)..."
-    vndconfig -u $VND_DEVICE_FILE || true
+	vndconfig -u $VND_DEVICE_FILE || true
 
-    ;;
+	;;
 
 *)
 	usage_exit 1
