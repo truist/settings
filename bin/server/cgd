@@ -1,22 +1,120 @@
 #!/bin/sh
 
+# based on http://julio.meroh.net/2012/02/encrypted-disk-images-in-netbsd.html
+
 set -eu
 
-if [ "$#" -ne 1 ] || [ -z "$1" ]; then
-        echo "args: <branch name>" >&2
-        exit 1
+ETC_CGD=/etc/cgd
+IMAGE_DIR=/var/secure
+CIPHER=aes-cbc
+BITS=192
+MOUNT_DIR=/mnt/secure
+
+SCRIPTNAME=$0
+usage_exit() {
+	{
+		echo "usage: $SCRIPTNAME <create|mount|umount> <device_id> [megabytes]"
+		echo "    device_id should an integer from 0 to 3"
+		echo "    megabytes should an integer greater than 1"
+	} >&2
+	exit $1
+}
+
+if [ "$#" -lt 2 ]; then
+	usage_exit 1
 fi
 
+COMMAND="$1"
 
-# device ID (0-3) to use
-# megabytes to generate
+check_int_arg() {
+	VALUE="$1"
+	MIN="$2"
+	MAX="$3"
 
-# path to secure dir
-# image file name
-# vnd device
-# cypher / bits
-# cgd device
-# mount point
+	NON_DIGITS=`echo "$VALUE" | sed 's/[0-9]//g'`
+	if [ -n "$NON_DIGITS" ] || [ "$VALUE" -lt $MIN ] || [ "$VALUE" -gt $MAX ]; then
+		usage_exit 2
+	fi
+}
 
-# set all the permissions!
+DEVICE_ID="$2"
+check_int_arg "$DEVICE_ID" 0 3
+IMAGE_FILE="$IMAGE_DIR/$DEVICE_ID.img"
+VND_DEVICE_FILE=/dev/vnd${DEVICE_ID}
+VND_VOLUME_NAME=vnd${DEVICE_ID}a
+VND_VOLUME_FILE=/dev/$VND_VOLUME_NAME
+CGD_PARAMS_FILE=$ETC_CGD/$VND_VOLUME_NAME
+CGD_DEVICE=cgd${DEVICE_ID}
+CGD_VOLUME_FILE=/dev/${CGD_DEVICE}a
+MOUNT_DIR="$MOUNT_DIR/$DEVICE_ID"
+
+mkdir_with_perms() {
+	mkdir -p "$1" || ( echo "Error creating $1" >&2 ; exit 3 )
+	chown root:wheel "$1" || ( echo "Error chowning $1" >&2 ; exit 3 )
+	chmod 700 "$1" || ( echo "Error chmoding $1" >&2 ; exit 3 )
+}
+touch_with_perms() {
+	touch "$1" || ( echo "Error touching $1" >&2 ; exit 4 )
+	chown root:wheel "$1" || ( echo "Error chowning $1" >&2 ; exit 4 )
+	chmod 600 "$1" || ( echo "Error chmoding $1" >&2 ; exit 4 )
+}
+
+case "$COMMAND" in
+create)
+	if [ "$#" -ne 3 ]; then
+		usage_exit 1
+	fi
+	SIZE_MB="$3"
+	check_int_arg "$SIZE_MB" 1 1048576
+
+	echo "Making directories and files..."
+	mkdir_with_perms "$IMAGE_DIR"
+	mkdir_with_perms "$ETC_CGD"
+	mkdir_with_perms "$MOUNT_DIR"
+
+	echo "Initializing empty image ($IMAGE_FILE)..."
+	[ -f "$IMAGE_FILE" ] && ( echo "Error: image file already exists" >&2 ; exit 5 )
+	dd if=/dev/zero of="$IMAGE_FILE" bs=1m count=$SIZE_MB
+	touch_with_perms "$IMAGE_FILE"
+
+	echo "Setting up vnd ($VND_DEVICE_FILE)..."
+	vndconfig -c $VND_DEVICE_FILE "$IMAGE_FILE"
+
+	echo "Configuring cgd parameters file ($CGD_PARAMS_FILE)..."
+	cgdconfig -g -o $CGD_PARAMS_FILE -V ffs $CIPHER $BITS
+	touch_with_perms $CGD_PARAMS_FILE
+	cat $CGD_PARAMS_FILE
+
+	echo "Configuring cgd device ($CGD_DEVICE)"
+	cgdconfig -V re-enter $CGD_DEVICE $VND_VOLUME_FILE $CGD_PARAMS_FILE
+
+	echo "Configuring filesystem on cgd ($CGD_VOLUME_FILE)"
+	newfs -O 2 $CGD_VOLUME_FILE
+
+	echo "Mounting cgd ($MOUNT_DIR)..."
+	mount $CGD_VOLUME_FILE "$MOUNT_DIR"
+	mkdir_with_perms "$MOUNT_DIR"
+
+	;;
+
+mount)
+	echo "mount"
+    # vnconfig -c /dev/vnd2 /secure.img
+    # cgdconfig cgd0 /dev/vnd2c
+    # fsck -y /dev/cgd0c
+    # mount /dev/cgd0c /secure
+    ;;
+
+umount)
+	echo "umount"
+    # umount /secure
+    # cgdconfig -u cgd0
+    # vnconfig -u /dev/vnd2
+    ;;
+
+*)
+	usage_exit 1
+esac
+
+exit 0
 
