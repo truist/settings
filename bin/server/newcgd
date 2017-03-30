@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -eu
+
+if [ "$#" -ne 1 ] || [ -z "$1" ]; then
+        echo "args: <branch name>" >&2
+        exit 1
+fi
+
+
+# device ID (0-3) to use
+# path to disk image
+# megabytes to generate
