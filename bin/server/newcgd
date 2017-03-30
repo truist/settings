@@ -9,5 +9,14 @@ fi
 
 
 # device ID (0-3) to use
-# path to disk image
 # megabytes to generate
+
+# path to secure dir
+# image file name
+# vnd device
+# cypher / bits
+# cgd device
+# mount point
+
+# set all the permissions!
+
