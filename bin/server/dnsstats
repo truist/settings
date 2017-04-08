@@ -1,12 +1,8 @@
 #!/bin/sh
 
-if [ "x$1x" = "xx" ]; then
-	echo "args: <path/to/apache/access/log/file> <arbitrary string (e.g. your IP address) to exclude from results>"
-	exit 0;
-fi
-sitestats $1 $2 - | \
+echo "usage: sitestats | whatever other stuff | dnsstats"
 
-#awk '{print $1}' $1 | sort | uniq -c | sort | tail -n 50 |   \
+#sitestats "$1" | \
 while read line
 do
 	set -- $line

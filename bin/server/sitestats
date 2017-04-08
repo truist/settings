@@ -1,7 +1,8 @@
 #!/bin/sh
-if [ "x$1x" = "xx" ]; then
-	echo "args: <path/to/apache/access/log/file> <arbitrary string (e.g. your IP address) to exclude from results>"
-	exit 0;
+
+if [ "$#" -ne 1 ]; then
+	echo "args: <path/to/apache/access/log/file>" >&2
+	exit 1;
 fi
-awk '{print $1}' $1 | sort | uniq -c | sort | grep -v $2 | tail -n 50
+awk '{print $1}' "$1" | sort | uniq -c | sort -n
 
