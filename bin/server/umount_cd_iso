@@ -1,3 +1,0 @@
-#!/bin/sh
-umount /mnt/vnd || exit $?
-vnconfig -u vnd0 || exit $?

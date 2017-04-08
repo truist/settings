@@ -1,3 +1,8 @@
 #!/bin/sh
+
+if [ "$#" -ne 1 ]; then
+	echo "args: <file to strip>" >&2
+	exit 1
+fi
 cat "$1" | sed s/// > "$1.tmp" && mv "$1.tmp" "$1"
 
