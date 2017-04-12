@@ -26,6 +26,7 @@ main() {
 	"$SETUPFILES/vim-pathogen"
 
 	if [ `uname` = 'Darwin' ]; then
+		echo
 		echo "OSX configuration..."
 		cd ~
 		"$SETUPFILES/configure_osx"
@@ -33,16 +34,19 @@ main() {
 
 	cd ~/src
 	if [ ! -e 'z' ]; then
+		echo
 		echo "z..."
 		git clone https://github.com/rupa/z
 	fi
 
 	if [ ! -e 'fonts' ]; then
+		echo
 		echo "powerline fonts..."
 		git clone https://github.com/powerline/fonts
 		echo "Reminder to install ~/src/fonts/SourceCodePro"
 	fi
 
+	echo
 	echo "done!"
 }
 
