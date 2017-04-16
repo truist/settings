@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -eu
+
+if [ "$#" -ne 4 ]; then
+	echo "args: <version number> <date string> <arch> <kern type>" >&2
+	echo "example: $0 7 201704152110Z evbarm-earmv7hf RPI2" >&2
+	echo "go to http://nyftp.netbsd.org/pub/NetBSD-daily/ to see options" >&2
+	exit 1
+fi
+
+NETBSD_VERSION="$1"
+DATE_STRING="$2"
+ARCH_ID="$3"
+KERN_TYPE="$4"
+
+for TGZ in base.tgz comp.tgz etc.tgz games.tgz kern-$KERN_TYPE.tgz man.tgz misc.tgz modules.tgz tests.tgz text.tgz xbase.tgz xcomp.tgz xetc.tgz xfont.tgz xserver.tgz; do
+	ftp "http://nyftp.netbsd.org/pub/NetBSD-daily/netbsd-$NETBSD_VERSION/$DATE_STRING/$ARCH_ID/binary/sets/$TGZ"
+done
+
+exit 0
