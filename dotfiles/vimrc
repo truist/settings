@@ -163,6 +163,7 @@ nmap ∏ <Plug>yankstack_substitute_newer_paste
 " configure vim-gitgutter
 highlight clear SignColumn
 set updatetime=250
+let g:gitgutter_max_signs = 1000
 
 "configure airline
 set noshowmode
