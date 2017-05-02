@@ -23,9 +23,9 @@ fi
 
 FILE_NAME="$(basename '$FILE_PATH')"
 
-if [ ! -d "${EXPORT_TO}" ]; then
-    echo "Creating directory '${EXPORT_TO}'"
-    mkdir -p "${EXPORT_TO}"
+if [ ! -d "$EXPORT_TO" ]; then
+    echo "Creating directory '$EXPORT_TO'"
+    mkdir -p "$EXPORT_TO"
 fi
 
 echo "Writing files to '$EXPORT_TO'"
