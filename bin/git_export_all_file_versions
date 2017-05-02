@@ -21,7 +21,7 @@ if [ -n "$2" ]; then
 	EXPORT_TO="$2"
 fi
 
-FILE_NAME="$(basename '$FILE_PATH')"
+FILE_NAME="$(basename "$FILE_PATH")"
 
 if [ ! -d "$EXPORT_TO" ]; then
     echo "Creating directory '$EXPORT_TO'"
