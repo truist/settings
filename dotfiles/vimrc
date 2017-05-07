@@ -114,7 +114,7 @@ autocmd FileType javascript setlocal expandtab
 autocmd FileType mkd setlocal expandtab
 autocmd FileType markdown setlocal expandtab
 autocmd FileType ikiwiki setlocal expandtab
-autocmd BufEnter *.md exe 'noremap <leader>m :! /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome %:p<CR>' 
+autocmd BufEnter *.md exe 'noremap <leader>m :! /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome %:p<CR>'
 
 " highlight text past 100 columns, for these types
 "autocmd BufWinEnter *.t let w:m2=matchadd('Search', '\%>100v.\+', -1)
@@ -152,8 +152,8 @@ map <Leader>## :s/^#<CR><CR>
 map <Leader>* :s/^\s*/* <CR><CR>
 map <Leader>** :s/^* <CR><CR>
 
-" shortcut to wrap text
-map <Leader>w !fmt<CR>
+" shortcut to toggle wrapping
+map <Leader>w :set wrap!<cr>
 
 " configure yankstack
 let g:yankstack_map_keys = 0
