@@ -2,6 +2,8 @@
 
 set -eu
 
+LOG=/var/pkg_comp/log/pkg_comp_wrapper.log
+
 {
 	flock -n 9 || (echo "unable to obtain lock; is a build already running?" >&2 && exit 1)
 
@@ -47,7 +49,7 @@ set -eu
 	echo "Running 'pkgin update'..."
 	$PKGIN update || die $? "Error running 'pkgin update'"
 
-} 9>/tmp/pkg_comp_wrapper.flock
+} 2>&1 9>/tmp/pkg_comp_wrapper.flock | tee $LOG
 
 echo "Done!"
 exit 0
