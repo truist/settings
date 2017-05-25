@@ -5,16 +5,16 @@ set -eu
 . ~/bin/util/util.sh
 
 PKG_LIST=/etc/pkglist
-test -f $PKG_LIST
+test -f "$PKG_LIST"
 
 PKGSRC_PATH=/var/pkg_comp/pkgsrc
-test -d $PKGSRC_PATH
+test -d "$PKGSRC_PATH"
 
 PACKAGES_PATH=/var/pkg_comp/packages/All
-test -d $PACKAGES_PATH
+test -d "$PACKAGES_PATH" || mkdir -p "$PACKAGES_PATH"
 
 PKGIN=/usr/pkg/bin/pkgin
-test -x $PKGIN
+test -x "$PKGIN"
 
 
 desired_raw() {
