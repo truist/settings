@@ -26,7 +26,7 @@
 	#search = "!f() { git log -p -G\"$1\" --diff-filter=M ; }; f"
 	search = "!f() { git log -p -G\"$1\" -i ; }; f"
 	# find files that are .gitignore'd but are already tracked
-	showtrackedignored = ls-files -i --exclude-standard
+	trackedignored = ls-files -i --exclude-standard
 	st = status -s
 	stashpull = "!f() { git stash && git pull && git stash pop ; }; f"
 	sync = "!f() { git pull && git push ; }; f"

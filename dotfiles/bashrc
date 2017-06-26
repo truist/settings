@@ -45,6 +45,8 @@ alias less='less -R -X'
 alias ack='ack --pager="less -R -X"'
 alias ag='ag --pager "less -R -X"'
 
+alias gradle='./gradlew'
+
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
@@ -125,10 +127,13 @@ fi
 alias gitjk="history 10 | tail -r | gitjk_cmd"
 
 function docfx {
-	mono $HOME/bin/docfx/docfx.exe
+	mono $HOME/bin/docfx/docfx.exe "$@"
 }
 
 function docfx-serve {
-	mono $HOME/bin/docfx/docfx.exe serve $1
+	mono $HOME/bin/docfx/docfx.exe serve "$@"
 }
 
+function nuget {
+	mono $HOME/bin/nuget/nuget.exe "$@"
+}
