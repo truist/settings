@@ -13,6 +13,7 @@
 	cleanall = clean -d -x -f
 	# summarize contributors and commit count
 	contributors = shortlog --summary --numbered
+	dump = cat-file -p
 	# awesome way to view commit history
 	graph = log --color --graph --pretty='format:%C(red)%h %C(yellow)%d%C(reset) %s  %C(green)%an, %ad%C(reset)' --date=short
 	ignored = status --ignored -s
@@ -33,6 +34,9 @@
 	#tags = log --date-order --tags --simplify-by-decoration --pretty='format:%C(green)%ad %C(red)%h %C(reset)%D %C(yellow)%(taggerdate)' --date=short
 	tags = for-each-ref --format='%(color:green)%(*creatordate:short)%(committerdate:short) %(color:red)%(objectname:short) %(color:reset)%(refname:short) %(color:blue)(%(taggerdate:short))' --sort=-taggerdate refs/tags
 	undo-commit = reset --soft HEAD^
+	unedit = checkout HEAD --
+	unstage = reset --
+	untrack = rm --cached
 	wdiff = diff --color-words
 	wshow = show --color-words
 
@@ -60,7 +64,7 @@
 #[credential]
 #	helper = cache
 #	helper = osxkeychain
-#	helper = wincred
+#	helper = manager
 
 [fetch]
 	prune = true
