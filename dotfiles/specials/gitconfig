@@ -8,37 +8,41 @@
 #	email = your@email
 
 [alias]
+
+	# basic verbs that should exist
+
 	branches = branch -a
-	# reset the working directory to exactly what it would be if you had just cloned
-	cleanall = clean -d -x -f
-	# summarize contributors and commit count
-	contributors = shortlog --summary --numbered
-	dump = cat-file -p
-	# awesome way to view commit history
-	graph = log --color --graph --pretty='format:%C(red)%h %C(yellow)%d%C(reset) %s  %C(green)%an, %ad%C(reset)' --date=short
-	ignored = status --ignored -s
-	# from http://stackoverflow.com/questions/1527234/finding-a-branch-point-with-git
-	oldest-ancestor = !bash -c 'diff --old-line-format= --new-line-format= <(git rev-list --first-parent \"${1:-master}\") <(git rev-list --first-parent \"${2:-HEAD}\") | head -1' -
-	# I just always work on master, and retroactively move work to a branch if needed
-	master-to-new-branch = "!master-to-new-branch"
-	prune-stale-branches = remote prune origin
 	remotes = remote -v
-	# find a commit that changes a particular bit of code
-	#search = "!f() { git log -p -G\"$1\" --diff-filter=M ; }; f"
-	search = "!f() { git log -p -G\"$1\" -i ; }; f"
-	# find files that are .gitignore'd but are already tracked
-	trackedignored = ls-files -i --exclude-standard
 	st = status -s
-	stashpull = "!f() { git stash && git pull && git stash pop ; }; f"
 	sync = "!f() { git pull && git push ; }; f"
-	#tags = log --date-order --tags --simplify-by-decoration --pretty='format:%C(green)%ad %C(red)%h %C(reset)%D %C(yellow)%(taggerdate)' --date=short
 	tags = for-each-ref --format='%(color:green)%(*creatordate:short)%(committerdate:short) %(color:red)%(objectname:short) %(color:reset)%(refname:short) %(color:blue)(%(taggerdate:short))' --sort=-taggerdate refs/tags
+	wdiff = diff --color-words
+	wshow = show --color-words
+
+	# workspace management
+
+	cleanall = clean -d -x -f
+	ignored = status --ignored -s
 	undo-commit = reset --soft HEAD^
 	unedit = checkout HEAD --
 	unstage = reset --
 	untrack = rm --cached
-	wdiff = diff --color-words
-	wshow = show --color-words
+
+	# history examination
+
+	contributors = shortlog --summary --numbered
+	graph = log --color --graph --pretty='format:%C(red)%h %C(yellow)%d%C(reset) %s  %C(green)%an, %ad%C(reset)' --date=short
+	search = "!f() { git log -p -G\"$1\" -i ; }; f"
+	#search = "!f() { git log -p -G\"$1\" --diff-filter=M ; }; f"
+
+	# rare but handy
+
+	dump = cat-file -p
+	master-to-new-branch = "!master-to-new-branch"
+	oldest-ancestor = !bash -c 'diff --old-line-format= --new-line-format= <(git rev-list --first-parent \"${1:-master}\") <(git rev-list --first-parent \"${2:-HEAD}\") | head -1' -		# from http://stackoverflow.com/questions/1527234/finding-a-branch-point-with-git
+	prune-stale-branches = remote prune origin
+	stashpull = "!f() { git stash && git pull && git stash pop ; }; f"
+	trackedignored = ls-files -i --exclude-standard		# find files that are .gitignore'd but are already tracked
 
 [branch]
 	autosetuprebase = always
