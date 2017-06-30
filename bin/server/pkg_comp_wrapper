@@ -2,7 +2,12 @@
 
 set -eu
 
-LOG=/var/pkg_comp/log/pkg_comp_wrapper.log
+WORK_DIR=/var/pkg_comp
+
+LOG=$WORK_DIR/log/pkg_comp_wrapper.log
+
+SANDBOX=$WORK_DIR/sandbox
+REBUILD_SUMMARY=$WORK_DIR/bin/rebuild_pkg_summary.sh
 
 {
 	flock -n 9 || (echo "unable to obtain lock; is a build already running?" >&2 && exit 1)
@@ -31,11 +36,15 @@ LOG=/var/pkg_comp/log/pkg_comp_wrapper.log
 	fi
 	_uncached_desired_package_name >/dev/null || die $?
 
-	echo "Destroying old sandbox (and ignoring errors)..."
-	$PKG_COMP sandbox-destroy || true
+	if test -z "$FAST" ; then
+		echo "Destroying old sandbox (and ignoring errors)..."
+		$PKG_COMP sandbox-destroy || true
+	fi
 
-	echo "Creating new sandbox..."
-	$PKG_COMP sandbox-create || die $? "Error creating sandbox"
+	if ! test -d $SANDBOX ; then
+		echo "Creating new sandbox..."
+		$PKG_COMP sandbox-create || die $? "Error creating sandbox"
+	fi
 
 	echo "Building..."
 	$PKG_COMP auto $FAST $PKGLIST || die $? "Error during 'auto' build"
@@ -43,8 +52,13 @@ LOG=/var/pkg_comp/log/pkg_comp_wrapper.log
 	echo "Checking that all desired packages exist..."
 	_do_diff 'desired_package_names' 'current_package_files' || die $? "Some desired packages are missing"
 
-	echo "Destroying new sandbox..."
-	$PKG_COMP sandbox-destroy || die $? "Error destroying sandbox"
+	if test -z "$FAST" ; then
+		echo "Destroying new sandbox..."
+		$PKG_COMP sandbox-destroy || die $? "Error destroying sandbox"
+	fi
+
+	echo "Fixing pkg_summary..."
+	$REBUILD_SUMMARY || die $? "Error running $REBUILD_SUMMARY"
 
 	echo "Running 'pkgin update'..."
 	$PKGIN update || die $? "Error running 'pkgin update'"
