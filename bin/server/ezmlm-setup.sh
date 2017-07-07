@@ -28,10 +28,6 @@ if test -n "$EXTRAS" ; then
 fi
 ezmlm-make -P -A -u -m -5 $MODERATOR $EXTRAS $ALIAS/$LIST $ALIAS/.qmail-$LIST $LIST $DOMAIN
 
-echo "Allowing submission from other mailing lists (i.e. that already set the 'Mailing-List' header and that didn't put this list on the To: or CC: lines)..."
-sed -I "s#/ezmlm-reject '#/ezmlm-reject -h -T '#" $ALIAS/$LIST/editor
-touch $ALIAS/$LIST/headerreject
-
 echo "Configuring the list so replies go to the list, not to the sender..."
 touch $ALIAS/$LIST/replytolist
 
