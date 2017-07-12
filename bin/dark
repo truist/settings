@@ -1,0 +1,4 @@
+#!/bin/sh
+
+osascript -e 'tell application "Terminal"' -e 'set current settings of selected tab of front window to settings set "Pro"' -e 'end tell'
+
