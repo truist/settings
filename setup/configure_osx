@@ -7,6 +7,8 @@ defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationM
 defaults write ~/Library/Preferences/.GlobalPreferences KeyRepeat 2
 defaults write ~/Library/Preferences/.GlobalPreferences InitialKeyRepeat 15
 
+defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+
 
 sudo -v
 
