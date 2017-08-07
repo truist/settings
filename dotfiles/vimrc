@@ -108,13 +108,12 @@ autocmd BufRead,BufNewFile *.json setfiletype javascript syntax=javascript
 autocmd BufRead,BufNewFile * setlocal tabstop=4 shiftwidth=4 softtabstop=4
 
 " type-specific settings
-autocmd BufRead,BufNewFile *.txt setlocal nowrap
+autocmd BufRead,BufNewFile *.txt setlocal nowrap spell spellcapcheck=
 autocmd FileType javascript setlocal expandtab
 " markdown
-autocmd FileType mkd setlocal expandtab
-autocmd FileType markdown setlocal expandtab
-autocmd FileType ikiwiki setlocal expandtab
-autocmd BufEnter *.md exe 'noremap <leader>m :! /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome %:p<CR>'
+autocmd FileType mkd setlocal expandtab spell
+autocmd FileType markdown setlocal expandtab spell
+autocmd FileType ikiwiki setlocal expandtab spell
 
 " highlight text past 100 columns, for these types
 "autocmd BufWinEnter *.t let w:m2=matchadd('Search', '\%>100v.\+', -1)
