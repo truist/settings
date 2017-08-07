@@ -21,6 +21,6 @@ $VIM "$@"
 # be prepared in case they background vi during the edit session
 wait
 
-dark
+#dark
 
 
