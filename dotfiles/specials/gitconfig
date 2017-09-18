@@ -11,7 +11,7 @@
 
 	# basic verbs that should exist
 
-	branches = branch -a
+	branches = "!f() { git -c color.ui=always branch -a -vv | sed -E 's/ [^[:space:]]{6,8} (\\[.*\\])?.*/ \\1/' ; }; f"
 	remotes = remote -v
 	st = status -s
 	sync = "!f() { git pull && git push ; }; f"
@@ -37,10 +37,11 @@
 
 	# rare but handy
 
+	branch-point = !branch-point
 	camend = commit --amend --no-edit
 	dump = cat-file -p
 	oldest-ancestor = !bash -c 'diff --old-line-format= --new-line-format= <(git rev-list --first-parent \"${1:-master}\") <(git rev-list --first-parent \"${2:-HEAD}\") | head -1' -		# from http://stackoverflow.com/questions/1527234/finding-a-branch-point-with-git
-	prune-stale-branches = remote prune origin
+	prune-stale-branches = "!f() { git remote prune origin ; git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d $@ ; }; f"
 	stashpull = "!f() { git stash && git pull && git stash pop ; }; f"
 	trackedignored = ls-files -i --exclude-standard		# find files that are .gitignore'd but are already tracked
 

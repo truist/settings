@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -e
+
+SHA=$(diff --old-line-format= --new-line-format= <(git rev-list --first-parent "${1:-master}") <(git rev-list --first-parent "${2:-HEAD}") | head -1 | xargs git rev-parse --short)  # adapted from http://stackoverflow.com/questions/1527234/finding-a-branch-point-with-git
+
+git graph --all | less -R +/$SHA
+
