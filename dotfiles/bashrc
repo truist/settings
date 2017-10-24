@@ -57,11 +57,17 @@ alias cdp=". ~/bin/cdp"
 # http://www.shellperson.net/using-sudo-with-an-alias/   (fixes "sudo vi <whatever>" not using vim)
 alias sudo='sudo '
 
+alias findpid="ps axww -o pid,user,%cpu,%mem,start,time,command | selecta | sed 's/^ *//' | cut -f1 -d' '"
+
 alias notify='tput bel'
 
 command -v grunt > /dev/null && alias grunt="grunt --stack"
 
+export HISTCONTROL=erasedups
+export HISTSIZE=10000
 export HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:pwd"
+# Append to the history file when exiting instead of overwriting it
+shopt -s histappend
 # type something then hit up/down to search history that matches what you already have
 if tty -s; then
 	bind '"\e[A": history-search-backward'
@@ -123,6 +129,10 @@ ZPATH=~/src/z/z.sh
 if [ -e $ZPATH ]; then
 	. $ZPATH
 fi
+
+zp() {
+	cd $(find ~/src/Solutions ~/src -maxdepth 1 -type d | selecta --height 10)
+}
 
 alias gitjk="history 10 | tail -r | gitjk_cmd"
 
