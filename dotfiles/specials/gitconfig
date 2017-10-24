@@ -12,16 +12,6 @@
 	# basic verbs that should exist
 
 	branches = branch -a
-	# reset the working directory to exactly what it would be if you had just cloned
-	cleanall = clean -d -x -f
-	# summarize contributors and commit count
-	contributors = shortlog --summary --numbered
-	# awesome way to view commit history
-	graph = log --color --graph --pretty='format:%C(red)%h %C(yellow)%d%C(reset) %s  %C(green)%an, %ad%C(reset)' --date=short
-	ignored = status --ignored -s
-	# from http://stackoverflow.com/questions/1527234/finding-a-branch-point-with-git
-	oldest-ancestor = !bash -c 'diff --old-line-format= --new-line-format= <(git rev-list --first-parent \"${1:-master}\") <(git rev-list --first-parent \"${2:-HEAD}\") | head -1' -
-	prune-stale-branches = remote prune origin
 	remotes = remote -v
 	st = status -s
 	sync = "!f() { git pull && git push ; }; f"
@@ -49,7 +39,6 @@
 
 	camend = commit --amend --no-edit
 	dump = cat-file -p
-	master-to-new-branch = "!master-to-new-branch"
 	oldest-ancestor = !bash -c 'diff --old-line-format= --new-line-format= <(git rev-list --first-parent \"${1:-master}\") <(git rev-list --first-parent \"${2:-HEAD}\") | head -1' -		# from http://stackoverflow.com/questions/1527234/finding-a-branch-point-with-git
 	prune-stale-branches = remote prune origin
 	stashpull = "!f() { git stash && git pull && git stash pop ; }; f"
