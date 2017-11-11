@@ -2,7 +2,6 @@
 
 # based on https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 
-# do this before sudo, so we don't change the file permissions
 defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationMagnification -bool YES
 defaults write ~/Library/Preferences/.GlobalPreferences KeyRepeat 2
 defaults write ~/Library/Preferences/.GlobalPreferences InitialKeyRepeat 15
@@ -14,7 +13,7 @@ sudo -v
 
 
 # wait longer (12 hours) before going into standby mode
-pmset -a standbydelay 43200
+sudo pmset -a standbydelay 43200
 
 
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
@@ -59,7 +58,7 @@ sudo systemsetup -setrestartfreeze on
 
 # Trackpad: enable tap to click for this user and for the login screen
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+sudo defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
 # Enable “natural” (Lion-style) scrolling
@@ -76,10 +75,10 @@ defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 5
 
 # Show icons for hard drives, servers, and removable media on the desktop
-defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
-defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
-defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
-defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+#defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+#defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
+#defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
+#defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 
 # Finder: show status bar
 defaults write com.apple.finder ShowStatusBar -bool true
@@ -95,7 +94,7 @@ defaults write NSGlobalDomain com.apple.springing.delay -float 0
 
 # Enable snap-to-grid for icons on the desktop and in other icon views
 /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
+#/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
 /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
 
 # Use list view in all Finder windows by default
