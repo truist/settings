@@ -30,8 +30,9 @@ set showmode
 "show e.g. number of lines selected
 set showcmd
 set title
-" turn off beeps
+" turn off beeps and flashes
 set vb
+set t_vb=
 " margin while scrolling
 set scrolloff=3
 set showtabline=1
@@ -137,6 +138,12 @@ set clipboard=unnamed
 " HITTING :
 "nnoremap  :set invpaste paste?<CR>
 "set pastetoggle=
+
+" don't use the arrow keys
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
 
 let mapleader = ","
 
