@@ -51,7 +51,12 @@ main() {
 		echo
 		echo "powerline fonts..."
 		git clone https://github.com/powerline/fonts
+		echo
 		echo "Reminder to install ~/src/fonts/SourceCodePro"
+	fi
+
+	if [ `vim --version | grep -c '+clipboard'` -ne 1 ]; then
+		echo "WARNING: vim is not compiled with +clipboard support" >&2
 	fi
 
 	echo
