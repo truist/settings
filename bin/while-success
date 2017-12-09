@@ -6,6 +6,7 @@
 echo > /dev/null
 
 while [ "$?" -eq "0" ]; do
+	sleep 1
     $*
 done
 
