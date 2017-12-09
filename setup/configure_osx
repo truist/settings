@@ -6,6 +6,7 @@ defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationM
 defaults write ~/Library/Preferences/.GlobalPreferences KeyRepeat 2
 defaults write ~/Library/Preferences/.GlobalPreferences InitialKeyRepeat 15
 
+# make SMB less-slow
 defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 
 
