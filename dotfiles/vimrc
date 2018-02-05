@@ -116,6 +116,10 @@ autocmd FileType mkd setlocal expandtab spell
 autocmd FileType markdown setlocal expandtab spell
 autocmd FileType ikiwiki setlocal expandtab spell
 
+" ctrl-f to take first suggested correction for last spelling error
+imap <c-f> <c-g>u<Esc>[s1z=`]a<c-g>u
+nmap <c-f> [s1z=<c-o>
+
 " highlight text past 100 columns, for these types
 "autocmd BufWinEnter *.t let w:m2=matchadd('Search', '\%>100v.\+', -1)
 "autocmd BufWinEnter *.p? let w:m2=matchadd('Search', '\%>100v.\+', -1)
@@ -204,3 +208,7 @@ autocmd BufEnter * let &titlestring = "vim " . expand("%:h") . "/" . expand("%:t
 if &term == "screen-256color"
 	set t_kb=
 endif
+
+" make :term use <esc> to switch to Normal mode
+tnoremap <Esc> <C-W>N
+
