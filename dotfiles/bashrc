@@ -1,6 +1,6 @@
 
 # to use this on a host, add this to the top of the host's .bashrc or .profile:
-# . ~/code/settings/dotfiles/bashrc
+# . ~/src/settings/dotfiles/bashrc
 
 if [ `/usr/bin/id -u` -eq 0 ] && [ -d /root ] && [ -n "$(find /root -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
 	export HOME=/root
@@ -97,24 +97,6 @@ if ( command -v tty >/dev/null ) && ( tty -s ) && [ -x /usr/games/fortune ]; the
 	/usr/games/fortune
 fi
 
-export NOTEDIR="$HOME/OneDrive/Scratch"
-if [ -d "$NOTEDIR" ]; then
-	_noteComplete() {
-		local files=("$NOTEDIR/$2"*)
-		[[ -e ${files[0]} ]] && COMPREPLY=( "${files[@]##*/}" )
-	}
-	complete -o bashdefault -o default -o filenames -F _noteComplete note
-fi
-
-export INTERVIEWDIR="$HOME/OneDrive/People/Hiring/Candidates"
-if [ -d "$INTERVIEWDIR" ]; then
-	_interviewComplete() {
-		local files=("$INTERVIEWDIR/$2"*.txt)
-		[[ -e ${files[0]} ]] && COMPREPLY=( "${files[@]##*/}" )
-	}
-	complete -o bashdefault -o default -o filenames -F _interviewComplete interview
-fi
-
 export SLIDESDIR="$HOME/src/reveal.js/slides"
 if [ -d "$SLIDESDIR" ]; then
 	_slidesComplete() {
@@ -130,20 +112,5 @@ if [ -e $ZPATH ]; then
 	. $ZPATH
 fi
 
-zp() {
-	cd $(find ~/src/Solutions ~/src -maxdepth 1 -type d | selecta --height 10)
-}
-
 alias gitjk="history 10 | tail -r | gitjk_cmd"
 
-function docfx {
-	mono $HOME/bin/docfx/docfx.exe "$@"
-}
-
-function docfx-serve {
-	mono $HOME/bin/docfx/docfx.exe serve "$@"
-}
-
-function nuget {
-	mono $HOME/bin/nuget/nuget.exe "$@"
-}

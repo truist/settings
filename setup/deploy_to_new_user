@@ -39,14 +39,6 @@ main() {
 		git clone https://github.com/rupa/z
 	fi
 
-	if [ ! -e 'selecta' ]; then
-		echo "selecta..."
-		git clone https://github.com/garybernhardt/selecta
-		cd ~/bin
-		ln -s ../src/selecta/selecta
-		cd -
-	fi
-
 	if [ ! -e 'fonts' ]; then
 		echo
 		echo "powerline fonts..."
