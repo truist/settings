@@ -11,7 +11,8 @@
 
 	# basic verbs that should exist
 
-	branches = "!f() { git -c color.ui=always branch -a -vv | sed -E 's/ [^[:space:]]{6,8} (\\[.*\\])?.*/ \\1/' ; }; f"
+	branches = "!f() { git -c color.ui=always branch -a -vv | sed -E 's/^(..([[:cntrl:]]\\[[0-9]{1,3}m)?[^[:space:]]+[[:space:]]*[[:cntrl:]]\\[m )(-> [^[:space:]]+)?([^[:space:]]{6,} )?(\\[.+\\])?.*$/\\1\\3\\5/' ; }; f"
+	#branches = "!f() { git branch -a -vv | sed -E 's/^(..[^[:space:]]+[[:space:]]+)([^[:space:]]{6,} )?(-> [^[:space:]]+)?(\\[.+\\])?.*$/\\1\\3\\4/' ; }; f"
 	remotes = remote -v
 	st = status -s
 	sync = "!f() { git pull && git push ; }; f"
