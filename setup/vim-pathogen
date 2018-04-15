@@ -31,6 +31,7 @@ clone_or_update 'PProvost' 'vim-ps1'
 clone_or_update 'blueyed' 'vim-autoclose'
 clone_or_update 'ntpeters' 'vim-better-whitespace'
 clone_or_update 'vim-airline' 'vim-airline'
+clone_or_update 'vim-airline' 'vim-airline-themes'
 clone_or_update 'weynhamz' 'vim-plugin-minibufexpl'
 clone_or_update 'maxbrunsfeld' 'vim-yankstack'
 
