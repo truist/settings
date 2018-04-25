@@ -6,13 +6,19 @@ if [ "$1" == "-q" ]; then
 fi
 
 # make a progress marker
+# http://tldp.org/HOWTO/Bash-Prompt-HOWTO/x361.html
 if [ "$QUIET" == true ]; then
 	for DIR in *; do
 		if [ -d "$DIR" ]; then
 			echo -n " "
 		fi
 	done
-	echo -en "|\033[100D"
+	echo -en "|\033[1D"
+	for DIR in *; do
+		if [ -d "$DIR" ]; then
+			echo -en "\033[1D"
+		fi
+	done
 fi
 
 BASEDIR=`pwd`
