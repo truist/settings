@@ -2,25 +2,6 @@
 
 set -e
 
-LIGHTSCRIPT="$HOME/.vim/light.script"
-VIM="vim -S $LIGHTSCRIPT"
-
-light
-
-(
-	cat <<-EOF
-		set bg=light
-		AirlineTheme papercolor
-		set colorcolumn=
-		set wrap
-EOF
-) > $LIGHTSCRIPT
-
-$VIM "$@"
-
-# be prepared in case they background vi during the edit session
-wait
-
-#dark
-
+echo "Use ,l instead, from within vim" >&2
+exit 1
 
