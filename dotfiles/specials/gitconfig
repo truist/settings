@@ -39,6 +39,7 @@
 	# rare but handy
 
 	branch-point = !branch-point
+	branch-point-branches = !bash -c 'git branch --contains $(git oldest-ancestor)'
 	camend = commit --amend --no-edit
 	dump = cat-file -p
 	hash = rev-parse --short=9 --default HEAD
