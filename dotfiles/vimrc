@@ -144,10 +144,10 @@ set clipboard=unnamed
 "set pastetoggle=
 
 " don't use the arrow keys
-noremap <Up> <NOP>
-noremap <Down> <NOP>
-noremap <Left> <NOP>
-noremap <Right> <NOP>
+" noremap <Up> <NOP>
+" noremap <Down> <NOP>
+" noremap <Left> <NOP>
+" noremap <Right> <NOP>
 
 let mapleader = ","
 
@@ -212,5 +212,5 @@ if &term == "screen-256color"
 endif
 
 " make :term use <esc> to switch to Normal mode
-tnoremap <Esc> <C-W>N
+" tnoremap <Esc> <C-W>N
 
