@@ -167,35 +167,36 @@ map <Leader>** :s/^* <CR><CR>
 " shortcut to toggle wrapping
 map <Leader>w :set wrap!<cr>
 
-" configure yankstack
+" yankstack
 let g:yankstack_map_keys = 0
 nmap π <Plug>yankstack_substitute_older_paste
 nmap ∏ <Plug>yankstack_substitute_newer_paste
 
-" configure vim-gitgutter
+" vim-gitgutter
 highlight clear SignColumn
 set updatetime=250
 let g:gitgutter_max_signs = 1000
 
-"configure airline
+" airline
 set noshowmode
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#wordcount#enabled = 0
 let g:airline#extensions#branch#enabled = 0
 let g:airline#extensions#hunks#enabled = 0
 
-" configure Supertab
+" Supertab
 let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabMidWordCompletion = "0"
 
-" configure minibufexplorer
+" minibufexplorer
 map <Leader>b :MBEFocus<cr>
 
-" auto-complete when in command-mode
-set wildmenu
+" ale/standard for JS
+let g:ale_linters = {
+\   'javascript': ['standard'],
+\}
+let g:ale_fixers = {'javascript': ['standard']}
 
-" configure ag to search from project root
-let g:ag_working_path_mode="r"
 
 " make the tmux status line show the currently-edited file
 if &term == "screen" || &term == "screen-256color"
@@ -210,7 +211,4 @@ autocmd BufEnter * let &titlestring = "vim " . expand("%:h") . "/" . expand("%:t
 if &term == "screen-256color"
 	set t_kb=
 endif
-
-" make :term use <esc> to switch to Normal mode
-" tnoremap <Esc> <C-W>N
 

@@ -22,24 +22,6 @@ clone_or_update() {
 # this powers the rest
 clone_or_update 'tpope' 'vim-pathogen'
 
-# odds 'n ends
-clone_or_update 'airblade' 'vim-gitgutter'
-clone_or_update 'plasticboy' 'vim-markdown'
-clone_or_update 'vim-scripts' 'ikiwiki-syntax'
-clone_or_update 'ervandew' 'supertab'
-clone_or_update 'PProvost' 'vim-ps1'
-clone_or_update 'blueyed' 'vim-autoclose'
-clone_or_update 'ntpeters' 'vim-better-whitespace'
-clone_or_update 'vim-airline' 'vim-airline'
-clone_or_update 'vim-airline' 'vim-airline-themes'
-clone_or_update 'weynhamz' 'vim-plugin-minibufexpl'
-clone_or_update 'maxbrunsfeld' 'vim-yankstack'
-
-# search for files
-#clone_or_update 'rking' 'ag.vim'
-#clone_or_update 'Chun-Yang' 'vim-action-ag'
-clone_or_update 'ctrlpvim' 'ctrlp.vim'
-
 # tpope
 clone_or_update 'tpope' 'vim-commentary'
 clone_or_update 'tpope' 'vim-endwise'
@@ -50,11 +32,24 @@ clone_or_update 'tpope' 'vim-surround'
 clone_or_update 'tpope' 'vim-unimpaired'
 clone_or_update 'tpope' 'vim-vinegar'
 
+# odds 'n ends
+clone_or_update 'ConradIrwin' 'vim-bracketed-paste'
+clone_or_update 'PProvost' 'vim-ps1'
+clone_or_update 'airblade' 'vim-gitgutter'
+clone_or_update 'blueyed' 'vim-autoclose'
+clone_or_update 'ctrlpvim' 'ctrlp.vim'
+clone_or_update 'ervandew' 'supertab'
+clone_or_update 'maxbrunsfeld' 'vim-yankstack'
+clone_or_update 'ntpeters' 'vim-better-whitespace'
+clone_or_update 'plasticboy' 'vim-markdown'
+clone_or_update 'vim-airline' 'vim-airline'
+clone_or_update 'vim-airline' 'vim-airline-themes'
+clone_or_update 'vim-scripts' 'ikiwiki-syntax'
+clone_or_update 'weynhamz' 'vim-plugin-minibufexpl'
+clone_or_update 'w0rp' 'ale'
+
 # truist
 clone_or_update 'truist' 'vim-open-url'
-
-# ConradIrwin
-clone_or_update 'ConradIrwin' 'vim-bracketed-paste'
 
 
 cd - >/dev/null
