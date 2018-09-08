@@ -23,12 +23,7 @@ if [ "-a" == "$1" ]; then
 	fi
 fi
 
-if [ "--light" == "$1" ]; then
-	shift
-	VIM="lvim"
-else
-	VIM="vim"
-fi
+VIM="vim"
 
 NOTEDIR="$HOME/OneDrive/Scratch"
 
