@@ -3,8 +3,11 @@
 # based on https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 
 defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationMagnification -bool YES
-defaults write ~/Library/Preferences/.GlobalPreferences KeyRepeat 2
-defaults write ~/Library/Preferences/.GlobalPreferences InitialKeyRepeat 15
+
+
+# these seem to cause performance issues (high CPU usage in Terminal when holding Enter)
+# defaults write ~/Library/Preferences/.GlobalPreferences KeyRepeat 2
+# defaults write ~/Library/Preferences/.GlobalPreferences InitialKeyRepeat 15
 
 # make SMB less-slow
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
@@ -18,7 +21,7 @@ sudo pmset -a standbydelay 43200
 
 
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
-defaults write NSGlobalDomain KeyRepeat -int 0
+# defaults write NSGlobalDomain KeyRepeat -int 0
 
 
 # Disable the sound effects on boot

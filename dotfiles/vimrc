@@ -129,8 +129,6 @@ if (exists('+colorcolumn'))
 	highlight ColorColumn ctermbg=233
 endif
 
-autocmd BufNewFile,BufRead ~/src/fretless/* set nowrap tabstop=2 shiftwidth=2 expandtab
-
 " sudo write
 ca w!! w !sudo tee >/dev/null "%"
 
