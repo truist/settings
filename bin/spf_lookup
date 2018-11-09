@@ -1,0 +1,25 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use Data::Dumper;
+
+sub resolve {
+	my ($domain, $whitespace) = @_;
+
+	my @query_result_lines = `dnsqr txt $domain | sed 's/\\\\040/ /g'`;
+	my @spf_lines = map { /.*v=spf1 (.*)/ } @query_result_lines;
+	my @values = map { split(/\s+/) } @spf_lines;
+	foreach my $value (@values) {
+		if ($value =~ /^include:/) {
+			print "$whitespace$value\n";
+			resolve($value =~ /^include:(.*)/, $whitespace . '  ');
+		} else {
+			print "$whitespace$value\n";
+		}
+	}
+}
+
+resolve(shift(@ARGV), '');
+
