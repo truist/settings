@@ -49,7 +49,7 @@ case "$MODE" in
 esac
 
 if echo `uname` | grep -E ^MINGW > /dev/null ; then
-	NC=nc.exe
+	NC=./nc.exe
 else
 	NC=nc
 fi
