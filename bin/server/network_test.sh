@@ -48,6 +48,11 @@ case "$MODE" in
 		;;
 esac
 
+if echo `uname` | grep -E ^MINGW > /dev/null ; then
+	NC=nc.exe
+else
+	NC=nc
+fi
 
 ###############################
 
@@ -81,11 +86,11 @@ set +e
 				;;
 			server)
 				echo "Listening on port $PORT"
-				nc -l $PORT
+				$NC -l $PORT
 				;;
 			client)
 				echo "Contacting $HOST on $PORT"
-				cat <(while true; do echo "client date: `datestr`"; sleep 1; done) | nc $HOST $PORT
+				cat <(while true; do echo "client date: `datestr`"; sleep 1; done) | $NC $HOST $PORT
 				;;
 			command)
 				echo "Running: $COMMAND"
