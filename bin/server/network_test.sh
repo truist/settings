@@ -48,6 +48,9 @@ case "$MODE" in
 		;;
 esac
 
+mkdir -p logs
+LOG="logs/$LOG"
+
 if echo `uname` | grep -E ^MINGW > /dev/null ; then
 	NC=./ncat.exe
 else
