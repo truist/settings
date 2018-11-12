@@ -50,8 +50,10 @@ esac
 
 if echo `uname` | grep -E ^MINGW > /dev/null ; then
 	NC=./nc.exe
+	NC_LISTEN_ARGS="-l -p $PORT"
 else
 	NC=nc
+	NC_LISTEN_ARGS="-l $PORT"
 fi
 
 ###############################
@@ -86,7 +88,7 @@ set +e
 				;;
 			server)
 				echo "Listening on port $PORT"
-				$NC -l $PORT
+				$NC $NC_LISTEN_ARGS
 				;;
 			client)
 				echo "Contacting $HOST on $PORT"
