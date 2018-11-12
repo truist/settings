@@ -55,6 +55,16 @@ datestr() {
 	date '+%Y-%m-%d %H:%M:%S'
 }
 
+tee_compressed() {  # https://stackoverflow.com/a/11454477/1132502
+	while read LINE ; do
+		if echo `uname` | grep -E ^MINGW > /dev/null ; then
+			echo $LINE | tee -a "$LOG"
+		else
+			echo $LINE | tee >(bzip2 -c >> "$LOG.bz2")
+		fi
+	done
+}
+
 set +e
 (
 	while true; do
@@ -91,7 +101,7 @@ set +e
 	done
 
 
-) 2>&1 | while IFS= read -r line; do echo "[`datestr`] $line"; done | tee >(bzip2 -c >> "$LOG.bz2")  # https://unix.stackexchange.com/a/26729/223285
+) 2>&1 | while IFS= read -r line; do echo "[`datestr`] $line"; done | tee_compressed  # https://unix.stackexchange.com/a/26729/223285
 
 SUBSHELL_EXIT=$?
 echo "Subshell exited with code $SUBSHELL_EXIT"
