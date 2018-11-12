@@ -5,48 +5,49 @@ set -o pipefail
 
 usage() {
 	echo "usage:" >&2
-	echo "  $0 <name> ping <host>" >&2
-	echo "  $0 <name> server <port>" >&2
-	echo "  $0 <name> client <host> <port>" >&2
-	echo "  $0 <name> command <command> [...]" >&2
+	echo "  $0 ping <host>" >&2
+	echo "  $0 server <port>" >&2
+	echo "  $0 client <host> <port>" >&2
+	echo "  $0 command <command> [...]" >&2
 	echo "" >&2
-	echo "    name: a unique name for the log file" >&2
 	echo "    host: name or IP of the server" >&2
 	echo "    port: TCP port to use" >&2
 	echo "    command: an arbitrary command to run in a 1-second loop" >&2
 	exit 1
 }
 
-[ $# -ge 3 ] || usage
+[ $# -ge 2 ] || usage
 
-NAME="$1"; shift
 MODE="$1"; shift
 
 case "$MODE" in
 	ping)
 		HOST="$1"; shift
 		[ $# -eq 0 ] || usage
+		LOG="ping_$HOST.log"
 		;;
 	server)
 		PORT="$1"; shift
 		[ $# -eq 0 ] || usage
+		LOG="server_$PORT.log"
 		;;
 	client)
 		HOST="$1"; shift
 		[ $# -eq 1 ] || usage
 		PORT="$1"; shift
 		[ $# -eq 0 ] || usage
+		LOG="client_${HOST}_$PORT.log"
 		;;
 	command)
 		[ $# -ge 1 ] || usage
 		COMMAND=$@
+		LOG="command_$1.log"
 		;;
 	*)
 		usage
 		;;
 esac
 
-LOG="$NAME.log"
 
 ###############################
 
@@ -60,7 +61,13 @@ set +e
 		case "$MODE" in
 			ping)
 				echo "Pinging $HOST"
-				ping $HOST
+				if echo `uname` | grep -E ^Darwin > /dev/null ; then
+					ping $HOST | grep --line-buffered -v "64 bytes"
+				elif echo `uname` | grep -E ^MINGW > /dev/null ; then
+					ping -t -w 1000 $HOST | grep --line-buffered -v bytes=32
+				else # linux, presumably
+					ping -O -q $HOST
+				fi
 				;;
 			server)
 				echo "Listening on port $PORT"
@@ -84,7 +91,7 @@ set +e
 	done
 
 
-) 2>&1 | while IFS= read -r line; do echo "[`datestr`] $line"; done | tee -a "$NAME.log" # https://unix.stackexchange.com/a/26729/223285
+) 2>&1 | while IFS= read -r line; do echo "[`datestr`] $line"; done | tee >(bzip2 -c >> "$LOG.bz2")  # https://unix.stackexchange.com/a/26729/223285
 
 SUBSHELL_EXIT=$?
 echo "Subshell exited with code $SUBSHELL_EXIT"
