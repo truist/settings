@@ -49,11 +49,9 @@ case "$MODE" in
 esac
 
 if echo `uname` | grep -E ^MINGW > /dev/null ; then
-	NC=./nc.exe
-	NC_LISTEN_ARGS="-l -p $PORT"
+	NC=./ncat.exe
 else
 	NC=nc
-	NC_LISTEN_ARGS="-l $PORT"
 fi
 
 ###############################
@@ -88,7 +86,7 @@ set +e
 				;;
 			server)
 				echo "Listening on port $PORT"
-				$NC $NC_LISTEN_ARGS
+				$NC -l $PORT
 				;;
 			client)
 				echo "Contacting $HOST on $PORT"
