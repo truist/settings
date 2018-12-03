@@ -16,7 +16,7 @@
 	remotes = remote -v
 	st = status -s
 	sync = "!f() { git pull && git push ; }; f"
-	tags = for-each-ref --format='%(color:green)%(*creatordate:short)%(committerdate:short) %(color:red)%(objectname:short) %(color:reset)%(refname:short) %(color:blue)(%(taggerdate:short))' --sort=-taggerdate refs/tags
+	tags = for-each-ref --format='%(color:green)%(*creatordate:short)%(committerdate:short) %(color:red)%(objectname:short)->%(*objectname:short) %(color:reset)%(refname:short) %(color:blue)(%(taggerdate:short))' --sort='*creatordate' refs/tags
 	wdiff = diff --color-words
 	wshow = show --color-words
 
