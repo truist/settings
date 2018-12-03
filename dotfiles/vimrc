@@ -37,6 +37,13 @@ set t_vb=
 set scrolloff=3
 set showtabline=1
 
+" different cursor appearance in Insert mode
+let &t_SI.="\e[5 q"
+let &t_SR.="\e[4 q"
+let &t_EI.="\e[1 q"
+autocmd InsertEnter * set cul
+autocmd InsertLeave * set nocul
+
 " Persistent undo
 let undodir = expand('~/.vim/undo')
 if !isdirectory(undodir)
@@ -212,4 +219,8 @@ autocmd BufEnter * let &titlestring = "vim " . expand("%:h") . "/" . expand("%:t
 if &term == "screen-256color"
 	set t_kb=
 endif
+
+
+
+
 
