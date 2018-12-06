@@ -30,7 +30,7 @@
 	untrack = rm --cached
 
 	# history examination
-
+	blamelines = "!f() { git log -L $2,$3:./$GIT_PREFIX/$1 HEAD ; }; f"
 	contributors = shortlog --summary --numbered
 	graph = log --color --graph --pretty='format:%C(red)%h %C(yellow)%d%C(reset) %s  %C(green)%an, %ad%C(reset)' --date=short
 	search = "!f() { git log -p -G\"$1\" -i ; }; f"
