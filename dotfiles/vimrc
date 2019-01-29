@@ -172,6 +172,9 @@ map <Leader>** :s/^* <CR><CR>
 " shortcut to toggle wrapping
 map <Leader>w :set wrap!<cr>
 
+" table-mode
+let g:table_mode_corner='|'
+
 " yankstack
 let g:yankstack_map_keys = 0
 nmap π <Plug>yankstack_substitute_older_paste
