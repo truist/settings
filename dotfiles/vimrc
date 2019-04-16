@@ -209,6 +209,9 @@ let g:ale_fixers = {'javascript': ['standard']}
 " editorconfig + fugitive
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
+" CtrlP
+let g:ctrlp_custom_ignore = '/node_modules/'
+
 " make the tmux status line show the currently-edited file
 if &term == "screen" || &term == "screen-256color"
 	set t_ts=
