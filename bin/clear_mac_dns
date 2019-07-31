@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -ev
+
+sudo killall -HUP mDNSResponder
+
+sleep 2
+
+echo Done!
