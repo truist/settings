@@ -3,7 +3,7 @@
 set -e
 
 if [ $# -ne 3 ]; then
-	echo "args: <output max dimension (pixels)> <input> <output>" >&2
+	echo "args: <output width (pixels)> <input> <output>" >&2
 	exit 1
 fi
 
