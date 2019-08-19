@@ -119,6 +119,7 @@ autocmd BufRead,BufNewFile * setlocal tabstop=4 shiftwidth=4 softtabstop=4
 autocmd BufRead,BufNewFile *.txt setlocal nowrap spell spellcapcheck=
 autocmd BufRead,BufNewFile *.dox setlocal expandtab
 autocmd FileType javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType perl setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd FileType groovy setlocal expandtab
 autocmd FileType mkd setlocal expandtab spell
 autocmd FileType markdown setlocal expandtab spell
