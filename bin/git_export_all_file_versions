@@ -29,7 +29,7 @@ if [ ! -d "$EXPORT_TO" ]; then
 fi
 
 echo "Writing files to '$EXPORT_TO'"
-git log --diff-filter=d --date-order --reverse --format="%ad %H" --date=iso-strict "$FILE_PATH" | grep -v '^commit' | \
+git log --diff-filter=d --date-order --reverse --format="%ad %H" --date=iso-strict -- "$FILE_PATH" | grep -v '^commit' | \
 	while read LINE; do \
 		COMMIT_DATE=`echo $LINE | cut -d ' ' -f 1`; \
 		COMMIT_SHA=`echo $LINE | cut -d ' ' -f 2`; \
