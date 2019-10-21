@@ -112,3 +112,5 @@ fi
 
 alias gitjk="history 10 | tail -r | gitjk_cmd"
 
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
