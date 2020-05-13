@@ -78,7 +78,11 @@ get_path_color() {
 }
 
 get_git_branch_if_branch() {
-	git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' | sed -e 's/* \(.*\)/\1/'
+	if echo "$PWD" | grep -E ^/Volumes/ > /dev/null ; then
+		echo 'unknown'
+	else
+		git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' | sed -e 's/* \(.*\)/\1/'
+	fi
 }
 
 wrap_result() {
@@ -92,10 +96,6 @@ wrap_result() {
 	fi
 }
 
-#show_git_branch_if_branch() {
-#	wrap_result "$(get_git_branch_if_branch)" "$@"
-#}
-
 show_git_branch_if_not_master() {
 	BRANCH=$(get_git_branch_if_branch)
 	if [ -n "$BRANCH" ] && [ "master" != "$BRANCH" ]; then
@@ -103,30 +103,10 @@ show_git_branch_if_not_master() {
 	fi
 }
 
-HAVE_GIT_PROMPT=0
-if [ -f ~/.git-prompt.sh ]; then
-	source ~/.git-prompt.sh
-fi
-if [ "`type -t __git_ps1`" == "function" ]; then
-# disabling this entirely, for now - I don't think I want it
-#	HAVE_GIT_PROMPT=1
-
-	# these next two are slow on large repos; turn them off per-repo as shown in each comment
-	GIT_PS1_SHOWDIRTYSTATE=1	# git config bash.showDirtyState false
-	GIT_PS1_SHOWUNTRACKEDFILES=1	# git config bash.showUntrackedFiles false
-
-	GIT_PS1_SHOWSTASHSTATE=1
-	GIT_PS1_SHOWUPSTREAM="auto verbose"
-	GIT_PS1_DESCRIBE_STYLE="default"
-fi
-
 do_git() {
-	if [ 1 -eq $HAVE_GIT_PROMPT ]; then
-		__git_ps1 ":%s"
-	else
-		show_git_branch_if_not_master "$@"
-	fi
+	show_git_branch_if_not_master "$@"
 }
+
 get_branch_color() {
 	BRANCH=$(get_git_branch_if_branch)
 	if [ -n "$BRANCH" ] && [ "master" == "$BRANCH" ]; then
