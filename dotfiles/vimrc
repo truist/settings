@@ -133,10 +133,10 @@ nmap <c-f> [s1z=<c-o>
 "autocmd BufWinEnter *.t let w:m2=matchadd('Search', '\%>100v.\+', -1)
 "autocmd BufWinEnter *.p? let w:m2=matchadd('Search', '\%>100v.\+', -1)
 "autocmd BufWinEnter *.sh let w:m2=matchadd('Search', '\%>100v.\+', -1)
-if (exists('+colorcolumn'))
-	set colorcolumn=80
-	highlight ColorColumn ctermbg=233
-endif
+"if (exists('+colorcolumn'))
+	"set colorcolumn=80
+	"highlight ColorColumn ctermbg=233
+"endif
 
 " sudo write
 ca w!! w !sudo tee >/dev/null "%"
