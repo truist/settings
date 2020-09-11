@@ -28,27 +28,40 @@ VIM="vim"
 NOTEDIR="$HOME/OneDrive/Scratch"
 
 FILE="$*"
-if [ ! -z "$FILE" ]; then
-	echo "$FILE"
-	if [ -d "$NOTEDIR/$FILE" ]; then
-		echo "$FILE is a directory" >&2
-		exit 1
-	fi
-	if  echo "$FILE" | grep -v -q "\." ; then
-		FILE="$FILE.txt"
-	fi
+if [ -z "$FILE" ]; then
+	echo "args: [-d] [-a /path/to/archive/dir] <name>" >&2
+	exit 1
+fi
+
+if [ -d "$NOTEDIR/$FILE" ]; then
+	echo "$NOTEDIR/$FILE is a directory" >&2
+	exit 1
+fi
+if  echo "$FILE" | grep -v -q "\." ; then
+	FILE="$FILE.txt"
 fi
 
 if [ "$ARCHIVING" == 1 ]; then
 	cp -i "$NOTEDIR/$FILE" "$ARCHIVE_PATH" || exit 1
 fi
 
+mkdir -p `dirname "$NOTEDIR/$FILE"`
+
 cd "$NOTEDIR"
 
 if [ "$DELETING" == 1 ]; then
 	git rm "$FILE" && git commit -m "delete $FILE"
+
 elif [ -f "$FILE" ]; then
 	$VIM "$FILE"
+
+	# be prepared in case they background vi during the edit session
+	wait
+
+	if ! `git diff -s --exit-code "$FILE"` ; then
+		git add "$FILE" && git commit -m "update $FILE"
+	fi
+
 else
 	DATESTAMP=$(date +"%a %b %d, %Y - %l:%M %p %Z")
 	DATEARG=":normal i$DATESTAMP"
@@ -58,12 +71,13 @@ else
 	else
 		$VIM -c "$DATEARG" -c "$MODARG" "$FILE"
 	fi
-fi
 
-# be prepared in case they background vi during the edit session
-wait
+	# be prepared in case they background vi during the edit session
+	wait
 
-if [ -f "$FILE" ]; then
-	git add "$FILE" && git commit -m "update $FILE"
+	if [ -f "$FILE" ]; then
+		git add "$FILE" && git commit -m "add $FILE"
+	fi
+
 fi
 

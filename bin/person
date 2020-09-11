@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+DELETING=0
+ARCHIVING=0
+if [ "-d" == "$1" ]; then
+	DELETING=1
+	shift
+elif [ "-a" == "$1" ]; then
+	ARCHIVING=1
+	ARCHIVE_PATH="$2"
+	shift
+	shift
+fi
+
+FILE="$*"
+
+if [ "$DELETING" == 1 ]; then
+	note -d "person/$FILE"
+elif [ "$ARCHIVING" == 1 ]; then
+	note -a "$ARCHIVE_PATH" "person/$FILE"
+else
+	note "person/$FILE"
+fi
