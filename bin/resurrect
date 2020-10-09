@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+if ! git rev-parse --show-toplevel >/dev/null 2>&1 ; then
+	echo "Error: you must run this from within a git working directory" >&2
+	exit 1
+fi
+
+if [ "$#" -ne 1 ]; then
+	echo "Usage: $0 <relative path to file>" >&2
+	exit 2
+fi
+
+FILE_PATH="$1"
+
+git log --diff-filter=d --date-order --reverse --format="%ad %H" --date=iso-strict -- "$FILE_PATH" | grep -v '^commit' | \
+	while read -r LINE; do \
+		COMMIT_SHA=$(echo "$LINE" | cut -d ' ' -f 2); \
+		git cat-file -p "$COMMIT_SHA:$FILE_PATH" > "$FILE_PATH" ; \
+		echo 'Found it'; \
+		break
+	done
+echo
+

@@ -14,7 +14,7 @@ _check_path_ownership() {
 
 ORIG_PATH=$PATH
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R7/bin:/usr/X11R6/bin
-PATH=${PATH}:/usr/local/bin:/usr/local/sbin
+PATH=/usr/local/bin:/usr/local/sbin:${PATH}
 # pkgin on osx, probably
 if _check_path_ownership /opt/pkg/bin root ; then
 	PATH=/opt/pkg/bin:/opt/pkg/sbin:${PATH}

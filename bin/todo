@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 set -e
 
 FIRSTARG="$1"
 
-if [ ! -z "$FIRSTARG" ] && [ ! ${FIRSTARG:0:1} == "-" ]; then
+if [ -n "$FIRSTARG" ] && [ ! "${FIRSTARG:0:1}" = "-" ]; then
 	ITEM="$*"
 
 	NOTEDIR="$HOME/OneDrive/Scratch"

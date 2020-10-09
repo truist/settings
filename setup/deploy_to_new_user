@@ -25,7 +25,7 @@ main() {
 	cd ~
 	"$SETUPFILES/vim-pathogen"
 
-	if [ `uname` = 'Darwin' ]; then
+	if [ "$(uname)" = 'Darwin' ]; then
 		echo
 		echo "OSX configuration..."
 		cd ~
@@ -47,7 +47,7 @@ main() {
 		echo "Reminder to install ~/src/fonts/SourceCodePro"
 	fi
 
-	if [ `vim --version | grep -c '+clipboard'` -ne 1 ]; then
+	if [ "$(vim --version | grep -c '+clipboard')" -ne 1 ]; then
 		echo "WARNING: vim is not compiled with +clipboard support" >&2
 	fi
 

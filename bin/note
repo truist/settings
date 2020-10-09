@@ -3,13 +3,13 @@
 set -e
 
 DELETING=0
-if [ "-d" == "$1" ]; then
+if [ "-d" = "$1" ]; then
 	DELETING=1
 	shift
 fi
 
 ARCHIVING=0
-if [ "-a" == "$1" ]; then
+if [ "-a" = "$1" ]; then
 	ARCHIVING=1
 	DELETING=1
 	ARCHIVE_PATH="$2"
@@ -41,15 +41,15 @@ if  echo "$FILE" | grep -v -q "\." ; then
 	FILE="$FILE.txt"
 fi
 
-if [ "$ARCHIVING" == 1 ]; then
+if [ "$ARCHIVING" = 1 ]; then
 	cp -i "$NOTEDIR/$FILE" "$ARCHIVE_PATH" || exit 1
 fi
 
-mkdir -p `dirname "$NOTEDIR/$FILE"`
+mkdir -p $(dirname "$NOTEDIR/$FILE")
 
 cd "$NOTEDIR"
 
-if [ "$DELETING" == 1 ]; then
+if [ "$DELETING" = 1 ]; then
 	git rm "$FILE" && git commit -m "delete $FILE"
 
 elif [ -f "$FILE" ]; then
@@ -58,7 +58,7 @@ elif [ -f "$FILE" ]; then
 	# be prepared in case they background vi during the edit session
 	wait
 
-	if ! `git diff -s --exit-code "$FILE"` ; then
+	if ! $(git diff -s --exit-code "$FILE") ; then
 		git add "$FILE" && git commit -m "update $FILE"
 	fi
 

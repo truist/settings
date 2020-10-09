@@ -21,26 +21,26 @@ if [ "$QUIET" == true ]; then
 	done
 fi
 
-BASEDIR=`pwd`
+BASEDIR=$(pwd)
 for DIR in *; do
 	if [ -d "$DIR" ]; then
-		cd "$DIR"
+		cd "$DIR" || exit 1
 		if [ "$QUIET" == true ]; then
 			echo -n .
 			ERROUT=$("$@" 2>&1 >/dev/null)
 			RESULT=$?
 			if [ $RESULT -gt 0 ]; then
 				echo
-				echo $DIR exited $RESULT:
-				echo $ERROUT
+				echo "$DIR exited $RESULT:"
+				echo "$ERROUT"
 				echo
 			fi
 		else
 			echo
-			echo === $DIR ===
+			echo "=== $DIR ==="
 			"$@"
 		fi
 	fi
-	cd "$BASEDIR"
+	cd "$BASEDIR" || exit 1
 done
 

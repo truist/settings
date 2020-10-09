@@ -9,11 +9,11 @@ clone_or_update() {
 	AUTH=$1
 	NAME=$2
 
-	echo "\n$AUTH/$NAME"
-	if [ ! -e $NAME ]; then
-		git clone https://github.com/$AUTH/${NAME}.git
+	printf '\n%s/%s\n' "$AUTH" "$NAME"
+	if [ ! -e "$NAME" ]; then
+		git clone "https://github.com/$AUTH/${NAME}.git"
 	else
-		cd $NAME
+		cd "$NAME"
 		git pull
 		cd - >/dev/null
 	fi
@@ -41,6 +41,7 @@ clone_or_update 'ctrlpvim' 'ctrlp.vim'
 clone_or_update 'dhruvasagar' 'vim-table-mode'
 clone_or_update 'editorconfig' 'editorconfig-vim'
 clone_or_update 'ervandew' 'supertab'
+clone_or_update 'itspriddle' 'vim-shellcheck'
 clone_or_update 'maxbrunsfeld' 'vim-yankstack'
 clone_or_update 'ntpeters' 'vim-better-whitespace'
 clone_or_update 'plasticboy' 'vim-markdown'

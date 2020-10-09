@@ -27,7 +27,7 @@ fi
 #
 #cat $PUBLIC_KEY_FILE | ssh $REMOTE "cat >> $REMOTE_AUTH_KEYS_FILE"
 
-cat $PUBLIC_KEY_FILE | ssh $REMOTE "mkdir -m 700 -p $SSH_CONF_DIR_RELATIVE >/dev/null 2>&1 && cat >> $REMOTE_AUTH_KEYS_FILE"
+cat $PUBLIC_KEY_FILE | ssh "$REMOTE" "mkdir -m 700 -p $SSH_CONF_DIR_RELATIVE >/dev/null 2>&1 && cat >> $REMOTE_AUTH_KEYS_FILE"
 
 echo "You may now 'ssh $REMOTE' without a password"
 
