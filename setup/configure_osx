@@ -1,31 +1,24 @@
 #!/usr/bin/env bash
 
 # based on https://github.com/mathiasbynens/dotfiles/blob/master/.osx
-
-defaults write ~/Library/Preferences/.GlobalPreferences CGDisableCursorLocationMagnification -bool YES
+# and https://github.com/chaseadamsio/dotfiles/blob/762ec94e83c2e7c3fd4f976b62cfc77d32c98838/macos.bash
 
 
 # these seem to cause performance issues (high CPU usage in Terminal when holding Enter)
 # defaults write ~/Library/Preferences/.GlobalPreferences KeyRepeat 2
 # defaults write ~/Library/Preferences/.GlobalPreferences InitialKeyRepeat 15
+# maybe this way will work without performance issues?
+defaults write NSGlobalDomain KeyRepeat -int 2
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
+
+# show all filename extension in Finder
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+defaults write NSGlobalDomain CGDisableCursorLocationMagnification -bool YES
 
 # make SMB less-slow
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
-
-
-sudo -v
-
-
-# wait longer (12 hours) before going into standby mode
-sudo pmset -a standbydelay 43200
-
-
-defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
-# defaults write NSGlobalDomain KeyRepeat -int 0
-
-
-# Disable the sound effects on boot
-sudo nvram SystemAudioVolume=" "
 
 # Disable transparency in the menu bar and elsewhere on Yosemite
 defaults write com.apple.universalaccess reduceTransparency -bool true
@@ -50,19 +43,8 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 # Disable automatic termination of inactive apps
 defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
 
-# Reveal IP address, hostname, OS version, etc. when clicking the clock
-# in the login window
-sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
-
-# Restart automatically if the computer freezes
-sudo systemsetup -setrestartfreeze on
-
-# Disable Notification Center and remove the menu bar icon
-#launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist 2> /dev/null
-
-# Trackpad: enable tap to click for this user and for the login screen
+# Trackpad: enable tap to click
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-sudo defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
 # Enable “natural” (Lion-style) scrolling
@@ -71,34 +53,21 @@ defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 # Increase sound quality for Bluetooth headphones/headsets
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
 
-# Disable auto-correct
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
-# Require password soon after sleep or screen saver begins
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 5
 
-# Show icons for hard drives, servers, and removable media on the desktop
-#defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
-#defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
-#defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
-#defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
-
-# Finder: show status bar
 defaults write com.apple.finder ShowStatusBar -bool true
-
-# Finder: show path bar
 defaults write com.apple.finder ShowPathbar -bool true
 
 # Enable spring loading for directories
 defaults write NSGlobalDomain com.apple.springing.enabled -bool true
-
 # Remove the spring loading delay for directories
 defaults write NSGlobalDomain com.apple.springing.delay -float 0
 
 # Enable snap-to-grid for icons on the desktop and in other icon views
 /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-#/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
 /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
 
 # Use list view in all Finder windows by default
@@ -115,9 +84,6 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict \
 	OpenWith -bool true \
 	Privileges -bool true
 
-# Don’t show Dashboard as a Space
-defaults write com.apple.dock dashboard-in-overlay -bool true
-
 # Disable the all too sensitive backswipe
 defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
 defaults write com.google.Chrome.canary AppleEnableSwipeNavigateWithScrolls -bool false
@@ -125,4 +91,41 @@ defaults write com.google.Chrome.canary AppleEnableSwipeNavigateWithScrolls -boo
 # Use the system-native print preview dialog
 defaults write com.google.Chrome DisablePrintPreview -bool true
 defaults write com.google.Chrome.canary DisablePrintPreview -bool true
+
+
+## DOCK STUFF
+
+# Automatically hide and show the Dock
+defaults write com.apple.dock autohide -bool true
+# Show indicator lights for open applications in the Dock
+defaults write com.apple.dock show-process-indicators -bool true
+# Don’t animate opening applications from the Dock
+defaults write com.apple.dock launchanim -bool false
+# empty the dock of any pre-defined apps
+defaults delete com.apple.dock persistent-apps
+# clean up right side (persistent)
+defaults delete com.apple.dock persistent-others
+killall Dock
+
+
+
+### SUDO STUFF from here down
+sudo -v
+
+# wait longer (12 hours) before going into standby mode
+sudo pmset -a standbydelay 43200
+
+# Disable the sound effects on boot
+sudo nvram SystemAudioVolume=" "
+
+# Reveal IP address, hostname, OS version, etc. when clicking the clock
+# in the login window
+sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
+
+# Restart automatically if the computer freezes
+sudo systemsetup -setrestartfreeze on
+
+# Trackpad: enable tap to click for the login screen
+sudo defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
 
