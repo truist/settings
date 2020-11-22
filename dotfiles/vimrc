@@ -161,7 +161,7 @@ let mapleader = ","
 " shortcut to switch background setting
 map <Leader>bg :let &background = ( &background == "dark"? "light" : "dark" )<CR> )
 " shortcut to switch to light mode
-map <Leader>l :execute '!light' \| :set bg=light \| set colorcolumn= \| set wrap \| AirlineTheme papercolor<CR>
+map <Leader>l :execute '!light' \| :set bg=light \| set colorcolumn= \| highlight clear SignColumn \| set wrap \| AirlineTheme papercolor<CR>
 
 " shortcuts to comment/uncomment lines
 map <Leader># :s/^/#<CR><CR>
@@ -205,6 +205,10 @@ map <Leader>b :MBEFocus<cr>
 let g:ale_linters_explicit = 1
 let g:ale_linters = {
 \   'javascript': ['standard'],
+\   'perl': ['perl'],
+\   'php': ['php'],
+\   'powershell': ['powershell'],
+\   'sh': ['shellcheck'],
 \}
 let g:ale_fixers = {'javascript': ['standard']}
 
