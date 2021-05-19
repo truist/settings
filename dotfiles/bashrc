@@ -115,3 +115,17 @@ alias gitjk="history 10 | tail -r | gitjk_cmd"
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
+if command -v direnv ; then
+	eval "$(direnv hook bash)"
+fi
+
+export NOTEDIR="$HOME/iCloud/Scratch"
+if [ -d "$NOTEDIR" ]; then
+	_noteComplete() {
+		local files=("$NOTEDIR/$2"*)
+		[[ -e ${files[0]} ]] && COMPREPLY=( "${files[@]##*/}" )
+	}
+	complete -o bashdefault -o default -o filenames -F _noteComplete note
+fi
+
+

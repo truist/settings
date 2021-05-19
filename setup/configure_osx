@@ -20,9 +20,6 @@ defaults write NSGlobalDomain CGDisableCursorLocationMagnification -bool YES
 # make SMB less-slow
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 
-# Disable transparency in the menu bar and elsewhere on Yosemite
-defaults write com.apple.universalaccess reduceTransparency -bool true
-
 # Expand save panel by default
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true

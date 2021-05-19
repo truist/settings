@@ -105,6 +105,10 @@ set hidden
 highlight LineNr cterm=NONE ctermfg=Grey ctermbg=NONE
 highlight CursorLineNr cterm=NONE ctermfg=Yellow ctermbg=NONE
 
+" Don't mark URL-like things as spelling errors
+" PUT THIS IN ~/.vim/after/syntax/{text,markdown}.vim
+" syn match UrlNoSpell '\w\+:\/\/[^[:space:]]\+' contains=@NoSpell
+
 " type identification help
 autocmd BufRead,BufNewFile *.t setfiletype perl
 " make this explicit so the markdown plugin doesn't take it
@@ -234,6 +238,7 @@ endif
 
 
 
-" these aren't currently save (on VIM <8.2.something)
+" these aren't currently safe (on VIM <8.2.something)
 set nomodeline
 set modelines=0
+

@@ -25,7 +25,10 @@ fi
 
 VIM="vim"
 
-NOTEDIR="$HOME/OneDrive/Scratch"
+if [ -z "$NOTEDIR" ]; then
+	echo "Please set NOTEDIR" >&2
+	exit 1
+fi
 
 FILE="$*"
 if [ -z "$FILE" ]; then
