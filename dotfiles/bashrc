@@ -60,6 +60,9 @@ alias findpid="ps axww -o pid,user,%cpu,%mem,start,time,command | selecta | sed 
 
 alias notify='tput bel'
 
+alias rbash='arch -x86_64 bash --login'
+alias say='say -v Ava'
+
 command -v grunt > /dev/null && alias grunt="grunt --stack"
 
 export HISTCONTROL=erasedups
