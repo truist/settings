@@ -131,4 +131,14 @@ if [ -d "$NOTEDIR" ]; then
 	complete -o bashdefault -o default -o filenames -F _noteComplete note
 fi
 
+_dropboxComplete() {
+	DROPBOXDIR="/Volumes/DropBoxes"
+	if [ ! -d "$DROPBOXDIR" ]; then
+		dropbox
+	fi
+	local files=("$DROPBOXDIR/$2"*)
+	[[ -e ${files[0]} ]] && COMPREPLY=( "${files[@]##*/}" )
+}
+complete -o bashdefault -o default -o filenames -F _dropboxComplete dropbox
+
 

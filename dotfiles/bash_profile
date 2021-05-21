@@ -2,10 +2,12 @@
 # and it calls ~/.bashrc, which is called by bash when it is run
 # as an interactive non-login shell
 
-if [ -n "$HOME/.bashrc" ]; then . "$HOME/.bashrc"; fi
+if [ -f "$HOME/.bashrc" ]; then . "$HOME/.bashrc"; fi
 
 # treat .profile as host-specific settings
-if [ -n "$HOME/.profile" ]; then . "$HOME/.profile"; fi
+if [ -f "$HOME/.profile" ]; then . "$HOME/.profile"; fi
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
+
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
