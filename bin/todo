@@ -12,7 +12,7 @@ fi
 if [ -n "$FIRSTARG" ] && [ ! "${FIRSTARG:0:1}" = "-" ]; then
 	ITEM="$*"
 
-	TRICKY_MATCH='-----'
+	TRICKY_MATCH='----'
 	BN=$'\\\n'
 
 	sed -i '' -e "s/^${TRICKY_MATCH}$/${TRICKY_MATCH}${BN}${ITEM}${BN}/" "${NOTEDIR}/todo.txt"
