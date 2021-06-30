@@ -62,7 +62,21 @@ else
 	ME_HOST="\h"
 fi
 
-BIT_COLOR=$P_PLAIN_GREEN
+if echo "$(detect_rosetta)" | grep -E '^rosetta$' > /dev/null ; then
+	BIT_COLOR=$P_PLAIN_YELLOW
+else
+	BIT_COLOR=$P_PLAIN_GREEN
+fi
+
+get_prompt_color() {
+	if [ "$1" = "0" ]; then
+		echo "$P_PLAIN$P_GREEN"
+	else
+		echo "$P_PLAIN$P_RED"
+	fi
+}
+
+
 
 if echo `uname` | grep -E ^MINGW > /dev/null ; then
 	ME_HOMEDIR=$HOME
@@ -117,11 +131,14 @@ get_branch_color() {
 }
 
 
+# HACKITY HACK HACK HACK. PROMPT_COMMAND IS OVERDUE HERE
+PS1="\$(LAST_EXIT_CODE=\$?;  echo \""
+
 # set the terminal title
 if [ "$TERM" == "vt100" ]; then
-	PS1=""
+	PS1+=""
 else
-	PS1="\[\033]0;\u@$ME_HOST:\w\007\]"
+	PS1+="\[\033]0;\u@$ME_HOST:\w\007\]"
 fi
 
 PS1+="\n"
@@ -135,7 +152,10 @@ PS1+="$P_ESC_PRE\$(get_path_color)$P_ESC_POST\w"
 PS1+="$BIT_COLOR "
 PS1+="$P_ESC_PRE\$(get_branch_color)$P_ESC_POST\$(do_git '[' ']$P_ESC_RESET')"
 PS1+=$'\n'  # this syntax fixes issue on msys
-PS1+="$USER_COLOR$PROMPT_CHAR $P_ESC_RESET"
+# PS1+="$USER_COLOR$PROMPT_CHAR $P_ESC_RESET"
+# PS1+="LEC:\$LAST_EXIT_CODE:CEL$PROMPT_CHAR $P_ESC_RESET"
+PS1+="$P_ESC_PRE\$(if [ \$LAST_EXIT_CODE == 0 ]; then echo \"$P_PLAIN$P_GREEN\"; else echo \"$P_PLAIN$P_RED\"; fi)$PROMPT_CHAR $P_ESC_RESET"
+PS1+="\")"
 
 export PS1
 

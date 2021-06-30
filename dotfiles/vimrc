@@ -106,8 +106,10 @@ highlight LineNr cterm=NONE ctermfg=Grey ctermbg=NONE
 highlight CursorLineNr cterm=NONE ctermfg=Yellow ctermbg=NONE
 
 " Don't mark URL-like things as spelling errors
-" PUT THIS IN ~/.vim/after/syntax/{text,markdown}.vim
+" From http://www.panozzaj.com/blog/2016/03/21/ignore-urls-and-acroynms-while-spell-checking-vim/
+" PUT THESE IN ~/.vim/after/syntax/{text,markdown}.vim
 " syn match UrlNoSpell '\w\+:\/\/[^[:space:]]\+' contains=@NoSpell
+" syn match AcronymNoSpell '\<\(\u\|\d\)\{3,}s\?\>' contains=@NoSpell
 
 " type identification help
 autocmd BufRead,BufNewFile *.t setfiletype perl
