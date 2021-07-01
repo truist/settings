@@ -69,7 +69,7 @@ else
 fi
 
 get_prompt_color() {
-	if [ "$1" = "0" ]; then
+	if [ $1 == 0 ]; then
 		echo "$P_PLAIN$P_GREEN"
 	else
 		echo "$P_PLAIN$P_RED"
@@ -152,9 +152,7 @@ PS1+="$P_ESC_PRE\$(get_path_color)$P_ESC_POST\w"
 PS1+="$BIT_COLOR "
 PS1+="$P_ESC_PRE\$(get_branch_color)$P_ESC_POST\$(do_git '[' ']$P_ESC_RESET')"
 PS1+=$'\n'  # this syntax fixes issue on msys
-# PS1+="$USER_COLOR$PROMPT_CHAR $P_ESC_RESET"
-# PS1+="LEC:\$LAST_EXIT_CODE:CEL$PROMPT_CHAR $P_ESC_RESET"
-PS1+="$P_ESC_PRE\$(if [ \$LAST_EXIT_CODE == 0 ]; then echo \"$P_PLAIN$P_GREEN\"; else echo \"$P_PLAIN$P_RED\"; fi)$PROMPT_CHAR $P_ESC_RESET"
+PS1+="$P_ESC_PRE\$(get_prompt_color \$LAST_EXIT_CODE)$PROMPT_CHAR$P_ESC_POST $P_ESC_RESET"
 PS1+="\")"
 
 export PS1

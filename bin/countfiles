@@ -1,0 +1,6 @@
+#!/bin/sh
+
+for DIR in */ ; do
+    COUNT=$(find "$DIR" -type f | wc -l) ;
+    echo "$COUNT $DIR" ;
+done

@@ -222,7 +222,15 @@ let g:ale_fixers = {'javascript': ['standard']}
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 " CtrlP
-let g:ctrlp_custom_ignore = '/node_modules/'
+let g:ctrlp_custom_ignore = { 'dir': '\v[\/](node_modules|playground|generated|client/build|thirdPartyLibs)$' }
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_max_files = 0
+
+" vim-better-whitespace
+let g:better_whitespace_ctermcolor='brown'
+" highlight ExtraWhitespace ctermbg=brown
+let g:better_whitespace_filetypes_blacklist=['c', 'cpp', 'h']
+let g:show_spaces_that_precede_tabs=1
 
 " make the tmux status line show the currently-edited file
 if &term == "screen" || &term == "screen-256color"
