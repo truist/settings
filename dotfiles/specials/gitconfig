@@ -76,6 +76,7 @@
 
 [fetch]
 	prune = true
+	recurseSubmodules = on-demand
 
 [log]
 	date = relative
@@ -94,4 +95,15 @@
 # also see https://github.com/git/git/blob/master/contrib/rerere-train.sh
 [rerere]
 	enabled = false
+
+[diff]
+	submodule = log
+
+[status]
+	submoduleSummary = true
+
+# SUPER-DANGEROUS
+# WILL SILENTLY DELETE LOCAL CHANGES IN SUBMODULES, WHEN YOU SWITCH AWAY FROM A BRANCH WITH A SUBMODULE
+#[submodule]
+#	recurse = true
 
