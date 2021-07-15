@@ -4,9 +4,10 @@
 
 set -e
 
+os_name="$(uname)"
 arch_name="$(uname -m)"
 
-if [ "$arch_name" = "x86_64" ] && [ "$(sysctl -in sysctl.proc_translated)" = "1" ]; then
+if [ "$os_name" = "Darwin" ] && [ "$arch_name" = "x86_64" ] && [ "$(sysctl -in sysctl.proc_translated)" = "1" ]; then
 	echo "rosetta"
 else
 	echo "$arch_name"
