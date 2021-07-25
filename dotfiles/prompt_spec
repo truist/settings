@@ -1,37 +1,39 @@
 #!/usr/bin/env bash
 
+set -e
+
 P_ESC_PRE='\[\e['
 P_ESC_POST='\]'
 P_ESC_RESET="${P_ESC_PRE}m${P_ESC_POST}"
 
 P_PLAIN="0;"
-P_BOLD="1;"
-P_HILITE="3;"
-P_UNDERLINE="4;"
-P_BLINK="5;"
+#P_BOLD="1;"
+#P_HILITE="3;"
+#P_UNDERLINE="4;"
+#P_BLINK="5;"
 
-P_GREY="29M"
-P_BLACK="30m"
+#P_GREY="29M"
+#P_BLACK="30m"
 P_RED="31m"
 P_GREEN="32m"
 P_YELLOW="33m"
 P_BLUE="34m"
-P_VIOLET="35m"
-P_AQUA="36m"
-P_WHITE="37m"
+#P_VIOLET="35m"
+#P_AQUA="36m"
+#P_WHITE="37m"
 
 P_PLAIN_GREEN="$P_ESC_PRE$P_PLAIN$P_GREEN$P_ESC_POST"
-P_UNDERLINE_YELLOW="$P_ESC_PRE$P_UNDERLINE$P_YELLOW$P_ESC_POST"
+#P_UNDERLINE_YELLOW="$P_ESC_PRE$P_UNDERLINE$P_YELLOW$P_ESC_POST"
 P_PLAIN_YELLOW="$P_ESC_PRE$P_PLAIN$P_YELLOW$P_ESC_POST"
-P_UNDERLINE_RED="$P_ESC_PRE$P_UNDERLINE$P_RED$P_ESC_POST"
+#P_UNDERLINE_RED="$P_ESC_PRE$P_UNDERLINE$P_RED$P_ESC_POST"
 P_PLAIN_RED="$P_ESC_PRE$P_PLAIN$P_RED$P_ESC_POST"
 
-if echo `uname` | grep -E ^MINGW > /dev/null ; then
+if uname | grep -E ^MINGW > /dev/null ; then
 	ME=$USERNAME
 else
-	ME=`whoami`
+	ME=$(whoami)
 fi
-if [ "`/usr/bin/id -u`" == 0 ]; then
+if [ "$(/usr/bin/id -u)" == 0 ]; then
 	USER_COLOR=$P_PLAIN_RED
 	PROMPT_CHAR='#'
 	SELF=0
@@ -56,20 +58,20 @@ else
 	HOST_COLOR=$P_PLAIN_YELLOW
 fi
 
-if echo `uname` | grep -E ^Darwin > /dev/null ; then
-	ME_HOST=`scutil --get ComputerName`
+if uname | grep -E ^Darwin > /dev/null ; then
+	ME_HOST=$(scutil --get ComputerName)
 else
 	ME_HOST="\h"
 fi
 
-if echo "$(detect_rosetta)" | grep -E '^rosetta$' > /dev/null ; then
+if detect_rosetta | grep -E '^rosetta$' > /dev/null ; then
 	BIT_COLOR=$P_PLAIN_YELLOW
 else
 	BIT_COLOR=$P_PLAIN_GREEN
 fi
 
 get_prompt_color() {
-	if [ $1 == 0 ]; then
+	if [ "$1" == 0 ]; then
 		echo "$P_PLAIN$P_GREEN"
 	else
 		echo "$P_PLAIN$P_RED"
@@ -78,13 +80,13 @@ get_prompt_color() {
 
 
 
-if echo `uname` | grep -E ^MINGW > /dev/null ; then
+if uname | grep -E ^MINGW > /dev/null ; then
 	ME_HOMEDIR=$HOME
 else
-	ME_HOMEDIR=`eval echo ~\`whoami\`` > /dev/null
+	ME_HOMEDIR=$(eval echo ~\`whoami\`) > /dev/null
 fi
 get_path_color() {
-	if echo "$PWD" | grep -E ^$ME_HOMEDIR > /dev/null ; then
+	if echo "$PWD" | grep -E "^$ME_HOMEDIR" > /dev/null ; then
 		echo "$P_PLAIN$P_GREEN"
 	else
 		echo "$P_PLAIN$P_YELLOW"
@@ -142,6 +144,7 @@ else
 fi
 
 PS1+="\n"
+# shellcheck disable=1087
 PS1+="$BIT_COLOR["
 PS1+="$USER_COLOR\u"
 PS1+="$BIT_COLOR@"
@@ -153,8 +156,10 @@ PS1+="$BIT_COLOR "
 PS1+="$P_ESC_PRE\$(get_branch_color)$P_ESC_POST\$(do_git '[' ']$P_ESC_RESET')"
 PS1+=$'\n'  # this syntax fixes issue on msys
 PS1+="$P_ESC_PRE\$(get_prompt_color \$LAST_EXIT_CODE)$PROMPT_CHAR$P_ESC_POST $P_ESC_RESET"
+# shellcheck disable=2089
 PS1+="\")"
 
+# shellcheck disable=2090
 export PS1
 
 #if [ "$TERM" == "screen" ] || [ "$TERM" == "screen-256color" ] ; then
