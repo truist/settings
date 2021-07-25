@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-set -e
+# this will make the shell exit!
+#set -e
 
 P_ESC_PRE='\[\e['
 P_ESC_POST='\]'
@@ -155,7 +156,7 @@ PS1+="$P_ESC_PRE\$(get_path_color)$P_ESC_POST\w"
 PS1+="$BIT_COLOR "
 PS1+="$P_ESC_PRE\$(get_branch_color)$P_ESC_POST\$(do_git '[' ']$P_ESC_RESET')"
 PS1+=$'\n'  # this syntax fixes issue on msys
-PS1+="$P_ESC_PRE\$(get_prompt_color \$LAST_EXIT_CODE)$PROMPT_CHAR$P_ESC_POST $P_ESC_RESET"
+PS1+="$P_ESC_PRE\$(get_prompt_color \$LAST_EXIT_CODE)$P_ESC_POST$PROMPT_CHAR $P_ESC_RESET"
 # shellcheck disable=2089
 PS1+="\")"
 
