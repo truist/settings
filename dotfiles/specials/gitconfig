@@ -29,7 +29,8 @@
 	# history examination
 	blamelines = "!f() { git log -L \"$2,$3:./$GIT_PREFIX/$1\" HEAD ; }; f"  # pass it three args: filename, starting line number, ending line number
 	contributors = shortlog --summary --numbered
-	graph = log --color --graph --pretty='format:%C(red)%h %C(yellow)%d%C(reset) %s  %C(green)%an, %ad%C(reset)' --date=short
+	graph  = log --color --graph --date=short --pretty='format:%C(red)%h %C(yellow)%d%C(reset) %<(70,trunc)%s %C(green)%an, %ad%C(reset)'
+	graphm = log --color --graph --date=short --pretty='format:%C(red)%h %C(yellow)%d%C(reset) %s  %C(green)%an, %ad%C(reset)%n%b'
 	search = "!f() { git log -p -G\"$1\" -i ; }; f"  # search the commit history for changes matching the search term
 
 	# rare but handy
