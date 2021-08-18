@@ -41,7 +41,7 @@
 	hash = rev-parse --short=9 --default HEAD  # useful for scripts
 	prune-stale-branches = "!f() { git remote prune origin ; git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d $@ ; }; f"  # prunes local branches that have disappeared from the remote
 	stashpull = "!f() { git stash && git pull && git stash pop ; }; f"
-	trackedignored = ls-files -i --exclude-standard	 # find files that are .gitignore'd but are already tracked
+	trackedignored = ls-files -i -c --exclude-standard	 # find files that are .gitignore'd but are already tracked
 
 [branch]
 	autosetuprebase = always
