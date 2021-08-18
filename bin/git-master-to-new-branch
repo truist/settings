@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# this script will move any local commits on local master,
+# that haven't been pushed to origin/master,
+# to a new branch,
+# and set the local master back to match origin/master
+
 # exit the script on first error
 set -e
 
