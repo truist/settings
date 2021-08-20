@@ -13,6 +13,6 @@ ARM_BREW=/opt/homebrew/bin/brew
 if [ -e "$ARM_BREW" ]; then
 	eval "$($ARM_BREW shellenv)"
 elif command -v brew >/dev/null ; then
-	eval "brew shellenv"
+	eval "$(brew shellenv)"
 fi
 
