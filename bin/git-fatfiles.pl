@@ -4,7 +4,10 @@ use strict;
 use IPC::Open2;
 use v5.14;
 
-# from https://stackoverflow.com/questions/1029969/why-is-my-git-repository-so-big/45366030#45366030
+# based on https://stackoverflow.com/questions/1029969/why-is-my-git-repository-so-big/45366030#45366030
+
+
+sub  trim { my $s = shift; $s =~ s/^\s+|\s+$//g; return $s };
 
 
 # Try to get the "format_bytes" function:
@@ -35,11 +38,11 @@ my ($directories, $sum);
     elsif ($arg) {
         print "Usage: $0 [ --sum, -s | --directories, -d ]\n";
         exit 1;
-    } 
+    }
 }
 
 # the format is [hash, file]
-my %revList = map { (split(' ', $_))[0 => 1]; } qx(git rev-list --all --objects);
+my %revList = map { (split(' ', $_, 2))[0 => 1]; } qx(git rev-list --all --objects);
 my $pid = open2(my $childOut, my $childIn, "git cat-file --batch-check");
 
 # The format is (hash => size)
@@ -60,7 +63,7 @@ waitpid($pid, 0);
 # Need to filter because some aren't files--there are useless directories in this list.
 # Format is name => size.
 my %fileSizes =
-    map { exists($hashSizes{$_}) ? ($revList{$_} => $hashSizes{$_}) : () } keys %revList;
+    map { exists($hashSizes{$_}) ? (trim($revList{$_}) => $hashSizes{$_}) : () } keys %revList;
 
 
 my @sortedSizes;
