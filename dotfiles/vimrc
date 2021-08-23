@@ -171,6 +171,7 @@ map <Leader>bg :let &background = ( &background == "dark"? "light" : "dark" )<CR
 map <Leader>l :execute '!light' \| :set bg=light \| set colorcolumn= \| highlight clear SignColumn \| set wrap \| AirlineTheme papercolor<CR>
 
 " shortcuts to comment/uncomment lines
+" (also try `gcl`, from a plugin)
 map <Leader># :s/^/#<CR><CR>
 map <Leader>## :s/^#<CR><CR>
 
@@ -180,6 +181,9 @@ map <Leader>** :s/^* <CR><CR>
 
 " shortcut to toggle wrapping
 map <Leader>w :set wrap!<cr>
+
+" shortcut to toggle spell check
+map <Leader>s :set spell!<cr>
 
 " table-mode
 let g:table_mode_corner='|'
