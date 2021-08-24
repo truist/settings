@@ -1,51 +1,41 @@
 #!/usr/bin/env perl
+
 use warnings;
 use strict;
+
+use Getopt::Long;
 use IPC::Open2;
 use v5.14;
 
 # based on https://stackoverflow.com/questions/1029969/why-is-my-git-repository-so-big/45366030#45366030
 
-
-sub  trim { my $s = shift; $s =~ s/^\s+|\s+$//g; return $s };
-
-
-# Try to get the "format_bytes" function:
-my $canFormat = eval {
-    require Number::Bytes::Human;
-    Number::Bytes::Human->import('format_bytes');
-    1;
-};
-my $format_bytes;
-if ($canFormat) {
-    $format_bytes = \&format_bytes;
-}
-else {
-    $format_bytes = sub { return shift; };
+sub args {
+  say STDERR "Usage: $0 [--sum | -s] [--directories | -d] [--[no]human | -h]";
+  exit 1;
 }
 
-# parse arguments:
-my ($directories, $sum);
-{
-    my $arg = $ARGV[0] // "";
-    if ($arg eq "--sum" || $arg eq "-s") {
-        $sum = 1;
-    }
-    elsif ($arg eq "--directories" || $arg eq "-d") {
-        $directories = 1;
-        $sum = 1;
-    }
-    elsif ($arg) {
-        print "Usage: $0 [ --sum, -s | --directories, -d ]\n";
-        exit 1;
-    }
+my ($directories, $sum, $human);
+$human = 1;
+GetOptions('sum' => \$sum, 'directories' => \$directories, 'human!' => \$human)
+  or args();
+$sum = 1 if $directories;
+
+my $format_bytes = sub { return shift; };
+if ($human) {
+  # Try to get the "format_bytes" function:
+  my $canFormat = eval {
+      require Number::Bytes::Human;
+      Number::Bytes::Human->import('format_bytes');
+      1;
+  };
+  if ($canFormat) {
+      $format_bytes = \&format_bytes;
+  }
 }
 
-# the format is [hash, file]
 my %revList = map { (split(' ', $_, 2))[0 => 1]; } qx(git rev-list --all --objects);
-my $pid = open2(my $childOut, my $childIn, "git cat-file --batch-check");
 
-# The format is (hash => size)
+my $pid = open2(my $childOut, my $childIn, "git cat-file --batch-check");
 my %hashSizes = map {
     print $childIn $_ . "\n";
     my @blobData = split(' ', <$childOut>);
@@ -60,11 +50,11 @@ my %hashSizes = map {
 close($childIn);
 waitpid($pid, 0);
 
+sub trim { my $s = shift; $s =~ s/^\s+|\s+$//g; return $s };
 # Need to filter because some aren't files--there are useless directories in this list.
 # Format is name => size.
-my %fileSizes =
-    map { exists($hashSizes{$_}) ? (trim($revList{$_}) => $hashSizes{$_}) : () } keys %revList;
-
+# Also trim off trailing newlines in the names, at this point.
+my %fileSizes = map { exists($hashSizes{$_}) ? (trim($revList{$_}) => $hashSizes{$_}) : () } keys %revList;
 
 my @sortedSizes;
 if ($sum) {
@@ -94,3 +84,4 @@ else {
 for my $fileSize (@sortedSizes) {
     printf "%s\t%s\n", $format_bytes->($fileSize->[1]), $fileSize->[0];
 }
+
