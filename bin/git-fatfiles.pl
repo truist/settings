@@ -11,30 +11,40 @@ use List::Util qw(max sum);
 # distantly based on the original answer at https://stackoverflow.com/questions/1029969/why-is-my-git-repository-so-big/45366030#45366030
 
 sub usage {
-    STDERR->say("Usage: $0 [--sum | -s] [--directories | -d] [--[no]human | -h]");
-    exit 1;
+    my ($exitCode) = @_;
+
+    STDERR->say("args: [(--help | -h) | ([(--directories | -d) | (--[no]sum | -s)] [--deleted | -d] [--[no]units | -u])]");
+    STDERR->say("\t");
+    STDERR->say("\tYou might want to run `git gc --prune=now --aggressive` before running this script.");
+    STDERR->say("\t");
+    STDERR->say("\tNo args (equivalent to `--sum --units`):");
+    STDERR->say("\t\tshow the sum of the on-disk (compressed) sizes for all objects in the history, for each path");
+    STDERR->say("\t--directories: aggregate results by directory");
+    STDERR->say("\t--nosum: show the size of the largest object in the history, rather than the sum of all objects, for each path");
+    STDERR->say("\t--deleted: only show results for paths that are not in the current working directory");
+    STDERR->say("\t--nounits: show results in bytes, not larger units");
+
+    exit $exitCode;
 }
 
 sub parseArgs {
-    my ($directories, $sum, $human);
+    my ($directories, $sum, $deleted, $units, $help);
 
-    $human = 1;
-    GetOptions('sum' => \$sum, 'directories' => \$directories, 'human!' => \$human)
-        or usage();
+    $sum = 1;
+    $units = 1;
+    GetOptions('sum!' => \$sum, 'directories' => \$directories, 'deleted' => \$deleted, 'units!' => \$units, 'help' => \$help)
+        or usage(1);
 
-    if ($directories && !$sum) {
-        STDERR->say("Auto-enabling --sum because you used --directories");
-        $sum = 1;
-    }
+    usage(0) if $help;
 
-    return ($directories, $sum, $human);
+    return ($directories, $sum, $deleted, $units);
 }
 
 my $format_bytes;
 sub formatBytes {
-    my ($human, $bytes) = @_;
+    my ($units, $bytes) = @_;
 
-    if ($human && !$format_bytes) {
+    if ($units && !$format_bytes) {
         # Try to get the "format_bytes" function:
         my $canFormat = eval {
             require Number::Bytes::Human;
@@ -72,8 +82,7 @@ sub getGitObjects {
 sub getHashSizesForBlobs {
     my (@hashes) = @_;
 
-    # output is: "<hash> <type> <size>"
-    my $pid = open2(my $childOut, my $childIn, "git cat-file --batch-check");
+    my $pid = open2(my $childOut, my $childIn, "git cat-file --batch-check='%(objectname) %(objecttype) %(objectsize:disk)'");
 
     # hash => size
     my %hashSizes;
@@ -125,6 +134,16 @@ sub mergeDirectories {
     return %dirSizes;
 }
 
+sub removeDeleted {
+    my (%pathSizes) = @_;
+
+    for my $path (keys %pathSizes) {
+        delete $pathSizes{$path} if -e $path || -l $path;
+    }
+
+    return %pathSizes;
+}
+
 sub sumOrMaxSizes {
     my ($sum, %pathSizes) = @_;
 
@@ -136,24 +155,25 @@ sub sumOrMaxSizes {
 }
 
 sub sortAndPrint {
-    my ($human, %pathSizes) = @_;
+    my ($units, %pathSizes) = @_;
 
     my @sortedPaths = sort { $pathSizes{$a} <=> $pathSizes{$b} } keys %pathSizes;
     for my $path (@sortedPaths) {
-        printf("%s\t%s\n", formatBytes($human, $pathSizes{$path}), $path);
+        printf("%s\t%s\n", formatBytes($units, $pathSizes{$path}), $path);
     }
 }
 
 sub main {
-    my ($directories, $sum, $human) = parseArgs();
+    my ($directories, $sum, $deleted, $units) = parseArgs();
 
     my %gitObjects = getGitObjects();
     my %hashSizes = getHashSizesForBlobs(keys %gitObjects);
     my %pathSizes = getAllSizesForPaths(\%gitObjects, \%hashSizes);
 
     %pathSizes = mergeDirectories(%pathSizes) if $directories;
+    %pathSizes = removeDeleted(%pathSizes) if $deleted;
     %pathSizes = sumOrMaxSizes($sum, %pathSizes);
-    sortAndPrint($human, %pathSizes);
+    sortAndPrint($units, %pathSizes);
 }
 
 main();
