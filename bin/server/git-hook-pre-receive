@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# based on https://github.com/olshanov/git-hooks/blob/master/pre-receive.deny-force-push-to-branches
+
+set -e
+
+# input will be one or more lines of: <oldrev> <newrev> <refname>
+while read -r oldrev newrev refname
+do
+	if [[ "$oldrev" == "0000000000000000000000000000000000000000" ]]; then
+		# they're creating a new branch
+		continue;
+	fi
+
+	if [[ "$refname" =~ ^refs/heads/[^/]+$ ]] ; then  # the branch doesn't have a / in the name
+		base="$(git merge-base "$oldrev" "$newrev")"
+		if [[ "$base" != "$oldrev" ]]; then  #non fast-forward, i.e. they're force-pushing
+			echo "Force push of $refname is not allowed"
+			exit 1
+		fi
+	fi
+done
+
+exit 0
