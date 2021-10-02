@@ -15,7 +15,9 @@ do
 	if [[ "$refname" =~ ^refs/heads/[^/]+$ ]] ; then  # the branch doesn't have a / in the name
 		base="$(git merge-base "$oldrev" "$newrev")"
 		if [[ "$base" != "$oldrev" ]]; then  #non fast-forward, i.e. they're force-pushing
+			echo ""
 			echo "Force push of $refname is not allowed"
+			echo ""
 			exit 1
 		fi
 	fi
