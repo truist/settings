@@ -2,23 +2,41 @@
 
 # based on https://github.com/olshanov/git-hooks/blob/master/pre-receive.deny-force-push-to-branches
 
+# Make sure the repo's `config` file has:
+# [receive]
+# 	denynonfastforwards = false
+
 set -e
+
+NO_COMMIT="0000000000000000000000000000000000000000"
 
 # input will be one or more lines of: <oldrev> <newrev> <refname>
 while read -r oldrev newrev refname
 do
-	if [[ "$oldrev" == "0000000000000000000000000000000000000000" ]]; then
+	if [[ "$oldrev" == "$NO_COMMIT" ]]; then
 		# they're creating a new branch
 		continue;
 	fi
 
-	if [[ "$refname" =~ ^refs/heads/[^/]+$ ]] ; then  # the branch doesn't have a / in the name
-		base="$(git merge-base "$oldrev" "$newrev")"
-		if [[ "$base" != "$oldrev" ]]; then  #non fast-forward, i.e. they're force-pushing
+	if [[ "$refname" =~ ^refs/heads/[^/]+$ ]] ; then
+		# they're on a restricted branch (i.e. it doesn't have a / in the name)
+		if [[ "$newrev" == "$NO_COMMIT" ]]; then
+			# they're deleting a branch
 			echo ""
-			echo "Force push of $refname is not allowed"
+			echo "Deleting branch $refname is not allowed."
+			echo "Please disable the pre-recieve hook on the server"
+			echo "if you're sure this is the right thing to do."
 			echo ""
 			exit 1
+		else
+			# regular push; check if they're rewriting history
+			base="$(git merge-base "$oldrev" "$newrev")"
+			if [[ "$base" != "$oldrev" ]]; then  #non fast-forward, i.e. they're force-pushing
+				echo ""
+				echo "Force push of $refname is not allowed."
+				echo ""
+				exit 1
+			fi
 		fi
 	fi
 done
