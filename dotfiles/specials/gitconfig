@@ -35,6 +35,7 @@
 	search = "!f() { git log -p -G\"$1\" -i ; }; f"  # search the commit history for changes matching the search term
 
 	# rare but handy
+	branch-name = !git symbolic-ref --short HEAD
 	branch-point = !bash -c 'diff --old-line-format= --new-line-format= <(git rev-list --first-parent \"${1:-master}\") <(git rev-list --first-parent \"${2:-HEAD}\") | head -1' -		# from http://stackoverflow.com/questions/1527234/finding-a-branch-point-with-git
 	branch-point-graph = !branch-point  # depends in a shell script in bin/
 	branch-point-branches = !bash -c 'git branch --contains $(git branch-point)'  # all the branches that contain the branch-point commit
@@ -42,8 +43,9 @@
 	delete-remote-branch = push -d
 	dump = cat-file -p  # dump out the raw contents of a particular file, typically a deleted one at an earlier revisions, with e.g. git dump <sha>:<file>
 	hash = rev-parse --short=9 --default HEAD  # useful for scripts
+	move-local-branch-pointer = "!f() { git update-ref -m \"Reset $1 to $2\" refs/heads/$1 $2; }; f"
 	prune-stale-branches = "!f() { git remote prune origin ; git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d $@ ; }; f"  # prunes local branches that have disappeared from the remote
-	set-upstream = !git branch --set-upstream-to=origin/`git symbolic-ref --short HEAD`
+	set-upstream = !git branch --set-upstream-to=origin/`git branch-name`
 	stashpull = "!f() { git stash && git pull && git stash pop ; }; f"
 	trackedignored = ls-files -i -c --exclude-standard	 # find files that are .gitignore'd but are already tracked
 
