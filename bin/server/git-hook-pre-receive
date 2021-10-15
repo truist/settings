@@ -5,10 +5,12 @@
 # Make sure the repo's `config` file has:
 # [receive]
 # 	denynonfastforwards = false
+# 	advertisePushOptions = true
 
 set -e
 
 NO_COMMIT="0000000000000000000000000000000000000000"
+FORCE_BRANCH_DELETE="force-branch-delete"
 
 # input will be one or more lines of: <oldrev> <newrev> <refname>
 while read -r oldrev newrev refname
@@ -22,12 +24,18 @@ do
 		# they're on a restricted branch (i.e. it doesn't have a / in the name)
 		if [[ "$newrev" == "$NO_COMMIT" ]]; then
 			# they're deleting a branch
-			echo ""
-			echo "Deleting branch $refname is not allowed."
-			echo "Please disable the pre-recieve hook on the server"
-			echo "if you're sure this is the right thing to do."
-			echo ""
-			exit 1
+			if [ "$GIT_PUSH_OPTION_COUNT" -eq 1 ] && [ "$GIT_PUSH_OPTION_0" = "$FORCE_BRANCH_DELETE" ]; then
+				echo ""
+				echo "Branch delete allowed because you specified --push-option=$FORCE_BRANCH_DELETE"
+				echo ""
+			else
+				echo ""
+				echo "Deleting branch $refname is not allowed."
+				echo "You can override this restriction - IF YOU ARE SURE - by setting:"
+				echo "    --push-option=$FORCE_BRANCH_DELETE"
+				echo ""
+				exit 1
+			fi
 		else
 			# regular push; check if they're rewriting history
 			base="$(git merge-base "$oldrev" "$newrev")"
