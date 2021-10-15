@@ -54,6 +54,10 @@ agvim() {
 	ag -l0 "$@" | xargs -0o vim
 }
 
+fdvim() {
+	fd -0 "$@" | xargs -0o vim
+}
+
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
