@@ -131,6 +131,7 @@ autocmd FileType mkd setlocal expandtab spell
 autocmd FileType markdown setlocal expandtab spell
 autocmd FileType ikiwiki setlocal expandtab spell
 autocmd FileType cpp setlocal nowrap
+autocmd FileType cmake setlocal nospell
 
 " ctrl-f to take first suggested correction for last spelling error
 imap <c-f> <c-g>u<Esc>[s1z=`]a<c-g>u
