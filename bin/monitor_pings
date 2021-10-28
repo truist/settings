@@ -4,5 +4,8 @@ set -e
 
 #osascript -e 'tell application "Terminal"' -e 'set background color of selected tab of front window to {29690, 20097, 10562}' -e 'end tell'
 
-prettyping --nolegend --last 20 --rttmin 32 8.8.8.8
+SERVER=${1:-google.com}
+echo $SERVER
+
+prettyping --nolegend --last 20 --rttmin 32 $SERVER
 
