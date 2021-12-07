@@ -170,6 +170,9 @@ let mapleader = ","
 map <Leader>bg :let &background = ( &background == "dark"? "light" : "dark" )<CR> )
 " shortcut to switch to light mode
 map <Leader>l :execute '!light' \| :set bg=light \| set colorcolumn= \| highlight clear SignColumn \| set wrap \| AirlineTheme papercolor<CR>
+" and back to dark mode
+map <Leader>d :execute '!dark' \| :set bg=dark \| set colorcolumn= \| highlight clear SignColumn \| set nowrap \| AirlineTheme dark<CR>
+
 
 " shortcuts to comment/uncomment lines
 " (also try `gcl`, from a plugin)
