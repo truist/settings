@@ -31,6 +31,10 @@ fi
 if _check_path_ownership "$HOME/pkg/bin" "$(id -u)" ; then
 	PATH=$HOME/pkg/bin:$HOME/pkg/sbin:${PATH}
 fi
+# user-specific homebrew
+if _check_path_ownership "/opt/homebrew/bin" "$(id -u)" ; then
+	PATH=/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}
+fi
 if echo `uname` | grep -E ^MINGW > /dev/null ; then
 	PATH=${PATH}:$ORIG_PATH
 fi
@@ -87,7 +91,9 @@ if tty -s; then
 	bind '"\e[B": history-search-forward'
 fi
 
-if [ -f ~/.prompt_spec ]; then
+if command -v starship >/dev/null ; then
+	eval "$(starship init bash)"
+elif [ -f ~/.prompt_spec ]; then
 	. ~/.prompt_spec
 elif [ `/usr/bin/id -u` == 0 ]; then
 	# red
@@ -129,7 +135,7 @@ alias gitjk="history 10 | tail -r | gitjk_cmd"
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
-if command -v direnv ; then
+if command -v direnv >/dev/null ; then
 	eval "$(direnv hook bash)"
 fi
 
