@@ -122,7 +122,7 @@ autocmd BufRead,BufNewFile *.json setfiletype javascript syntax=javascript
 autocmd BufRead,BufNewFile * setlocal tabstop=4 shiftwidth=4 softtabstop=4
 
 " type-specific settings
-autocmd BufRead,BufNewFile *.txt setlocal nowrap spell spellcapcheck=
+autocmd FileType text setlocal wrap spell spellcapcheck=
 autocmd FileType javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd FileType perl setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
