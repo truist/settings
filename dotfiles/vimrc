@@ -241,6 +241,9 @@ let g:better_whitespace_ctermcolor='brown'
 let g:better_whitespace_filetypes_blacklist=['c', 'cpp', 'h']
 let g:show_spaces_that_precede_tabs=1
 
+" lexima.vim
+let g:lexima_enable_basic_rules = 0
+
 " make the tmux status line show the currently-edited file
 if &term == "screen" || &term == "screen-256color"
 	set t_ts=

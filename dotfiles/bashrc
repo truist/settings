@@ -139,6 +139,8 @@ if command -v direnv >/dev/null ; then
 	eval "$(direnv hook bash)"
 fi
 
+export FIGNORE=DS_Store
+
 export NOTEDIR="$HOME/iCloud/Scratch"
 if [ -d "$NOTEDIR" ]; then
 	_noteComplete() {

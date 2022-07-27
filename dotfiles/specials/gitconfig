@@ -15,7 +15,7 @@
 	st = status -s
 	submodules = submodule status
 	sync = "!f() { git pull && git push ; }; f"
-	tags = for-each-ref --format='%(color:green)%(*creatordate:short)%(committerdate:short) %(color:red)%(objectname:short)->%(*objectname:short) %(color:reset)%(refname:short) %(color:blue)(%(taggerdate:short))' --sort='*creatordate' refs/tags
+	tags = for-each-ref --format='%(color:blue)%(taggerdate:short) %(objectname:short)->%(color:green)%(*objectname:short) %(*creatordate:short)%(committerdate:short) %(color:reset)%(refname:short)' --sort='*creatordate' refs/tags
 	wdiff = diff --color-words
 	wshow = show --color-words
 
@@ -30,7 +30,8 @@
 	# history examination
 	blamelines = "!f() { git log -L \"$2,$3:./$GIT_PREFIX/$1\" HEAD ; }; f"  # pass it three args: filename, starting line number, ending line number
 	contributors = shortlog --summary --numbered
-	graph  = log --color --graph --date=short --pretty='format:%C(red)%h %C(yellow)%d%C(reset) %<(70,trunc)%s %C(green)%an, %ad%C(reset)'
+	#graph  = log --oneline --graph --decorate --color
+	graph = log --color --graph --date=short --pretty='format:%C(red)%h %C(yellow)%d%C(reset) %<(70,trunc)%s %C(green)%an, %ad%C(reset)'
 	graphm = log --color --graph --date=short --pretty='format:%C(red)%h %C(yellow)%d%C(reset) %s  %C(green)%an, %ad%C(reset)%n%b'
 	search = "!f() { git log -p -G\"$1\" -i ; }; f"  # search the commit history for changes matching the search term
 
@@ -50,7 +51,7 @@
 	trackedignored = ls-files -i -c --exclude-standard	 # find files that are .gitignore'd but are already tracked
 
 [branch]
-	autosetuprebase = always
+	#autosetuprebase = always
 
 [color]
 	ui = true
@@ -107,4 +108,7 @@
 # WILL SILENTLY DELETE LOCAL CHANGES IN SUBMODULES, WHEN YOU SWITCH AWAY FROM A BRANCH WITH A SUBMODULE
 #[submodule]
 #	recurse = true
+
+[advice]
+	pushNonFFCurrent = false
 

@@ -13,7 +13,7 @@ use List::Util qw(max sum);
 sub usage {
     my ($exitCode) = @_;
 
-    STDERR->say("args: [(--help | -h) | ([(--directories | -d) | (--[no]sum | -s)] [--deleted | -d] [--[no]units | -u])]");
+    STDERR->say("args: [(--help | -h) | ([--directories | (--[no]sum | -s)] [--[no]deleted] [--[no]units | -u])]");
     STDERR->say("\t");
     STDERR->say("\tYou might want to run `git gc --prune=now --aggressive` before running this script.");
     STDERR->say("\t");
@@ -21,7 +21,8 @@ sub usage {
     STDERR->say("\t\tshow the sum of the on-disk (compressed) sizes for all objects in the history, for each path");
     STDERR->say("\t--directories: aggregate results by directory");
     STDERR->say("\t--nosum: show the size of the largest object in the history, rather than the sum of all objects, for each path");
-    STDERR->say("\t--deleted: only show results for paths that are not in the current working directory");
+    STDERR->say("\t--deleted: only show results for paths that are *not* in the current working directory");
+    STDERR->say("\t--nodeleted: only show results for paths that *are* in the current working directory");
     STDERR->say("\t--nounits: show results in bytes, not larger units");
 
     exit $exitCode;
@@ -32,7 +33,8 @@ sub parseArgs {
 
     $sum = 1;
     $units = 1;
-    GetOptions('sum!' => \$sum, 'directories' => \$directories, 'deleted' => \$deleted, 'units!' => \$units, 'help' => \$help)
+    $deleted = 'unset';
+    GetOptions('sum!' => \$sum, 'directories' => \$directories, 'deleted!' => \$deleted, 'units!' => \$units, 'help' => \$help)
         or usage(1);
 
     usage(0) if $help;
@@ -134,11 +136,19 @@ sub mergeDirectories {
     return %dirSizes;
 }
 
-sub removeDeleted {
-    my (%pathSizes) = @_;
+sub handleDeleted {
+    my ($deleted, %pathSizes) = @_;
 
-    for my $path (keys %pathSizes) {
-        delete $pathSizes{$path} if -e $path || -l $path;
+    if ($deleted ne "unset") {
+        if ($deleted == 1) {
+            for my $path (keys %pathSizes) {
+                delete $pathSizes{$path} if -e $path || -l $path;
+            }
+        } elsif ($deleted == 0) {
+            for my $path (keys %pathSizes) {
+                delete $pathSizes{$path} unless -e $path || -l $path;
+            }
+        }
     }
 
     return %pathSizes;
@@ -164,6 +174,10 @@ sub sortAndPrint {
 }
 
 sub main {
+    my $repo_root = qx(git rev-parse --show-toplevel);
+    chomp $repo_root;
+    chdir $repo_root || die "Error: couldn't chdir to repo root ($repo_root)";
+
     my ($directories, $sum, $deleted, $units) = parseArgs();
 
     my %gitObjects = getGitObjects();
@@ -171,7 +185,7 @@ sub main {
     my %pathSizes = getAllSizesForPaths(\%gitObjects, \%hashSizes);
 
     %pathSizes = mergeDirectories(%pathSizes) if $directories;
-    %pathSizes = removeDeleted(%pathSizes) if $deleted;
+    %pathSizes = handleDeleted($deleted, %pathSizes);
     %pathSizes = sumOrMaxSizes($sum, %pathSizes);
     sortAndPrint($units, %pathSizes);
 }

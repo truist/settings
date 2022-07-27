@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+if [ $# -ne 1 ]; then
+	echo "args: <commit ID>" >&2
+	exit 1
+fi
+
+COMMIT="$1"
+
+git-file-size-diff "$COMMIT~1..$COMMIT"
+
