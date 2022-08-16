@@ -1,0 +1,3 @@
+[tool.pylint."messages control"]
+disable = raw-checker-failed, bad-inline-option, locally-disabled, file-ignored, suppressed-message, useless-suppression, deprecated-pragma, use-symbolic-message-instead, bad-indentation, invalid-name, trailing-whitespace, line-too-long, missing-function-docstring
+

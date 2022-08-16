@@ -216,7 +216,7 @@ let g:SuperTabMidWordCompletion = "0"
 " minibufexplorer
 map <Leader>b :MBEFocus<cr>
 
-" ale/standard for JS
+" linters
 let g:ale_linters_explicit = 1
 let g:ale_linters = {
 \   'javascript': ['standard'],
@@ -224,8 +224,11 @@ let g:ale_linters = {
 \   'php': ['php'],
 \   'powershell': ['powershell'],
 \   'sh': ['shellcheck'],
+\   'python': ['pylint'],
 \}
 let g:ale_fixers = {'javascript': ['standard']}
+nmap <silent> [l <Plug>(ale_previous_wrap)
+nmap <silent> ]l <Plug>(ale_next_wrap)
 
 " editorconfig + fugitive
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
