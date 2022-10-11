@@ -54,10 +54,12 @@ alias ack='ack --pager="less -R -X"'
 alias ag='ag --pager "less -R -X"'
 alias fd='fd -c never'
 
+vimpipe() {
+	xargs -o vim
+}
 agvim() {
 	ag -l0 "$@" | xargs -0o vim
 }
-
 fdvim() {
 	fd -0 "$@" | xargs -0o vim
 }

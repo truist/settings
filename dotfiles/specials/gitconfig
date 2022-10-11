@@ -41,6 +41,7 @@
 	branch-point-graph = !branch-point  # depends in a shell script in bin/
 	branch-point-branches = !bash -c 'git branch --contains $(git branch-point)'  # all the branches that contain the branch-point commit
 	camend = commit --amend --no-edit  # for when you haven't set your username and email yet
+	conflicts = diff --name-only --diff-filter=U --relative
 	delete-remote-branch = push -d
 	dump = cat-file -p  # dump out the raw contents of a particular file, typically a deleted one at an earlier revisions, with e.g. git dump <sha>:<file>
 	hash = rev-parse --short=9 --default HEAD  # useful for scripts
