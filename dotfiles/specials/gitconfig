@@ -13,6 +13,8 @@
 	branches = "!f() { git -c color.ui=always branch -a -vv | sed -E 's/^(..([[:cntrl:]]\\[[0-9]{1,3}m)?[^[:space:]]+[[:space:]]*[[:cntrl:]]\\[m )(-> [^[:space:]]+)?([^[:space:]]{6,} )?(\\[.+\\])?.*$/\\1\\3\\5/' ; }; f"
 	remotes = remote -v
 	st = status -s
+	ss = submodule status
+	su = submodule update
 	submodules = submodule status
 	sync = "!f() { git pull && git push ; }; f"
 	tags = for-each-ref --format='%(color:blue)%(taggerdate:short) %(objectname:short)->%(color:green)%(*objectname:short) %(*creatordate:short)%(committerdate:short) %(color:reset)%(refname:short)' --sort='*creatordate' refs/tags
@@ -44,6 +46,7 @@
 	conflicts = diff --name-only --diff-filter=U --relative
 	delete-remote-branch = push -d
 	dump = cat-file -p  # dump out the raw contents of a particular file, typically a deleted one at an earlier revisions, with e.g. git dump <sha>:<file>
+	fetch-file = !git-fetch-file.sh
 	hash = rev-parse --short=9 --default HEAD  # useful for scripts
 	move-local-branch-pointer = "!f() { git update-ref -m \"Reset $1 to $2\" refs/heads/$1 $2; }; f"
 	prune-stale-branches = "!f() { git remote prune origin ; git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d $@ ; }; f"  # prunes local branches that have disappeared from the remote
