@@ -161,6 +161,15 @@ if [ -d "$PERSONDIR" ]; then
 	complete -o bashdefault -o default -o filenames -F _personComplete person
 fi
 
+export MEETINGDIR="$NOTEDIR/meeting"
+if [ -d "$MEETINGDIR" ]; then
+	_meetingComplete() {
+		local files=("$MEETINGDIR/$2"*)
+		[[ -e ${files[0]} ]] && COMPREPLY=( "${files[@]##*/}" )
+	}
+	complete -o bashdefault -o default -o filenames -F _meetingComplete meeting
+fi
+
 _dropboxComplete() {
 	DROPBOXDIR="/Volumes/DropBoxes"
 	if [ ! -d "$DROPBOXDIR" ]; then
