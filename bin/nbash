@@ -10,5 +10,5 @@ if [ ! -d "$NEWWORKHOME" ]; then
 	exit 1
 fi
 
-WORKHOME="$NEWWORKHOME" bash --login --rcfile "$NEWWORKHOME/.bash_profile"
+WORKHOME="$NEWWORKHOME" bash --rcfile "$NEWWORKHOME/.bash_profile"
 
