@@ -1,0 +1,131 @@
+command_timeout = 500
+
+[directory]
+truncate_to_repo = false
+truncation_length = 5
+fish_style_pwd_dir_length = 1
+truncation_symbol = ".../"
+repo_root_style = "bold green"
+
+read_only = " ro"
+
+
+[aws]
+format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
+symbol = "aws "
+
+[character]
+success_symbol = "[>](bold green)"
+error_symbol = "[x](bold red)"
+vicmd_symbol = "[<](bold green)"
+
+[cmake]
+format = '\[[$symbol($version)]($style)\]'
+symbol = "cmake "
+
+[cmd_duration]
+format = '\[[$duration]($style)\]'
+
+[dart]
+format = '\[[$symbol($version)]($style)\]'
+symbol = "dart "
+
+[deno]
+format = '\[[$symbol($version)]($style)\]'
+symbol = "deno "
+
+[docker_context]
+format = '\[[$symbol$context]($style)\]'
+symbol = "docker "
+
+[dotnet]
+format = '\[[$symbol($version)(🎯 $tfm)]($style)\]'
+symbol = ".NET "
+
+[gcloud]
+format = '\[[$symbol$account(@$domain)(\($region\))]($style)\]'
+
+[git_branch]
+format = '\[[$symbol$branch]($style)\]'
+symbol = ""
+
+[git_commit]
+tag_symbol = " tag "
+
+[git_status]
+format = '(\[[$all_status$ahead_behind]($style)\])'
+ahead = ">"
+behind = "<"
+diverged = "<>"
+renamed = "r"
+deleted = "x"
+
+[golang]
+format = '\[[$symbol($version)]($style)\]'
+symbol = "go "
+
+[hg_branch]
+format = '\[[$symbol$branch]($style)\]'
+symbol = "hg "
+
+[java]
+format = '\[[$symbol($version)]($style)\]'
+symbol = "java "
+
+[kotlin]
+format = '\[[$symbol($version)]($style)\]'
+symbol = "kotlin "
+
+[kubernetes]
+format = '\[[$symbol$context( \($namespace\))]($style)\]'
+
+[memory_usage]
+format = '\[$symbol[$ram( | $swap)]($style)\]'
+symbol = "memory "
+
+[nodejs]
+format = '\[[$symbol($version)]($style)\]'
+symbol = "nodejs "
+
+[package]
+format = '\[[$symbol$version]($style)\]'
+symbol = "pkg "
+
+[perl]
+format = '\[[$symbol($version)]($style)\]'
+symbol = "perl "
+
+[php]
+format = '\[[$symbol($version)]($style)\]'
+symbol = "php "
+
+[python]
+format = '\[[${symbol}${pyenv_prefix}(${version})(\($virtualenv\))]($style)\]'
+symbol = "python "
+
+[ruby]
+format = '\[[$symbol($version)]($style)\]'
+symbol = "ruby "
+
+[rust]
+format = '\[[$symbol($version)]($style)\]'
+symbol = "rust "
+
+[scala]
+format = '\[[$symbol($version)]($style)\]'
+symbol = "scala "
+
+[swift]
+format = '\[[$symbol($version)]($style)\]'
+symbol = "swift "
+
+[terraform]
+format = '\[[$symbol$workspace]($style)\]'
+
+[time]
+format = '\[[$time]($style)\]'
+
+[username]
+format = '\[[$user]($style)\]'
+
+

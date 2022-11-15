@@ -2,11 +2,11 @@
 autocmd!
 
 " reload changes automatically when saved
-autocmd! bufwritepost .vimrc source ~/.vimrc
+autocmd! bufwritepost $WORKHOME/.vimrc source $WORKHOME/.vimrc
 
 set nocompatible
 
-set runtimepath+=~/.vim
+set runtimepath+=$WORKHOME/.vim
 
 if has("multi_byte")
 	if &termencoding == ""
@@ -19,8 +19,8 @@ if has("multi_byte")
 endif
 
 " pathogen (https://github.com/tpope/vim-pathogen)
-runtime bundle/vim-pathogen/autoload/pathogen.vim
-execute pathogen#infect()
+source $WORKHOME/.vim/bundle/vim-pathogen/autoload/pathogen.vim
+execute pathogen#infect(expand("$WORKHOME/.vim/bundle/{}"))
 Helptags
 
 "general ui
@@ -45,19 +45,19 @@ autocmd InsertEnter * set cul
 autocmd InsertLeave * set nocul
 
 " Persistent undo
-let undodir = expand('~/.vim/undo')
+let undodir = expand('$WORKHOME/.vim/undo')
 if !isdirectory(undodir)
 	call mkdir(undodir)
 endif
-set undodir=~/.vim/undo//
+set undodir=$WORKHOME/.vim/undo//
 set undofile " Create FILE.un~ files for persistent undo
 
 " Keep swp files out of working directories
-let swapdir = expand('~/.vim/swap')
+let swapdir = expand('$WORKHOME/.vim/swap')
 if !isdirectory(swapdir)
 	call mkdir(swapdir)
 endif
-set directory=~/.vim/swap//
+set directory=$WORKHOME/.vim/swap//
 
 " search settings
 set incsearch

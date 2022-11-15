@@ -2,10 +2,17 @@
 # and it calls ~/.bashrc, which is called by bash when it is run
 # as an interactive non-login shell
 
-if [ -f "$HOME/.bashrc" ]; then . "$HOME/.bashrc"; fi
+if [[ -z "$WORKHOME" ]]; then
+	WORKHOME="$HOME"
+	export WORKHOME
+	XDG_CONFIG_HOME="$WORKHOME/.config"
+	export XDG_CONFIG_HOME
+fi
+
+if [ -f "$WORKHOME/.bashrc" ]; then . "$WORKHOME/.bashrc"; fi
 
 # treat .profile as host-specific settings
-if [ -f "$HOME/.profile" ]; then . "$HOME/.profile"; fi
+if [ -f "$WORKHOME/.profile" ]; then . "$WORKHOME/.profile"; fi
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
 

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# make a new bash instance that uses all of Nathan's preferred config stuff
+
+set -e
+
+NEWWORKHOME="$HOME/src/settings/workhome/$(id -un)"
+if [ ! -d "$WORKHOME" ]; then
+	echo "You must deploy into $NEWWORKHOME first. (deploy_to_new_user --temp)" >&2
+	exit 1
+fi
+
+WORKHOME="$NEWWORKHOME" bash --login --rcfile "$NEWWORKHOME/.bash_profile"
+

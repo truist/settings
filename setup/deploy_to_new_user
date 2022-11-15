@@ -2,16 +2,36 @@
 
 set -eu
 
-SETTINGS=src/settings
-DOTFILES="$SETTINGS/dotfiles"
-SPECIALS="$DOTFILES/specials"
-BINFILES="$SETTINGS/bin"
-SETUPFILES="$SETTINGS/setup"
+REALHOME="$HOME"
+	SETTINGS="$REALHOME/src/settings"
+		DOTFILES="$SETTINGS/dotfiles"
+			SPECIALS="$DOTFILES/specials"
+		BINFILES="$SETTINGS/bin"
+		SETUPFILES="$SETTINGS/setup"
 
-cd ~
 if [ ! -d "$SETTINGS" ]; then
 	echo "$SETTINGS is missing - please clone from github.com/truist/settings" >&2
 	exit 1
+fi
+
+if [[ -n "$1" ]]; then
+	if [[ '--temp' == "$1" ]]; then
+		WORKHOMES="$SETTINGS/workhome"
+		WORKHOME="$WORKHOMES/$(id -un)"
+		mkdir -p "$WORKHOME"
+		if [ ! -d "$WORKHOME" ]; then
+			echo "$WORKHOME must be a directory" >&2
+		fi
+		echo "Deploying into: $WORKHOME"
+
+		mkdir -p "$REALHOME/bin"
+		ln -sf "$BINFILES/nbash" "$REALHOME/bin/"
+	else
+		echo "args: [--temp]" >&2
+		exit 1
+	fi
+else
+	WORKHOME="$HOME"
 fi
 
 #################
@@ -22,17 +42,17 @@ main() {
 	do_bin_scripts
 
 	echo "vim plugins..."
-	cd ~
-	"$SETUPFILES/vim-pathogen"
+	"$SETUPFILES/vim-pathogen" "$WORKHOME"
 
-	if [ "$(uname)" = 'Darwin' ]; then
+	if [[ "$WORKHOME" == "$REALHOME" && "$(uname)" == 'Darwin' ]]; then
 		echo
 		echo "OSX configuration..."
-		cd ~
+		cd "$REALHOME"
 		"$SETUPFILES/configure_osx"
 	fi
 
-	cd ~/src
+	mkdir -p "$WORKHOME/src"
+	cd "$WORKHOME/src"
 	if [ ! -e 'z' ]; then
 		echo
 		echo "z..."
@@ -61,7 +81,7 @@ do_dotfiles() {
 	cd "$DOTFILES"
 	files=(*)
 
-	cd ~
+	cd "$WORKHOME"
 	for nodotfile in "${files[@]}" ; do
 		if [ -f "$DOTFILES/$nodotfile" ]; then
 			link_file "$DOTFILES/$nodotfile" ".$nodotfile"
@@ -72,7 +92,7 @@ do_dotfiles() {
 }
 
 do_special_dotfiles() {
-	cd ~
+	cd "$WORKHOME"
 
 	# gitconfig
 	nodotfile="gitconfig"
@@ -91,40 +111,38 @@ EOF
 	chmod 700 "$sshdir"
 	cat "$SPECIALS/$nodotfile" >> "$sshdir/config"
 
-	# .vagrant
-	vagdir=".vagrant.d"
-	mkdir -p "$vagdir"
-	cd "$vagdir"
-	nodotfile="Vagrantfile"
-	link_file "../$SPECIALS/$nodotfile" "$nodotfile"
-	cd -
-
 	# lvim light.script
 	vimdir=".vim"
 	mkdir -p "$vimdir"
 	nodotfile="light.script"
 	cd "$vimdir"
-	link_file "../$SPECIALS/$nodotfile" "$nodotfile"
+	link_file "$SPECIALS/$nodotfile" "$nodotfile"
+	cd -
+
+	# starship.toml
+	configdir=".config"
+	mkdir -p "$configdir"
+	nodotfile="starship.toml"
+	cd "$configdir"
+	link_file "$SPECIALS/$nodotfile" "$nodotfile"
 	cd -
 }
 
 do_bin_scripts() {
 	echo "bin scripts..."
 
-	cd ~
+	cd "$WORKHOME"
 
 	bindir="bin"
 	mkdir -p "$bindir"
 
 	cd "$BINFILES"
 	files=(*)
-	cd - >/dev/null
 
-	cd "$bindir"
+	cd "$WORKHOME/$bindir"
 	for binfile in "${files[@]}" ; do
-		relpath="../$BINFILES/$binfile"
-		if [ -f "$relpath" ]; then
-			link_file "$relpath" "$binfile"
+		if [ -f "$BINFILES/$binfile" ]; then
+			link_file "$BINFILES/$binfile" "$binfile"
 		fi
 	done
 }

@@ -1,9 +1,20 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 set -e
 
-mkdir -p ~/.vim/bundle
-cd ~/.vim/bundle/
+if [[ -n "$1" ]]; then
+	WORKHOME="$1"
+	if [ ! -d "$WORKHOME" ]; then
+		echo "$WORKHOME must be a directory" >&2
+		echo "args: [<path/to/new/working home directory>]"
+		exit 1
+	fi
+else
+	WORKHOME="$HOME"
+fi
+
+mkdir -p "$WORKHOME/.vim/bundle"
+cd "$WORKHOME/.vim/bundle/"
 
 clone_or_update() {
 	AUTH=$1
@@ -54,7 +65,4 @@ clone_or_update 'w0rp' 'ale'
 
 # truist
 clone_or_update 'truist' 'vim-open-url'
-
-
-cd - >/dev/null
 

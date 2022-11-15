@@ -1,11 +1,15 @@
 
-# to use this on a host, add this to the top of the host's .bashrc or .profile:
-# . ~/src/settings/dotfiles/bashrc
-
-if [ `/usr/bin/id -u` -eq 0 ] && [ -d /root ] && [ -n "$(find /root -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
+if [[ $(/usr/bin/id -u) -eq 0 ]] && [ -d /root ] && [ -n "$(find /root -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
 	export HOME=/root
-elif [ `/usr/bin/id -u` -eq 0 ] && [ -d /var/root ] && [ -n "$(find /var/root -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
+elif [[ $(/usr/bin/id -u) -eq 0 ]] && [ -d /var/root ] && [ -n "$(find /var/root -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
 	export HOME=/var/root
+fi
+
+if [[ -z "$WORKHOME" ]]; then
+	WORKHOME="$HOME"
+	export WORKHOME
+	XDG_CONFIG_HOME="$WORKHOME/.config"
+	export XDG_CONFIG_HOME
 fi
 
 _check_path_ownership() {
@@ -28,21 +32,22 @@ if _check_path_ownership /usr/pkg/bin root ; then
 	PATH=/usr/pkg/bin:/usr/pkg/sbin:${PATH}
 fi
 # user-specific pkgsrc
-if _check_path_ownership "$HOME/pkg/bin" "$(id -u)" ; then
-	PATH=$HOME/pkg/bin:$HOME/pkg/sbin:${PATH}
+if _check_path_ownership "$WORKHOME/pkg/bin" "$(id -u)" ; then
+	PATH=$WORKHOME/pkg/bin:$WORKHOME/pkg/sbin:${PATH}
 fi
 # user-specific homebrew
 if _check_path_ownership "/opt/homebrew/bin" "$(id -u)" ; then
 	PATH=/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}
 fi
-if echo `uname` | grep -E ^MINGW > /dev/null ; then
+if echo "$(uname)" | grep -E ^MINGW > /dev/null ; then
 	PATH=${PATH}:$ORIG_PATH
 fi
-PATH=$HOME/bin:${PATH}
+PATH=$WORKHOME/bin:$HOME/bin:${PATH}
 export PATH
 #export MANPATH
 
 # also add these two lines to /root/.profile (for e.g. 'sudo -i crontab -e')
+VIMINIT="$WORKHOME/.vimrc"
 export EDITOR=vim
 alias vi=vim
 
@@ -50,9 +55,9 @@ alias ls='ls -F'
 
 export PAGER=less
 alias less='less -R -X'
-alias ack='ack --pager="less -R -X"'
-alias ag='ag --pager "less -R -X"'
+alias ag="ag --path-to-ignore '$WORKHOME/.agignore' --pager 'less -R -X'"
 alias fd='fd -c never'
+alias pylint="pylint --rcfile '$WORKHOME/.pylintrc'"
 
 vimpipe() {
 	xargs -o vim
@@ -69,7 +74,7 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
-alias cdp=". ~/bin/cdp"
+alias cdp=". $WORKHOME/bin/cdp"
 
 # http://www.shellperson.net/using-sudo-with-an-alias/   (fixes "sudo vi <whatever>" not using vim)
 alias sudo='sudo '
@@ -95,9 +100,9 @@ fi
 
 if command -v starship >/dev/null ; then
 	eval "$(starship init bash)"
-elif [ -f ~/.prompt_spec ]; then
-	. ~/.prompt_spec
-elif [ `/usr/bin/id -u` == 0 ]; then
+elif [ -f "$WORKHOME/.prompt_spec" ]; then
+	. "$WORKHOME/.prompt_spec"
+elif [[ $(/usr/bin/id -u) -eq 0 ]]; then
 	# red
 	export PS1="\[\e[0;31m\][\u@\h \W]$ \[\e[m\]"
 else
@@ -105,8 +110,9 @@ else
 	export PS1="\[\e[0;32m\][\u@\h \W]$ \[\e[m\]"
 fi
 
-if [ -f ~/.git-completion.bash ]; then
-	. ~/.git-completion.bash
+GIT_CONFIG_GLOBAL="$WORKHOME/.gitconfig"
+if [ -f "$WORKHOME/.git-completion.bash" ]; then
+	. "$WORKHOME/.git-completion.bash"
 fi
 
 # mosh sets this to en_US.UTF-8, which makes perl angry, so do this on mosh servers, if necessary
@@ -118,7 +124,7 @@ if ( command -v tty >/dev/null ) && ( tty -s ) && [ -x /usr/games/fortune ]; the
 	/usr/games/fortune
 fi
 
-export SLIDESDIR="$HOME/src/reveal.js/slides"
+export SLIDESDIR="$WORKHOME/src/reveal.js/slides"
 if [ -d "$SLIDESDIR" ]; then
 	_slidesComplete() {
 		local files=("$SLIDESDIR/$2"*)
@@ -128,7 +134,7 @@ if [ -d "$SLIDESDIR" ]; then
 fi
 
 # see https://github.com/rupa/z
-ZPATH=~/src/z/z.sh
+ZPATH=$WORKHOME/src/z/z.sh
 if [ -e $ZPATH ]; then
 	. $ZPATH
 fi
@@ -143,7 +149,7 @@ fi
 
 export FIGNORE=DS_Store
 
-export NOTEDIR="$HOME/iCloud/Scratch"
+export NOTEDIR="$WORKHOME/iCloud/Scratch"
 if [ -d "$NOTEDIR" ]; then
 	_noteComplete() {
 		local files=("$NOTEDIR/$2"*)
@@ -161,13 +167,13 @@ if [ -d "$PERSONDIR" ]; then
 	complete -o bashdefault -o default -o filenames -F _personComplete person
 fi
 
-export MEETINGDIR="$NOTEDIR/meeting"
-if [ -d "$MEETINGDIR" ]; then
-	_meetingComplete() {
-		local files=("$MEETINGDIR/$2"*)
+export MEETDIR="$NOTEDIR/meeting"
+if [ -d "$MEETDIR" ]; then
+	_meetComplete() {
+		local files=("$MEETDIR/$2"*)
 		[[ -e ${files[0]} ]] && COMPREPLY=( "${files[@]##*/}" )
 	}
-	complete -o bashdefault -o default -o filenames -F _meetingComplete meeting
+	complete -o bashdefault -o default -o filenames -F _meetComplete meet
 fi
 
 _dropboxComplete() {
