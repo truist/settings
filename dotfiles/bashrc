@@ -48,7 +48,7 @@ export PATH
 #export MANPATH
 
 # also add these two lines to /root/.profile (for e.g. 'sudo -i crontab -e')
-VIMINIT="$WORKHOME/.vimrc"
+VIMINIT='source $WORKHOME/.vimrc'
 export VIMINIT
 export EDITOR=vim
 alias vi=vim
