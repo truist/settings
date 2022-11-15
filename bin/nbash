@@ -5,7 +5,7 @@
 set -e
 
 NEWWORKHOME="$HOME/src/settings/workhome/$(id -un)"
-if [ ! -d "$WORKHOME" ]; then
+if [ ! -d "$NEWWORKHOME" ]; then
 	echo "You must deploy into $NEWWORKHOME first. (deploy_to_new_user --temp)" >&2
 	exit 1
 fi
