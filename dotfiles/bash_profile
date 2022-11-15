@@ -5,8 +5,6 @@
 if [[ -z "$WORKHOME" ]]; then
 	WORKHOME="$HOME"
 	export WORKHOME
-	XDG_CONFIG_HOME="$WORKHOME/.config"
-	export XDG_CONFIG_HOME
 fi
 
 if [ -f "$WORKHOME/.bashrc" ]; then . "$WORKHOME/.bashrc"; fi
