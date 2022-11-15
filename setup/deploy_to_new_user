@@ -94,6 +94,32 @@ do_dotfiles() {
 do_special_dotfiles() {
 	cd "$WORKHOME"
 
+	# ssh UseRoaming
+	nodotfile="ssh_config"
+	sshdir=".ssh"
+	mkdir -p "$sshdir"
+	chmod 700 "$sshdir"
+	clear_file "$sshdir/config"
+	cat "$SPECIALS/$nodotfile" >> "$sshdir/config"
+
+	# lvim light.script
+	vimdir=".vim"
+	mkdir -p "$vimdir"
+	nodotfile="light.script"
+	clear_file "$vimdir/$nodotfile"
+	cd "$vimdir"
+	link_file "$SPECIALS/$nodotfile" "$nodotfile" >/dev/null
+	cd - >/dev/null
+
+	# starship.toml
+	configdir=".config"
+	mkdir -p "$configdir"
+	nodotfile="starship.toml"
+	clear_file "$configdir/$nodotfile"
+	cd "$configdir"
+	link_file "$SPECIALS/$nodotfile" "$nodotfile" >/dev/null
+	cd - >/dev/null
+
 	# gitconfig
 	nodotfile="gitconfig"
 	dotfile=".$nodotfile"
@@ -103,29 +129,13 @@ do_special_dotfiles() {
 	path = $SPECIALS/$nodotfile
 EOF
 
-	# ssh UseRoaming
-	nodotfile="ssh_config"
-	echo "  $nodotfile"
-	sshdir=".ssh"
-	mkdir -p "$sshdir"
-	chmod 700 "$sshdir"
-	cat "$SPECIALS/$nodotfile" >> "$sshdir/config"
-
-	# lvim light.script
-	vimdir=".vim"
-	mkdir -p "$vimdir"
-	nodotfile="light.script"
-	cd "$vimdir"
-	link_file "$SPECIALS/$nodotfile" "$nodotfile"
-	cd -
-
-	# starship.toml
-	configdir=".config"
-	mkdir -p "$configdir"
-	nodotfile="starship.toml"
-	cd "$configdir"
-	link_file "$SPECIALS/$nodotfile" "$nodotfile"
-	cd -
+	# .gitconfig for older git versions
+	xdg_git="$configdir/git"
+	mkdir -p "$xdg_git"
+	clear_file "$xdg_git/config"
+	cd "$xdg_git"
+	link_file "../../.gitconfig" "config" >/dev/null
+	cd - >/dev/null
 }
 
 do_bin_scripts() {
