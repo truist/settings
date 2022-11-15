@@ -48,6 +48,7 @@
 	dump = cat-file -p  # dump out the raw contents of a particular file, typically a deleted one at an earlier revisions, with e.g. git dump <sha>:<file>
 	fetch-file = !git-fetch-file.sh
 	hash = rev-parse --short=9 --default HEAD  # useful for scripts
+	missing-submodule-refs = "!find_missing_submodule_refs.sh"
 	move-local-branch-pointer = "!f() { git update-ref -m \"Reset $1 to $2\" refs/heads/$1 $2; }; f"
 	prune-stale-branches = "!f() { git remote prune origin ; git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d $@ ; }; f"  # prunes local branches that have disappeared from the remote
 	set-upstream = !git branch --set-upstream-to=origin/`git branch-name`
