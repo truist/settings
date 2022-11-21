@@ -1,6 +1,10 @@
 " ensure autocmd's don't get defined twice
 autocmd!
 
+if empty($WORKHOME)
+	let $WORKHOME = $HOME
+endif
+
 " reload changes automatically when saved
 autocmd! bufwritepost $WORKHOME/.vimrc source $WORKHOME/.vimrc
 

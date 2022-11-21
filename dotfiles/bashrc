@@ -40,6 +40,9 @@ fi
 if _check_path_ownership "/opt/homebrew/bin" "$(id -u)" ; then
 	PATH=/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}
 fi
+if command -v pyenv >/dev/null ; then
+	eval "$(pyenv init --path)"
+fi
 if uname | grep -E ^MINGW > /dev/null ; then
 	PATH=${PATH}:$ORIG_PATH
 fi
@@ -47,9 +50,10 @@ PATH=$WORKHOME/bin:$HOME/bin:${PATH}
 export PATH
 #export MANPATH
 
-# also add these two lines to /root/.profile (for e.g. 'sudo -i crontab -e')
-VIMINIT='source $WORKHOME/.vimrc'
+VIMINIT="source $WORKHOME/.vimrc"
 export VIMINIT
+
+# also add these two lines to /root/.profile (for e.g. 'sudo -i crontab -e')
 export EDITOR=vim
 alias vi=vim
 
