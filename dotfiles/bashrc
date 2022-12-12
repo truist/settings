@@ -15,7 +15,7 @@ XDG_CONFIG_HOME="$WORKHOME/.config"
 export XDG_CONFIG_HOME
 
 _check_path_ownership() {
-	if [ -d "$1" ]; then
+	if [ -f "$1" ] || [ -d "$1" ]; then
 		if [ -n "$(find "$1" -user "$2" -print -prune -o -prune 2>/dev/null)" ]; then
 			true
 		else
@@ -31,11 +31,9 @@ _check_path_ownership() {
 
 ORIG_PATH=$PATH
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R7/bin:/usr/X11R6/bin
+# put this on first (i.e. near the end of PATH), so even if it's a mess, everything else will override it
+PATH=/usr/local/bin:/usr/local/sbin:${PATH}
 
-# old-school /usr/local (non-homebrew)
-if _check_path_ownership "/usr/local/bin" root ; then
-	PATH=/usr/local/bin:/usr/local/sbin:${PATH}
-fi
 # snap packages
 if _check_path_ownership /snap/bin root ; then
 	PATH=/snap/bin:${PATH}
