@@ -11,6 +11,7 @@
 
 	# frequently-used verbs that should exist and/or give more information
 	branches = "!f() { git -c color.ui=always branch -a -vv | sed -E 's/^(..([[:cntrl:]]\\[[0-9]{1,3}m)?[^[:space:]]+[[:space:]]*[[:cntrl:]]\\[m )(-> [^[:space:]]+)?([^[:space:]]{6,} )?(\\[.+\\])?.*$/\\1\\3\\5/' ; }; f"
+	cam = commit -a -m
 	remotes = remote -v
 	st = status -s
 	ss = submodule status
