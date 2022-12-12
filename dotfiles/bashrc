@@ -1,3 +1,4 @@
+# shellcheck disable=SC2139
 
 if [[ $(/usr/bin/id -u) -eq 0 ]] && [ -d /root ] && [ -n "$(find /root -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
 	export HOME=/root
@@ -14,12 +15,27 @@ XDG_CONFIG_HOME="$WORKHOME/.config"
 export XDG_CONFIG_HOME
 
 _check_path_ownership() {
-	[ -d "$1" ] && [ -n "$(find "$1" -user "$2" -print -prune -o -prune 2>/dev/null)" ]
+	if [ -d "$1" ]; then
+		if [ -n "$(find "$1" -user "$2" -print -prune -o -prune 2>/dev/null)" ]; then
+			true
+		else
+			# shellcheck disable=SC2012
+			PATHOWNER="$(ls -ld "$1" | awk '{print $3}')"
+			echo "WARNING: $1 exists and is owned by $PATHOWNER; we want it to be owned by $2 (and you are $(whoami) / $(id -u))"
+			false
+		fi
+	else
+		false
+	fi
 }
 
 ORIG_PATH=$PATH
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R7/bin:/usr/X11R6/bin
-PATH=/usr/local/bin:/usr/local/sbin:${PATH}
+
+# old-school /usr/local (non-homebrew)
+if _check_path_ownership "/usr/local/bin" root ; then
+	PATH=/usr/local/bin:/usr/local/sbin:${PATH}
+fi
 # snap packages
 if _check_path_ownership /snap/bin root ; then
 	PATH=/snap/bin:${PATH}
@@ -36,19 +52,41 @@ fi
 if _check_path_ownership "$WORKHOME/pkg/bin" "$(id -u)" ; then
 	PATH=$WORKHOME/pkg/bin:$WORKHOME/pkg/sbin:${PATH}
 fi
-# user-specific homebrew
-if _check_path_ownership "/opt/homebrew/bin" "$(id -u)" ; then
-	PATH=/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}
+
+brewuser() {
+	BREWROOT="$1"
+	# shellcheck disable=SC2012
+	BREWOWNER="$(ls -ld "$BREWROOT/bin/brew" | awk '{print $3}')"
+	echo "WARNING: brew is owned by '$BREWOWNER'; setting up brew sudo alias for $BREWROOT/bin" >&2
+	PATH=$BREWROOT/bin:$BREWROOT/sbin:${PATH}
+	alias brew="sudo -Hu '$BREWOWNER' $BREWROOT/bin/brew"
+}
+if _check_path_ownership "/opt/homebrew/bin/brew" "$(id -u)" ; then
+	# ARM homebrew, current user
+	eval "$(/opt/homebrew/bin/brew shellenv)"
+elif _check_path_ownership "/usr/local/bin/brew" "$(id -u)" ; then
+	# Intel homebrew, current user
+	eval "$(/usr/local/bin/brew shellenv)"
+elif command -v brew >/dev/null ; then
+	# who knows?
+	echo "WARNING: brew is installed somewhere unexpected ($(command -v brew)); not setting it up" >&2
+elif [ -x /opt/homebrew/bin/brew ]; then
+	# ARM homebrew, some other user
+	brewuser '/opt/homebrew'
+elif [ -x /usr/local/bin/brew ]; then
+	# Intel homebrew, some other user
+	brewuser '/usr/local'
 fi
+
 if command -v pyenv >/dev/null ; then
 	eval "$(pyenv init --path)"
 fi
 if uname | grep -E ^MINGW > /dev/null ; then
 	PATH=${PATH}:$ORIG_PATH
 fi
+# both WORKHOME and HOME, in case they are different (in which case we want both)
 PATH=$WORKHOME/bin:$HOME/bin:${PATH}
 export PATH
-#export MANPATH
 
 VIMINIT="source $WORKHOME/.vimrc"
 export VIMINIT
@@ -84,8 +122,6 @@ alias cdp=". $WORKHOME/bin/cdp"
 
 # http://www.shellperson.net/using-sudo-with-an-alias/   (fixes "sudo vi <whatever>" not using vim)
 alias sudo='sudo '
-
-alias findpid="ps axww -o pid,user,%cpu,%mem,start,time,command | selecta | sed 's/^ *//' | cut -f1 -d' '"
 
 alias notify='tput bel'
 
@@ -143,10 +179,9 @@ fi
 # see https://github.com/rupa/z
 ZPATH=$WORKHOME/src/z/z.sh
 if [ -e $ZPATH ]; then
+	# shellcheck disable=SC1090
 	. $ZPATH
 fi
-
-alias gitjk="history 10 | tail -r | gitjk_cmd"
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
@@ -193,4 +228,13 @@ _dropboxComplete() {
 }
 complete -o bashdefault -o default -o filenames -F _dropboxComplete dropbox
 
+warn_if_missing() {
+	which "$1" >/dev/null || echo "$1 is not installed" >&2
+}
+
+if [ -z "$DISABLE_MISSING_TOOLS_WARNINGS" ]; then
+	for tool in ag fd starship ; do
+		warn_if_missing $tool
+	done
+fi
 
