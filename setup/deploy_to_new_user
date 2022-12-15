@@ -120,6 +120,13 @@ do_special_dotfiles() {
 	link_file "$SPECIALS/$nodotfile" "$nodotfile" >/dev/null
 	cd - >/dev/null
 
+	# htoprc
+	nodotfile="htoprc"
+	clear_file "$configdir/htop/$nodotfile"
+	cd "$configdir/htop"
+	link_file "$SPECIALS/$nodotfile" "$nodotfile" >/dev/null
+	cd - >/dev/null
+
 	# gitconfig
 	nodotfile="gitconfig"
 	dotfile=".$nodotfile"
