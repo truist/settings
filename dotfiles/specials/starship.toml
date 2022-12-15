@@ -68,6 +68,9 @@ symbol = "go "
 format = '\[[$symbol$branch]($style)\]'
 symbol = "hg "
 
+[hostname]
+format = '@[$hostname]($style)\] '
+
 [java]
 format = '\[[$symbol($version)]($style)\]'
 symbol = "java "
@@ -126,6 +129,5 @@ format = '\[[$symbol$workspace]($style)\]'
 format = '\[[$time]($style)\]'
 
 [username]
-format = '\[[$user]($style)\]'
-
+format = '\[[$user]($style)'
 
