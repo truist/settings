@@ -89,7 +89,7 @@ set +e
 				;;
 			server)
 				echo "Listening on port $PORT"
-				$NC -l $PORT
+				$NC -l -p $PORT
 				;;
 			client)
 				echo "Contacting $HOST on $PORT"

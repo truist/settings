@@ -318,7 +318,7 @@ if [ -z "$DISABLE_MISSING_TOOLS_WARNINGS" ]; then
 	done
 fi
 
-
+export LC_ALL=en_US.UTF-8
 
 # script profiling
 # set +x
