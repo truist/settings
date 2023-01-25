@@ -49,6 +49,7 @@ main() {
 		echo "OSX configuration..."
 		cd "$REALHOME"
 		"$SETUPFILES/configure_osx"
+		echo "Reminder to install homebrew, then 'brew bundle --file $SETUPFILES/Brewfile'"
 	fi
 
 	mkdir -p "$WORKHOME/src"
