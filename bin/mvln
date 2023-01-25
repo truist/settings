@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [[ $# -ne 2 ]]; then
+	echo "args: <file> <destdir>" >&2
+	exit 1
+fi
+if [[ ! -f "$1" ]] || [[ -h "$1" ]]; then
+	echo "error: $1 must be a file (not a symlink)" >&2
+	exit 2
+fi
+if [[ ! -f "$1" ]] || [[ -h "$1" ]] || [[ ! -d "$2" ]]; then
+	echo "error: $2 must be a directory" >&2
+	exit 3
+fi
+
+FILE="$(basename "$1")"
+if [[ ! -f "$FILE" ]]; then
+	echo "you must run this command from the directory $1 is in" >&2
+	exit 4
+fi
+
+# shellcheck disable=SC2001
+DESTDIR="$(echo "$2" | sed 's:/*$::')"  # strip trailing slash, if any
+
+mv "$FILE" "$DESTDIR/"
+
+ln -s "$DESTDIR/$FILE" "$FILE"
+
