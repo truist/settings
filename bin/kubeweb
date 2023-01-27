@@ -9,9 +9,7 @@ if [[ $# -ne 1 ]]; then
 	exit 1
 fi
 
-kubectl config use-context "$1"
-
-kubectl --namespace kubernetes-dashboard create token admin-user --duration=24h | pbcopy
+kubectl --context $1 --namespace kubernetes-dashboard create token admin-user --duration=24h | pbcopy
 
 (
 	sleep 1
