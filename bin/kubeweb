@@ -9,14 +9,14 @@ if [[ $# -ne 1 ]]; then
 	exit 1
 fi
 
-kubectl config use-context "$1"
+KCONTEXT="$1"
 
-kubectl --namespace kubernetes-dashboard create token admin-user --duration=24h | pbcopy
+kubectl --context "$KCONTEXT" --namespace kubernetes-dashboard create token admin-user --duration=24h | pbcopy
 
 (
 	sleep 1
 	open 'http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login'
 ) &
 
-kubectl proxy
+kubectl --context "$KCONTEXT" proxy
 
