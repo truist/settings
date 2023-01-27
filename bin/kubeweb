@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [[ $# -ne 1 ]]; then
+	echo "args: <environment>" >&2
+	echo "available environments:" >&2
+	kubectl config get-contexts -o name >&2
+	exit 1
+fi
+
+kubectl config use-context "$1"
+
+kubectl --namespace kubernetes-dashboard create token admin-user --duration=24h | pbcopy
+
+(
+	sleep 1
+	open 'http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login'
+) &
+
+kubectl proxy
+
