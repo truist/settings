@@ -79,6 +79,10 @@ fi
 if command -v pyenv >/dev/null ; then
 	eval "$(pyenv init --path)"
 fi
+if _check_path_ownership "$WORKHOME/.cargo/bin" "$(id -u)" ; then
+	PATH=$WORKHOME/.cargo/bin:${PATH}
+fi
+
 if uname | grep -E ^MINGW > /dev/null ; then
 	PATH=${PATH}:$ORIG_PATH
 fi
