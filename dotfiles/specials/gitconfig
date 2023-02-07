@@ -118,3 +118,11 @@
 [advice]
 	pushNonFFCurrent = false
 
+[init]
+	defaultBranch = main
+
+[notes]
+	displayRef = refs/notes/*
+[remote "origin"]
+	fetch = +refs/notes/*:refs/notes/*
+
