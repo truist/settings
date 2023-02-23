@@ -123,8 +123,10 @@ do_special_dotfiles() {
 
 	# htoprc
 	nodotfile="htoprc"
-	clear_file "$configdir/htop/$nodotfile"
-	cd "$configdir/htop"
+	htopdir="$configdir/htop"
+	mkdir -p "$htopdir"
+	clear_file "$htopdir/$nodotfile"
+	cd "$htopdir"
 	link_file "$SPECIALS/$nodotfile" "$nodotfile" >/dev/null
 	cd - >/dev/null
 
