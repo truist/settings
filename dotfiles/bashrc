@@ -154,6 +154,17 @@ else
 	export PS1="\[\e[0;32m\][\u@\h \W]$ \[\e[m\]"
 fi
 
+if type brew &>/dev/null ; then
+	HOMEBREW_PREFIX="$(brew --prefix)"
+	if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
+		source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+	else
+		for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/"*; do
+			[[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+		done
+	fi
+fi
+
 GIT_CONFIG_GLOBAL="$WORKHOME/.gitconfig"
 export GIT_CONFIG_GLOBAL
 if [ -f "$WORKHOME/.git-completion.bash" ]; then
@@ -231,7 +242,7 @@ _dropboxComplete() {
 complete -o bashdefault -o default -o filenames -F _dropboxComplete dropbox
 
 warn_if_missing() {
-	which "$1" >/dev/null || echo "$1 is not installed" >&2
+	which "$1" >/dev/null 2>&1 || echo "$1 is not installed" >&2
 }
 
 if [ -z "$DISABLE_MISSING_TOOLS_WARNINGS" ]; then

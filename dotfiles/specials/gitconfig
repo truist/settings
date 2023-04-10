@@ -23,7 +23,7 @@
 	wshow = show --color-words
 
 	# workspace management
-	cleanall = clean -d -x -f  # careful with this one!
+	cleanall = clean -d -x -f -f  # careful with this one!  # two -f to make it delete unexpected nested git repos
 	ignored = status --ignored -s
 	undo-commit = reset --soft HEAD^
 	unedit = checkout HEAD --

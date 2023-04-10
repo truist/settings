@@ -128,6 +128,7 @@ autocmd BufRead,BufNewFile *.t setfiletype perl
 autocmd BufRead,BufNewFile *.mdwn setfiletype ikiwiki
 autocmd BufRead,BufNewFile *.md setfiletype markdown
 autocmd BufRead,BufNewFile *.json setfiletype javascript syntax=javascript
+autocmd BufRead,BufNewFile Jenkinsfile* setfiletype groovy
 
 " defaults
 autocmd BufRead,BufNewFile * setlocal tabstop=4 shiftwidth=4 softtabstop=4
@@ -137,7 +138,7 @@ autocmd FileType text setlocal wrap spell spellcapcheck=
 autocmd FileType javascript setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd FileType perl setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
-autocmd FileType groovy setlocal expandtab
+autocmd FileType groovy setlocal noexpandtab
 autocmd FileType mkd setlocal expandtab spell
 autocmd FileType markdown setlocal expandtab spell
 autocmd FileType ikiwiki setlocal expandtab spell
@@ -235,7 +236,7 @@ let g:ale_linters = {
 \   'php': ['php'],
 \   'powershell': ['powershell'],
 \   'sh': ['shellcheck'],
-\   'python': ['pylint', 'flake8'],
+\   'python': ['pylint'],
 \}
 let g:ale_fixers = {'javascript': ['standard']}
 nmap <silent> [l <Plug>(ale_previous_wrap)
@@ -257,6 +258,13 @@ let g:show_spaces_that_precede_tabs=1
 
 " lexima.vim
 let g:lexima_enable_basic_rules = 0
+"
+" vim-powered terminal in split window
+map <Leader>t :below term<cr>
+tmap <Leader>t <c-w>:below term<cr>
+" vim-powered terminal in new tab
+map <Leader>T :tab term<cr>
+tmap <Leader>T <c-w>:tab term<cr>
 
 " make the tmux status line show the currently-edited file
 if &term == "screen" || &term == "screen-256color"
