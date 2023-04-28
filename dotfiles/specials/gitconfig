@@ -33,16 +33,16 @@
 	# history examination
 	blamelines = "!f() { git log -L \"$2,$3:./$GIT_PREFIX/$1\" HEAD ; }; f"  # pass it three args: filename, starting line number, ending line number
 	contributors = shortlog --summary --numbered
-	#graph  = log --oneline --graph --decorate --color
 	graph = log --color --graph --date=short --pretty='format:%C(red)%h %C(yellow)%d%C(reset) %<(70,trunc)%s %C(green)%an, %ad%C(reset)'
 	graphm = log --color --graph --date=short --pretty='format:%C(red)%h %C(yellow)%d%C(reset) %s  %C(green)%an, %ad%C(reset)%n%b'
+	graphs  = log --oneline --graph --decorate --color
 	search = "!f() { git log -p -G\"$1\" -i ; }; f"  # search the commit history for changes matching the search term
 
 	# rare but handy
 	branch-name = !git symbolic-ref --short HEAD
-	branch-point = !bash -c 'diff --old-line-format= --new-line-format= <(git rev-list --first-parent \"${1:-master}\") <(git rev-list --first-parent \"${2:-HEAD}\") | head -1' -		# from http://stackoverflow.com/questions/1527234/finding-a-branch-point-with-git
-	branch-point-graph = !branch-point  # depends in a shell script in bin/
-	branch-point-branches = !bash -c 'git branch --contains $(git branch-point)'  # all the branches that contain the branch-point commit
+	branch-point = !bash -c 'git log -1 --pretty=format:%h $(git rev-parse $(git rev-list --exclude-first-parent-only ^"${1:-master}" "${2:-HEAD}" | tail -1)^ )' -    # https://stackoverflow.com/a/71193866/1132502
+	branch-point-graph = !bash -c 'git graph "${1:-master}" "${2:-HEAD}" | less -R +/$(git branch-point "$1" "$2")' -
+	branch-point-branches = !bash -c 'git branch --contains $(git branch-point "$1" "$2")' -  # all the branches that contain the branch-point commit
 	camend = commit --amend --no-edit  # for when you haven't set your username and email yet
 	conflicts = diff --name-only --diff-filter=U --relative
 	delete-remote-branch = push -d
