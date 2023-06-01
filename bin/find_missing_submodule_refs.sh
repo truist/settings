@@ -2,7 +2,7 @@
 
 set -e
 
-if [ -n "$(git status --porcelain)" ]; then 
+if [ -n "$(git status --porcelain)" ]; then
 	echo "Please clean your working directory first" >&2
 	git status
 	exit 1

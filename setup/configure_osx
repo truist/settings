@@ -89,6 +89,9 @@ defaults write com.google.Chrome.canary AppleEnableSwipeNavigateWithScrolls -boo
 defaults write com.google.Chrome DisablePrintPreview -bool true
 defaults write com.google.Chrome.canary DisablePrintPreview -bool true
 
+# Disable previews in small icons
+# https://mastodon.social/@chockenberry/110386586751278042
+defaults write com.apple.finder QLInlinePreviewMinimumSupportedSize -int 512
 
 ## DOCK STUFF
 

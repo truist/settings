@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+PULL=0
+if [[ $# -gt 0 ]]; then
+	if [[ "$1" == "--pull" ]]; then
+		PULL=1
+	else
+		echo "args: [--pull]" >&2
+		exit 1
+	fi
+fi
+
+run_command() {
+	errout=$("$@" 2>&1 >/dev/null)
+	result=$?
+	if [[ $result -gt 0 ]]; then
+		echo >&2
+		echo "$PWD" >&2
+		echo "Error: $result:" >&2
+		echo "$errout" >&2
+		echo >&2
+		return $result
+	fi
+
+	return 0
+}
+
+process_dir() {
+	startdir="$PWD"
+
+	curdir="$1"
+	cd "$curdir" || (echo "Error CDing to $curdir" && exit 1)
+	echo -n '.'
+
+	if [[ -d .git ]]; then
+		run_command git fetch --tags
+		result=$?
+		if [[ $PULL -gt 0 ]] && [[ $result -eq 0 ]]; then
+			run_command git pull
+		fi
+	else
+		for content in *; do
+			if [ -d "$content" ]; then
+				# for some reason I have to do this in a subshell or all my local variables get messed up
+				( process_dir "$content" )
+			fi
+		done
+	fi
+
+	cd "$startdir" || (echo "Error CDing to $startdir" && exit 1)
+}
+
+process_dir "$PWD"
+
+echo
+echo "Done!"
