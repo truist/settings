@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+# set -e
 
 if [ -n "$(git status --porcelain)" ]; then
 	echo "Please clean your working directory first" >&2
@@ -23,13 +23,13 @@ cleanup() {
 trap cleanup 2
 
 for branch in $(git branch -a --sort=-committerdate | grep remotes | grep -Eo 'origin\S*') ; do
-	git checkout -q "$branch" >/dev/null 2>&1 || true
-	RESULT="$(git submodule status --cached 2>&1 | grep -E '\(\)$')" || true
-	if [ -n "$RESULT" ]; then
-		echo ""
-		echo "$branch: $RESULT"
-	else
+	git checkout -f -q "$branch" >/dev/null 2>&1
+	if git submodule update >/dev/null 2>&1 ; then
 		echo -n '.'
+	else
+		echo ""
+		echo "$branch:"
+		git submodule status --cached | grep -E '\(\)'
 	fi
 done
 

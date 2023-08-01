@@ -4,13 +4,13 @@ PULL=0
 if [[ $# -gt 0 ]]; then
 	if [[ "$1" == "--pull" ]]; then
 		PULL=1
-	else
-		echo "args: [--pull]" >&2
-		exit 1
+		shift
 	fi
 fi
+EXTRAS=("$@")
 
 run_command() {
+	# echo "running command: $*"
 	errout=$("$@" 2>&1 >/dev/null)
 	result=$?
 	if [[ $result -gt 0 ]]; then
@@ -33,7 +33,7 @@ process_dir() {
 	echo -n '.'
 
 	if [[ -d .git ]]; then
-		run_command git fetch --tags
+		run_command git fetch --tags "${EXTRAS[@]}"
 		result=$?
 		if [[ $PULL -gt 0 ]] && [[ $result -eq 0 ]]; then
 			run_command git pull
