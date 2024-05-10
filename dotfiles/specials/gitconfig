@@ -52,6 +52,8 @@
 	missing-submodule-refs = "!find_missing_submodule_refs.sh"
 	move-local-branch-pointer = "!f() { git update-ref -m \"Reset $1 to $2\" refs/heads/$1 $2; }; f"
 	prune-stale-branches = "!f() { git remote prune origin ; git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d $@ ; }; f"  # prunes local branches that have disappeared from the remote
+	root-commits = fsck --root
+	# root-commits = rev-list --max-parents=0 HEAD
 	set-upstream = !git branch --set-upstream-to=origin/`git branch-name`
 	stashpull = "!f() { git stash && git pull && git stash pop ; }; f"
 	trackedignored = ls-files -i -c --exclude-standard	 # find files that are .gitignore'd but are already tracked
@@ -63,6 +65,9 @@
 	ui = true
 [color "diff"]
 	meta = yellow
+
+[commit]
+	verbose = true
 
 [core]
 # uncomment these on windows
@@ -83,11 +88,11 @@
 #	helper = manager
 
 [fetch]
-	# prune = true
-	# recurseSubmodules = on-demand
+	prune = true
+	recurseSubmodules = on-demand
 
 [log]
-	date = short
+	date = iso
 
 [merge]
 	# Include summaries of merged commits in newly created merge commit messages
@@ -105,6 +110,7 @@
 	enabled = false
 
 [diff]
+	algorithm = histogram
 	submodule = log
 
 [status]
@@ -125,4 +131,39 @@
 	displayRef = refs/notes/*
 [remote "origin"]
 	fetch = +refs/notes/*:refs/notes/*
+
+
+
+### 'delta' diff tool
+[core]
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[include]
+	path = /Users/narthur/src/delta/themes.gitconfig
+
+[delta]
+	navigate = true
+	features = dark
+	line-numbers = true
+	side-by-side = false
+
+[merge]
+	conflictstyle = diff3
+
+[diff]
+	colorMoved = default
+
+[delta "dark"]
+	features = chameleon hunk-header
+
+[delta "light"]
+	features = hoopoe hunk-header
+
+[delta "hunk-header"]
+	hunk-header-style = syntax
+
+
 

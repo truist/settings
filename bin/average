@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+awk '{s+=$1}END{print s/NR}' RS=" " "$*"

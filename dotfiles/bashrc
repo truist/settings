@@ -77,7 +77,7 @@ elif [ -x /usr/local/bin/brew ]; then
 fi
 
 if command -v pyenv >/dev/null ; then
-	eval "$(pyenv init --path)"
+	eval "$(pyenv init -)"
 fi
 if _check_path_ownership "$WORKHOME/.cargo/bin" "$(id -u)" ; then
 	PATH=$WORKHOME/.cargo/bin:${PATH}
@@ -101,6 +101,7 @@ alias ls='ls -F'
 
 export PAGER=less
 alias less='less -R -X'
+# alias ag="ag --path-to-ignore '$WORKHOME/.agignore' --pager 'less -R -X' --follow"
 alias ag="ag --path-to-ignore '$WORKHOME/.agignore' --pager 'less -R -X'"
 alias fd='fd -c never'
 alias pylint="pylint --rcfile '$WORKHOME/.pylintrc'"
@@ -114,6 +115,16 @@ agvim() {
 fdvim() {
 	fd -0 "$@" | xargs -0o vim
 }
+dark() {
+	osascript -e 'tell application "Terminal"' -e 'set current settings of selected tab of front window to settings set "Pro"' -e 'end tell'
+	export DELTA_FEATURES=dark
+}
+export -f dark
+light() {
+	osascript -e 'tell application "Terminal"' -e 'set current settings of selected tab of front window to settings set "Novel"' -e 'end tell'
+	export DELTA_FEATURES=light
+}
+export -f light
 
 alias ..="cd .."
 alias ...="cd ../.."

@@ -25,5 +25,6 @@ fi
 
 ssh-copy-id -i "$PUBLIC_KEY_FILE" "$REMOTE"
 
+echo "Testing the new setup..."
 ssh "$REMOTE"
 
