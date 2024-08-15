@@ -79,6 +79,10 @@ fi
 if command -v pyenv >/dev/null ; then
 	eval "$(pyenv init -)"
 fi
+if pyenv virtualenvs >/dev/null ; then
+	eval "$(pyenv virtualenv-init -)"
+fi
+
 if _check_path_ownership "$WORKHOME/.cargo/bin" "$(id -u)" ; then
 	PATH=$WORKHOME/.cargo/bin:${PATH}
 fi
@@ -262,3 +266,6 @@ if [ -z "$DISABLE_MISSING_TOOLS_WARNINGS" ]; then
 	done
 fi
 
+
+# Created by `pipx` on 2024-07-23 21:20:31
+export PATH="$PATH:/Users/narthur/.local/bin"
