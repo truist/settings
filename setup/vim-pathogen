@@ -64,5 +64,5 @@ clone_or_update 'weynhamz' 'vim-plugin-minibufexpl'
 clone_or_update 'w0rp' 'ale'
 
 # truist
-clone_or_update 'truist' 'vim-open-url'
+#clone_or_update 'truist' 'vim-open-url'
 

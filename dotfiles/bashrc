@@ -81,6 +81,12 @@ if command -v pyenv >/dev/null ; then
 fi
 if pyenv virtualenvs >/dev/null ; then
 	eval "$(pyenv virtualenv-init -)"
+
+	function pylint() {
+		PYENV_VERSION=global-pylint command pylint "$@"
+	}
+else
+	alias pylint="pylint --rcfile '$WORKHOME/.pylintrc'"
 fi
 
 if _check_path_ownership "$WORKHOME/.cargo/bin" "$(id -u)" ; then
@@ -108,7 +114,6 @@ alias less='less -R -X'
 # alias ag="ag --path-to-ignore '$WORKHOME/.agignore' --pager 'less -R -X' --follow"
 alias ag="ag --path-to-ignore '$WORKHOME/.agignore' --pager 'less -R -X'"
 alias fd='fd -c never'
-alias pylint="pylint --rcfile '$WORKHOME/.pylintrc'"
 
 vimpipe() {
 	xargs -o vim
@@ -136,6 +141,9 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
 alias cdp=". $WORKHOME/bin/cdp"
+if [[ -x "$WORKHOME/bin/enable_signing" ]]; then
+	alias enable_signing=". $WORKHOME/bin/enable_signing"
+fi
 
 # http://www.shellperson.net/using-sudo-with-an-alias/   (fixes "sudo vi <whatever>" not using vim)
 alias sudo='sudo '

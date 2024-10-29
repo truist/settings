@@ -179,27 +179,33 @@ set clipboard=unnamed
 let mapleader = ","
 
 " shortcut to switch background setting
-map <Leader>bg :let &background = ( &background == "dark"? "light" : "dark" )<CR> )
+nnoremap <Leader>bg :let &background = ( &background == "dark"? "light" : "dark" )<CR> )
 " shortcut to switch to light mode
-map <Leader>l :execute '!light' \| :set bg=light \| set colorcolumn= \| highlight clear SignColumn \| set wrap \| AirlineTheme papercolor<CR>
+nnoremap <Leader>l :execute '!light' \| :set bg=light \| set colorcolumn= \| highlight clear SignColumn \| set wrap \| AirlineTheme papercolor<CR>
 " and back to dark mode
-map <Leader>d :execute '!dark' \| :set bg=dark \| set colorcolumn= \| highlight clear SignColumn \| set nowrap \| AirlineTheme dark<CR>
+nnoremap <Leader>d :execute '!dark' \| :set bg=dark \| set colorcolumn= \| highlight clear SignColumn \| set nowrap \| AirlineTheme dark<CR>
 
 
 " shortcuts to comment/uncomment lines
 " (also try `gcl`, from a plugin)
-map <Leader># :s/^/#<CR><CR>
-map <Leader>## :s/^#<CR><CR>
+nnoremap <Leader># :s/^/#<CR><CR>
+nnoremap <Leader>## :s/^#<CR><CR>
 
 " shortcuts to bullet/unbullet (markdown) lines
-map <Leader>* :s/^\s*/* <CR><CR>
-map <Leader>** :s/^* <CR><CR>
+nnoremap <Leader>* :s/^\s*/* <CR><CR>
+nnoremap <Leader>** :s/^* <CR><CR>
 
 " shortcut to toggle wrapping
-map <Leader>w :set wrap!<cr>
+nnoremap <Leader>w :set wrap!<cr>
 
 " shortcut to toggle spell check
-map <Leader>s :set spell!<cr>
+nnoremap <Leader>s :set spell!<cr>
+
+" Scrum Mate card lookup
+nnoremap <leader>o :execute '!open http://slacklist.paceap.com:8080/hubot/scrummate/' . expand('<cWORD>')<CR><CR>
+
+" abandon vim-open-url in favor of 'gx'
+noremap <Leader>u :echo "Try 'gx' instead"<CR>
 
 " table-mode
 let g:table_mode_corner='|'
@@ -228,8 +234,18 @@ let g:SuperTabMidWordCompletion = "0"
 " minibufexplorer
 map <Leader>b :MBEFocus<cr>
 
+" Automatically set python3 interpreter to the active pyenv virtualenv
+function! SetPythonHostProg()
+  let pyenv_python = system('pyenv which python3')
+  if v:shell_error == 0
+    let g:python3_host_prog = trim(pyenv_python)
+  endif
+endfunction
+autocmd BufEnter * call SetPythonHostProg()
+
 " linters
 let g:ale_linters_explicit = 1
+" let g:ale_python_pylint_executable = 'pylint'
 let g:ale_linters = {
 \   'javascript': ['standard'],
 \   'perl': ['perl'],

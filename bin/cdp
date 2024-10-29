@@ -7,9 +7,9 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
 fi
 
 if git rev-parse --show-toplevel >/dev/null ; then
-	cd "`git rev-parse --show-toplevel`"
-	if [ ! -z "$1" ]; then
-		cd "$@"
+	cd "$(git rev-parse --show-toplevel)" || false
+	if [ -n "$1" ]; then
+		cd "$@" || false
 	fi
 else
 	echo "You must be within a git work tree" >&2
