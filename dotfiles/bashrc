@@ -1,5 +1,12 @@
 # shellcheck disable=SC2139
 
+# SCRIPT PROFILING
+# PS4='+ $(/opt/homebrew/bin/gdate "+%s.%N")\011 '
+# exec 3>&2 2>/tmp/bash_startup_time.$$.log
+# set -x
+# FIND THE SLOW-RUNNING STEPS WITH THIS:
+#   cat /tmp/bash_startup_time.$$.log | grep '++' | awk 'NR==1 {prev=$2; print} NR>1 {diff=$2-prev; if (diff >= 0.1) print diff, $0; prev=$2}'
+
 if [[ $(/usr/bin/id -u) -eq 0 ]] && [ -d /root ] && [ -n "$(find /root -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
 	export HOME=/root
 elif [[ $(/usr/bin/id -u) -eq 0 ]] && [ -d /var/root ] && [ -n "$(find /var/root -user "root" -print -prune -o -prune 2>/dev/null)" ]; then
@@ -77,16 +84,53 @@ elif [ -x /usr/local/bin/brew ]; then
 fi
 
 if command -v pyenv >/dev/null ; then
-	eval "$(pyenv init -)"
-fi
-if pyenv virtualenvs >/dev/null ; then
-	eval "$(pyenv virtualenv-init -)"
+	eval "$(pyenv init - --no-rehash bash)"
+	if pyenv help | grep -q virtualenvs >/dev/null ; then
+		eval "$(pyenv virtualenv-init -)" # SLOW
 
-	function pylint() {
-		PYENV_VERSION=global-pylint command pylint "$@"
-	}
-else
-	alias pylint="pylint --rcfile '$WORKHOME/.pylintrc'"
+		# from https://gist.github.com/nolar/ba60ad1c0df936d7b1cd1f708039f337
+		# This is a replacement hook for the pyenv-virtualenv, which triggers only on demand,
+		# and stays inactive on other cases -- to save the time on prompt generation.
+		__pyenv_local_file=.python-version
+		__pyenv_mtime_file=/tmp/pyenv.mtime
+		__pyenv_last_cwd=
+		_pyenv_virtualenv_hook_cached ()
+		{
+			local ret=$?;
+			if [[
+				( "$__pyenv_last_cwd" != "$PWD" ) ||
+				( ! -e "$__pyenv_local_file" && -e "$__pyenv_mtime_file" ) ||
+				( -e "$__pyenv_local_file" && ! -e "$__pyenv_mtime_file" ) ||
+				( "$__pyenv_local_file" -nt "$__pyenv_mtime_file" )
+			]] ; then
+
+				# Call the actual hook.
+				if [[ ( -n "$__pyenv_last_cwd" ) || -e "$__pyenv_local_file" ]]; then
+					_pyenv_virtualenv_hook "$@"
+				fi
+
+				# Store the new stage as the last known, for future checks.
+				__pyenv_last_cwd="$PWD"
+				if [[ -e "$__pyenv_local_file" ]] ; then
+					touch -r "$__pyenv_local_file" "$__pyenv_mtime_file"
+				else
+					rm -f "$__pyenv_mtime_file"
+				fi
+			fi
+			return $ret
+		}
+		PROMPT_COMMAND="${PROMPT_COMMAND//_pyenv_virtualenv_hook;/_pyenv_virtualenv_hook_cached;}"
+
+		# Make it clear when the virtualenv is changed, and when it is cached.
+		# export PYENV_VIRTUALENV_VERBOSE_ACTIVATE=yes
+
+
+		function pylint() {
+			PYENV_VERSION=global-pylint command pylint "$@"
+		}
+	else
+		alias pylint="pylint --rcfile '$WORKHOME/.pylintrc'"
+	fi
 fi
 
 if _check_path_ownership "$WORKHOME/.cargo/bin" "$(id -u)" ; then
@@ -277,3 +321,10 @@ fi
 
 # Created by `pipx` on 2024-07-23 21:20:31
 export PATH="$PATH:/Users/narthur/.local/bin"
+
+
+# script profiling
+# set +x
+# exec 2>&3 3>&-
+# unset PS4
+

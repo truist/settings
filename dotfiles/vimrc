@@ -226,6 +226,8 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#wordcount#enabled = 0
 let g:airline#extensions#branch#enabled = 0
 let g:airline#extensions#hunks#enabled = 0
+" fixes slowness while a search is active, in big files
+let g:airline#extensions#searchcount#enabled = 0
 
 " Supertab
 let g:SuperTabDefaultCompletionType = "context"
