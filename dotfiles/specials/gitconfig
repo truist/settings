@@ -73,6 +73,7 @@
 # uncomment these on windows
 #	autocrlf = true
 #	fscache = true
+#	symlinks = true
 	excludesfile = ~/.gitignore
 	longpaths = true
 	pager = less -i -S
