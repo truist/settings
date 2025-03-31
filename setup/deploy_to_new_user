@@ -136,7 +136,7 @@ do_special_dotfiles() {
 	clear_file "$dotfile"
 	cat << EOF > "$dotfile"
 [include]
-	path = $SPECIALS/$nodotfile
+	path = ${SPECIALS/#$HOME/~}/$nodotfile
 EOF
 
 	# .gitconfig for older git versions

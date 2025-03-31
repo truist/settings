@@ -156,7 +156,7 @@
 	diffFilter = delta --color-only
 
 [include]
-	path = /Users/narthur/src/delta/themes.gitconfig
+	path = ~/src/delta/themes.gitconfig
 
 [delta]
 	navigate = true
