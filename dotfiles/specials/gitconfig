@@ -59,6 +59,7 @@
 	trackedignored = ls-files -i -c --exclude-standard	 # find files that are .gitignore'd but are already tracked
 
 [branch]
+	# sort = -committerdate
 	#autosetuprebase = always
 
 [color]
@@ -90,6 +91,8 @@
 
 [fetch]
 	prune = true
+	# pruneTags = true
+	# all = true
 	recurseSubmodules = on-demand
 
 [log]
@@ -105,6 +108,8 @@
 
 [push]
 	default = current
+	autoSetupRemote = true
+	followTags = true
 
 # also see https://github.com/git/git/blob/master/contrib/rerere-train.sh
 [rerere]
@@ -112,6 +117,8 @@
 
 [diff]
 	algorithm = histogram
+	mnemonicPrefix = true
+	renames = true
 	submodule = log
 
 [status]
@@ -133,7 +140,13 @@
 [remote "origin"]
 	fetch = +refs/notes/*:refs/notes/*
 
+[help]
+	autocorrect = prompt
 
+[rebase]
+	# autoSquash = true
+	# autoStash = true
+	updateRefs = true
 
 ### 'delta' diff tool
 [core]
@@ -152,7 +165,7 @@
 	side-by-side = false
 
 [merge]
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 
 [diff]
 	colorMoved = default

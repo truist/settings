@@ -2,7 +2,7 @@
 init-hook='import sys; import site; sys.path.extend(site.getsitepackages())'
 
 [tool.pylint."messages control"]
-disable = raw-checker-failed, bad-inline-option, locally-disabled, file-ignored, suppressed-message, useless-suppression, deprecated-pragma, use-symbolic-message-instead, bad-indentation, invalid-name, trailing-whitespace, line-too-long, missing-function-docstring
+disable = raw-checker-failed, bad-inline-option, locally-disabled, file-ignored, suppressed-message, useless-suppression, deprecated-pragma, use-symbolic-message-instead, bad-indentation, invalid-name, trailing-whitespace, line-too-long, missing-function-docstring, missing-module-docstring
 
 additional-builtins=_
 
