@@ -229,6 +229,10 @@ let g:airline#extensions#hunks#enabled = 0
 " fixes slowness while a search is active, in big files
 let g:airline#extensions#searchcount#enabled = 0
 
+" fix line-length display (`col(".")`)
+let g:airline_section_z = '%p%%%#__accent_bold#%{g:airline_symbols.linenr}%l%#__restore__#%#__accent_bold#/%L%{g:airline_symbols.maxlinenr}%#__restore__#%#__accent_bold#%{g:airline_symbols.colnr}%{col(".")}%#__restore__#'
+let g:airline_section_z = '%l/%L:%{col(".")}'
+
 " Supertab
 let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabMidWordCompletion = "0"
@@ -238,10 +242,10 @@ map <Leader>b :MBEFocus<cr>
 
 " Automatically set python3 interpreter to the active pyenv virtualenv
 function! SetPythonHostProg()
-  let pyenv_python = system('pyenv which python3')
-  if v:shell_error == 0
-    let g:python3_host_prog = trim(pyenv_python)
-  endif
+	let pyenv_python = system('pyenv which python3')
+	if v:shell_error == 0
+		let g:python3_host_prog = trim(pyenv_python)
+	endif
 endfunction
 autocmd BufEnter * call SetPythonHostProg()
 

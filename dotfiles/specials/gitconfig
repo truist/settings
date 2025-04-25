@@ -151,6 +151,8 @@
 ### 'delta' diff tool
 [core]
 	pager = delta
+	# for Windows
+	symlinks = true
 
 [interactive]
 	diffFilter = delta --color-only

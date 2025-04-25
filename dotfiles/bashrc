@@ -184,7 +184,7 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
-alias cdp=". $WORKHOME/bin/cdp"
+alias cdp=". '$WORKHOME/bin/cdp'"
 if [[ -x "$WORKHOME/bin/enable_signing" ]]; then
 	alias enable_signing=". '$WORKHOME/bin/enable_signing'"
 fi
