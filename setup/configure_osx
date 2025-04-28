@@ -2,6 +2,7 @@
 
 # based on https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 # and https://github.com/chaseadamsio/dotfiles/blob/762ec94e83c2e7c3fd4f976b62cfc77d32c98838/macos.bash
+# also see https://macos-defaults.com/
 
 
 # these seem to cause performance issues (high CPU usage in Terminal when holding Enter)
@@ -44,8 +45,14 @@ defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
+# Trackpad: three-finger drag
+defaults write com.apple.AppleMultitouchTrackpad "TrackpadThreeFingerDrag" -bool true
+
 # Enable “natural” (Lion-style) scrolling
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
+
+# Turn off the double-click-Fn to show the emoji picker
+defaults write com.apple.HIToolbox AppleFnUsageType -int "0"
 
 # Increase sound quality for Bluetooth headphones/headsets
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
