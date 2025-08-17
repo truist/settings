@@ -150,15 +150,15 @@
 
 ### 'delta' diff tool
 [core]
-	pager = delta
+	# pager = delta
 	# for Windows
 	symlinks = true
 
 [interactive]
-	diffFilter = delta --color-only
+	# diffFilter = delta --color-only
 
 [include]
-	path = ~/src/delta/themes.gitconfig
+	# path = ~/src/delta/themes.gitconfig
 
 [delta]
 	navigate = true
