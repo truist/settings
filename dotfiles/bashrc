@@ -325,3 +325,4 @@ export LC_ALL=en_US.UTF-8
 # exec 2>&3 3>&-
 # unset PS4
 
+. "$HOME/.cargo/env"

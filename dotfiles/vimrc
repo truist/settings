@@ -129,6 +129,7 @@ autocmd BufRead,BufNewFile *.mdwn setfiletype ikiwiki
 autocmd BufRead,BufNewFile *.md setfiletype markdown
 autocmd BufRead,BufNewFile *.json setfiletype javascript syntax=javascript
 autocmd BufRead,BufNewFile Jenkinsfile* setfiletype groovy
+autocmd BufRead,BufNewFile *.rs setfiletype rust
 
 " defaults
 autocmd BufRead,BufNewFile * setlocal tabstop=4 shiftwidth=4 softtabstop=4
@@ -240,7 +241,6 @@ let g:SuperTabMidWordCompletion = "0"
 " minibufexplorer
 map <Leader>b :MBEFocus<cr>
 
-" Automatically set python3 interpreter to the active pyenv virtualenv
 function! SetPythonHostProg()
 	let pyenv_python = system('pyenv which python3')
 	if v:shell_error == 0
@@ -257,12 +257,18 @@ let g:ale_linters = {
 \   'perl': ['perl'],
 \   'php': ['php'],
 \   'powershell': ['powershell'],
+\   'rust': ['analyzer'],
 \   'sh': ['shellcheck'],
 \   'python': ['pylint'],
 \}
 let g:ale_fixers = {'javascript': ['standard']}
 nmap <silent> [l <Plug>(ale_previous_wrap)
 nmap <silent> ]l <Plug>(ale_next_wrap)
+set completeopt=menu,menuone,preview,noselect,noinsert
+let g:ale_completion_enabled = 1
+nnoremap <C-LeftMouse> :ALEGoToDefinition<CR>
+
+let g:rustfmt_autosave = 1
 
 " editorconfig + fugitive
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
