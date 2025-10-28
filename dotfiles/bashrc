@@ -179,6 +179,11 @@ light() {
 	export DELTA_FEATURES=light
 }
 export -f light
+mkcd () {
+	mkdir -p "$1"
+	cd "$1"
+}
+export -f mkcd
 
 alias ..="cd .."
 alias ...="cd ../.."
@@ -298,16 +303,6 @@ if [ -d "$MEETDIR" ]; then
 	}
 	complete -o bashdefault -o default -o filenames -F _meetComplete meet
 fi
-
-_dropboxComplete() {
-	DROPBOXDIR="/Volumes/DropBoxes"
-	if [ ! -d "$DROPBOXDIR" ]; then
-		dropbox
-	fi
-	local files=("$DROPBOXDIR/$2"*)
-	[[ -e ${files[0]} ]] && COMPREPLY=( "${files[@]##*/}" )
-}
-complete -o bashdefault -o default -o filenames -F _dropboxComplete dropbox
 
 warn_if_missing() {
 	which "$1" >/dev/null 2>&1 || echo "$1 is not installed" >&2

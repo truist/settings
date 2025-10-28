@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -e
+set -u
+
+# from https://codeberg.org/EvanHahn/dotfiles/src/commit/843b9ee13d949d346a4a73ccee2a99351aed285b/home/bin/bin/running
+
+process_list="$(ps -eo 'pid command')"
+if [[ $# != 0 ]]; then
+  process_list="$(echo "$process_list" | grep -Fiw "$@")"
+fi
+
+echo "$process_list" |
+  grep -Fv "${BASH_SOURCE[0]}" |
+  grep -Fv grep |
+  GREP_COLORS='mt=00;35' grep -E --colour=auto '^\s*[[:digit:]]+'

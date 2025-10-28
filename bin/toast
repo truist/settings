@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+title="${1:-Notification}"
+description="${2:-$(date -u +"%Y-%m-%dT%H:%M:%SZ")}"
+
+osascript -l JavaScript <<EOF && exit 0
+var app = Application.currentApplication();
+app.includeStandardAdditions = true;
+app.displayNotification(${description@Q}, { withTitle: ${title@Q} });
+EOF
+
+echo "can't send notifications" >&2
+exit 1
