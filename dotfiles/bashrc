@@ -1,7 +1,8 @@
 # shellcheck disable=SC2139
 
 # SCRIPT PROFILING
-# PS4='+ $(/opt/homebrew/bin/gdate "+%s.%N")\011 '
+# ALSO UNCOMMENT THE BIT AT THE END OF THIS FILE
+# PS4='+ $(/usr/local/bin/gdate "+%s.%N")\011 '
 # exec 3>&2 2>/tmp/bash_startup_time.$$.log
 # set -x
 # FIND THE SLOW-RUNNING STEPS WITH THIS:
@@ -320,9 +321,8 @@ fi
 
 export LC_ALL=en_US.UTF-8
 
-# script profiling
+# SCRIPT PROFILING
 # set +x
 # exec 2>&3 3>&-
 # unset PS4
 
-. "$HOME/.cargo/env"

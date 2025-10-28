@@ -269,14 +269,18 @@ let g:ale_completion_enabled = 1
 nnoremap <C-LeftMouse> :ALEGoToDefinition<CR>
 
 let g:rustfmt_autosave = 1
+let g:ale_rust_analyzer_config = {
+\   'diagnostics': { 'disabled': ['inactive-code'] }
+\}
 
 " editorconfig + fugitive
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 " CtrlP
-let g:ctrlp_custom_ignore = { 'dir': '\v[\/](node_modules|playground|generated|client/build|thirdPartyLibs)$' }
-let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_custom_ignore = { 'dir': '\v[\/](node_modules|playground|generated|client/build|thirdPartyLibs|target)$' }
+let g:ctrlp_working_path_mode = 'rw'
 let g:ctrlp_max_files = 0
+" let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --cached --exclude-standard --others']
 
 " vim-better-whitespace
 let g:better_whitespace_ctermcolor='brown'
