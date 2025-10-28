@@ -1,7 +1,0 @@
-#!/bin/sh
-
-set -e
-
-echo "Use ,l instead, from within vim" >&2
-exit 1
-

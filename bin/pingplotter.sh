@@ -2,6 +2,11 @@
 
 set -e
 
+if ! command -v ts ; then
+	echo "You must install 'ts' from 'moreutils' to use this script" >&2
+	exit 1
+fi
+
 function testit {
 	while read LINE; do
 		echo "GOT IT: $LINE"

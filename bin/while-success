@@ -8,6 +8,6 @@ echo > /dev/null
 while [ "$?" -eq "0" ]; do
 	sleep 1
 	echo `date "+%FT%T"`
-    $*
+	$*
 done
 
