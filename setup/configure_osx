@@ -133,7 +133,8 @@ sudo nvram SystemAudioVolume=" "
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
 
 # Restart automatically if the computer freezes
-sudo systemsetup -setrestartfreeze on
+# This prints a spurious error, so we mute stderr
+sudo systemsetup -setrestartfreeze on 2>/dev/null
 
 # Trackpad: enable tap to click for the login screen
 sudo defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1

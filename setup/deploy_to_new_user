@@ -49,7 +49,15 @@ main() {
 		echo "OSX configuration..."
 		cd "$REALHOME"
 		"$SETUPFILES/configure_osx"
-		echo "Reminder to install homebrew, then 'brew bundle --file $SETUPFILES/Brewfile'"
+
+		echo "Installing brew..."
+		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+		echo "Installing standard apps..."
+		brew bundle --file "$SETUPFILES/Brewfile"
+
+		echo "Setting default shell to bash (via sudo)..."
+		sudo chsh -s /opt/homebrew/bin/bash narthur
 	fi
 
 	mkdir -p "$WORKHOME/src"
@@ -64,8 +72,8 @@ main() {
 		echo
 		echo "powerline fonts..."
 		git clone https://github.com/powerline/fonts
-		echo
-		echo "Reminder to install ~/src/fonts/SourceCodePro"
+		cd fonts
+		./install.sh
 	fi
 
 	if [ "$(vim --version | grep -c '+clipboard')" -ne 1 ]; then

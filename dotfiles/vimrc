@@ -116,12 +116,6 @@ set hidden
 highlight LineNr cterm=NONE ctermfg=Grey ctermbg=NONE
 highlight CursorLineNr cterm=NONE ctermfg=Yellow ctermbg=NONE
 
-" Don't mark URL-like things as spelling errors
-" From http://www.panozzaj.com/blog/2016/03/21/ignore-urls-and-acroynms-while-spell-checking-vim/
-" PUT THESE IN ~/.vim/after/syntax/{text,markdown}.vim
-" syn match UrlNoSpell '\w\+:\/\/[^[:space:]]\+' contains=@NoSpell
-" syn match AcronymNoSpell '\<\(\u\|\d\)\{3,}s\?\>' contains=@NoSpell
-
 " type identification help
 autocmd BufRead,BufNewFile *.t setfiletype perl
 " make this explicit so the markdown plugin doesn't take it
@@ -149,6 +143,15 @@ autocmd FileType cmake setlocal nospell
 " ctrl-f to take first suggested correction for last spelling error
 imap <c-f> <c-g>u<Esc>[s1z=`]a<c-g>u
 nmap <c-f> [s1z=<c-o>
+
+if has('syntax') && exists('+spell')
+  augroup nospell_urls
+    autocmd!
+	" Don't mark URL-like things as spelling errors
+	autocmd Syntax * syn match UrlNoSpell '\w\+:\/\/[^[:space:]]\+' contains=@NoSpell
+	autocmd Syntax * syn match AcronymNoSpell '\<\(\u\|\d\)\{3,}s\?\>' contains=@NoSpell
+  augroup END
+endif
 
 " highlight text past 100 columns, for these types
 "autocmd BufWinEnter *.t let w:m2=matchadd('Search', '\%>100v.\+', -1)
@@ -311,7 +314,6 @@ autocmd BufEnter * let &titlestring = "vim " . expand("%:h") . "/" . expand("%:t
 if &term == "screen-256color"
 	set t_kb=
 endif
-
 
 
 " these aren't currently safe (on VIM <8.2.something)
