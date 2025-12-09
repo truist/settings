@@ -13,13 +13,11 @@ defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 
-# show all filename extension in Finder
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-
 defaults write NSGlobalDomain CGDisableCursorLocationMagnification -bool YES
 
 # make SMB less-slow
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
 # Expand save panel by default
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
@@ -48,6 +46,10 @@ defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 # Trackpad: three-finger drag
 defaults write com.apple.AppleMultitouchTrackpad "TrackpadThreeFingerDrag" -bool true
 
+# Trackpad: four-finger swipe
+defaults write NSGlobalDomain TrackpadFourFingerHorizSwipeGesture -int 2
+defaults write NSGlobalDomain TrackpadFourFingerVertSwipeGesture -int 2
+
 # Enable “natural” (Lion-style) scrolling
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 
@@ -62,8 +64,25 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 5
 
+# Finder stuff
+defaults write com.apple.finder AppleShowAllFiles -bool true
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 defaults write com.apple.finder ShowStatusBar -bool true
 defaults write com.apple.finder ShowPathbar -bool true
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+defaults write com.apple.finder NewWindowTarget -string "PfLo"
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Downloads/"
+defaults write com.apple.finder FinderSpawnTab -bool true
+defaults write com.apple.sidebarlists systemitems -dict-add ShowTags -bool false
+defaults write com.apple.sidebarlists useritems -dict-add ShowHome -bool true
+defaults write com.apple.finder ShowRecentTags -bool false
+defaults write com.apple.sidebarlists systemitems -dict-add ShowRecents -bool false
+defaults write com.apple.sidebarlists systemitems -dict-add ShowThisComputer -bool true
+defaults write com.apple.sidebarlists systemitems -dict-add ShowComputer -bool true
+defaults write com.apple.finder FXRemoveOldTrashItems -bool true
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
 
 # Enable spring loading for directories
 defaults write NSGlobalDomain com.apple.springing.enabled -bool true
@@ -91,6 +110,7 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict \
 # Disable the all too sensitive backswipe
 defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
 defaults write com.google.Chrome.canary AppleEnableSwipeNavigateWithScrolls -bool false
+defaults write -g AppleEnableSwipeNavigateWithScrolls -bool false
 
 # Use the system-native print preview dialog
 defaults write com.google.Chrome DisablePrintPreview -bool true
@@ -137,6 +157,8 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo Hos
 sudo systemsetup -setrestartfreeze on 2>/dev/null
 
 # Trackpad: enable tap to click for the login screen
-sudo defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+# sudo defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
+
+echo "You probably need to reboot to make all the settings changes take effect"
 
