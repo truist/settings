@@ -39,6 +39,7 @@
 	search = "!f() { git log -p -G\"$1\" -i ; }; f"  # search the commit history for changes matching the search term
 
 	# rare but handy
+	branch-commits = "!f() { git log --cherry-pick --right-only --oneline $1...$2 ; }; f"
 	branch-name = !git symbolic-ref --short HEAD
 	branch-point = !bash -c 'git log -1 --pretty=format:%h $(git rev-parse $(git rev-list --exclude-first-parent-only ^"${1:-master}" "${2:-HEAD}" | tail -1)^ )' -    # https://stackoverflow.com/a/71193866/1132502
 	branch-point-graph = !bash -c 'git graph "${1:-master}" "${2:-HEAD}" | less -R +/$(git branch-point "$1" "$2")' -

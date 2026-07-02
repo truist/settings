@@ -163,12 +163,15 @@ alias fd='fd -c never'
 vimpipe() {
 	xargs -o vim
 }
+export -f vimpipe
 agvim() {
 	ag -l0 "$@" | xargs -0o vim
 }
+export -f agvim
 fdvim() {
 	fd -0 "$@" | xargs -0o vim
 }
+export -f fdvim
 dark() {
 	osascript -e 'tell application "Terminal"' -e 'set current settings of selected tab of front window to settings set "Pro"' -e 'end tell'
 	export DELTA_FEATURES=dark
@@ -180,10 +183,14 @@ light() {
 }
 export -f light
 mkcd () {
-	mkdir -p "$1"
-	cd "$1"
+	mkdir -p "$1" && cd "$1" || return
 }
 export -f mkcd
+latest() {
+	#shellcheck disable=SC2012
+	ls -tr "$@" | tail -n 1
+}
+export -f latest
 
 alias ..="cd .."
 alias ...="cd ../.."
@@ -321,3 +328,7 @@ export LC_ALL=en_US.UTF-8
 # exec 2>&3 3>&-
 # unset PS4
 
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

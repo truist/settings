@@ -264,7 +264,16 @@ let g:ale_linters = {
 \   'sh': ['shellcheck'],
 \   'python': ['pylint'],
 \}
-let g:ale_fixers = {'javascript': ['standard']}
+let g:ale_fixers = {
+\   'javascript': ['prettier'],
+\   'typescript': ['prettier'],
+\   'css': ['prettier'],
+\   'html': ['prettier'],
+\   'json': ['prettier'],
+\   'markdown': ['prettier'],
+\   'yaml': ['prettier'],
+\}
+let g:ale_fix_on_save = 1
 nmap <silent> [l <Plug>(ale_previous_wrap)
 nmap <silent> ]l <Plug>(ale_next_wrap)
 set completeopt=menu,menuone,preview,noselect,noinsert
